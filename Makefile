@@ -1,16 +1,19 @@
 include .env
 
-.env: ## Setup .env from example
+.env:
 	cp .env.example .env
 
-up: ## Start the Docker Compose stack.
+up:
 	docker-compose up -d
 
-down: ## Stop the Docker Compose stack.
+down:
 	docker-compose down
 
-webapp: ## Run bash in the app service.
+webapp:
 	docker-compose exec webapp sh
 
 clear-cache:
 	docker-compose exec webapp php artisan optimize
+
+restart:
+	docker-compose down && docker-compose up -d

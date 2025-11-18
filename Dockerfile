@@ -1,5 +1,5 @@
 # php.Dockerfile
-FROM php:8.2-fpm-alpine
+FROM php:8.3-fpm-alpine
 
 # Install system dependencies
 RUN apk add --no-cache \
@@ -18,7 +18,7 @@ RUN apk add --no-cache \
 # Install PHP extensions
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd \
-    && docker-php-ext-install pdo_mysql pdo_pgsql zip bcmath opcache pcntl exif iconv intl soap
+    && docker-php-ext-install pdo_mysql pdo_pgsql zip bcmath opcache pcntl exif intl soap
 
 # Set working directory
 WORKDIR /var/www/html
