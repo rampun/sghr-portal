@@ -2,13 +2,13 @@
 
 namespace App\Filament\Resources\JobAds\Schemas;
 
-use App\Enums\ExperienceLevelEnum;
-use App\Enums\IndustryEnum;
+use App\Enums\Users\ExperienceLevelEnum;
+use App\Enums\Users\IndustryEnum;
 use App\Enums\Jobs\AdDurationEnum;
 use App\Enums\Jobs\LocationEnum;
 use App\Enums\Jobs\StatusEnum;
 use App\Enums\Jobs\TypeEnum;
-use App\Enums\UserRoleEnum;
+use App\Enums\Users\UserRoleEnum;
 use Filament\Forms\Components\DatePicker;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\Select;
@@ -45,11 +45,11 @@ class JobAdsForm
                     ->options(LocationEnum::class)
                     ->required(),
                 TextInput::make('salary_min_range')
-                    ->label('Salary Minimum Range (USD)')
+                    ->label('Salary Minimum Range (USD/month)')
                     ->numeric()
                     ->required(),
                 TextInput::make('salary_max_range')
-                    ->label('Salary Maximum Range (USD)')
+                    ->label('Salary Maximum Range (USD/month)')
                     ->numeric()
                     ->required(),
                 Select::make('status')

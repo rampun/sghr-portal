@@ -4,8 +4,8 @@ namespace App\Models;
 
 use App\Enums\Jobs\TypeEnum;
 use App\Enums\Jobs\LocationEnum;
-use App\Enums\ExperienceLevelEnum;
-use App\Enums\IndustryEnum;
+use App\Enums\Users\ExperienceLevelEnum;
+use App\Enums\Users\IndustryEnum;
 use App\Enums\Jobs\AdDurationEnum;
 use App\Enums\Jobs\StatusEnum;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
