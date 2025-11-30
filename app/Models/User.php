@@ -4,20 +4,19 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Enums\Users\CompanySizeEnum;
+use App\Enums\Users\CountryEnum;
+use App\Enums\Users\EducationLevelEnum;
+use App\Enums\Users\ExperienceLevelEnum;
+use App\Enums\Users\IndustryEnum;
+use App\Enums\Users\UserRoleEnum;
+use App\Enums\Users\UserStatusEnum;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\JobAds;
-
-use App\Enums\UserStatusEnum;
-use App\Enums\UserRoleEnum;
-use App\Enums\ExperienceLevelEnum;
-use App\Enums\CompanySizeEnum;
-use App\Enums\IndustryEnum;
-use App\Enums\CountryEnum;
-use App\Enums\EducationLevelEnum;
 
 class User extends Authenticatable
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Enums;
+namespace App\Enums\Users;
 
 use Filament\Support\Contracts\HasLabel;
 

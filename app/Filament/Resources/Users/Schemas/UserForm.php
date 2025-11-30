@@ -3,16 +3,16 @@
 namespace App\Filament\Resources\Users\Schemas;
 
 use Filament\Schemas\Components\Utilities\Get;
-use App\Enums\UserRoleEnum;
+use App\Enums\Users\UserRoleEnum;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
-use App\Enums\CompanySizeEnum;
-use App\Enums\IndustryEnum;
-use App\Enums\CountryEnum;
-use App\Enums\UserStatusEnum;
-use App\Enums\ExperienceLevelEnum;
-use App\Enums\EducationLevelEnum;
+use App\Enums\Users\CompanySizeEnum;
+use App\Enums\Users\IndustryEnum;
+use App\Enums\Users\CountryEnum;
+use App\Enums\Users\UserStatusEnum;
+use App\Enums\Users\ExperienceLevelEnum;
+use App\Enums\Users\EducationLevelEnum;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\TagsInput;

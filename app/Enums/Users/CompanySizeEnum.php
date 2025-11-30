@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Enums;
+namespace App\Enums\Users;
 
 use Filament\Support\Contracts\HasLabel;
 
@@ -9,6 +9,7 @@ enum CompanySizeEnum: string implements HasLabel
     case SMALL = 'SMALL';
     case MEDIUM = 'MEDIUM';
     case LARGE = 'LARGE';
+
     public function getLabel(): string
     {
         return match ($this) {
