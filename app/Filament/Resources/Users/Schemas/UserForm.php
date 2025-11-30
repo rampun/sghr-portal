@@ -99,7 +99,7 @@ class UserForm
                             ->minValue(0)
                             ->required(),
                         TextInput::make('expected_salary')
-                            ->label('Expected Salary (in USD)')
+                            ->label('Expected Salary (USD)')
                             ->numeric()
                             ->minValue(0)
                             ->required(),

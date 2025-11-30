@@ -13,6 +13,11 @@ use App\Models\JobAds;
 
 use App\Enums\UserStatusEnum;
 use App\Enums\UserRoleEnum;
+use App\Enums\ExperienceLevelEnum;
+use App\Enums\CompanySizeEnum;
+use App\Enums\IndustryEnum;
+use App\Enums\CountryEnum;
+use App\Enums\EducationLevelEnum;
 
 class User extends Authenticatable
 {
@@ -79,6 +84,13 @@ class User extends Authenticatable
             'user_skills' => 'array',
             'status' => UserStatusEnum::class,
             'role' => UserRoleEnum::class,
+            'education_level' => EducationLevelEnum::class,
+            'experience_level' => ExperienceLevelEnum::class,
+            'company_size' => CompanySizeEnum::class,
+            'company_industry' => IndustryEnum::class,
+            'user_industry' => IndustryEnum::class,
+            'user_country' => CountryEnum::class,
+            'company_country' => CountryEnum::class,
         ];
     }
 

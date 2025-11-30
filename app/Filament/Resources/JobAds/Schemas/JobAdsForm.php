@@ -45,11 +45,11 @@ class JobAdsForm
                     ->options(LocationEnum::class)
                     ->required(),
                 TextInput::make('salary_min_range')
-                    ->label('Salary Minimum Range (in USD)')
+                    ->label('Salary Minimum Range (USD)')
                     ->numeric()
                     ->required(),
                 TextInput::make('salary_max_range')
-                    ->label('Salary Maximum Range (in USD)')
+                    ->label('Salary Maximum Range (USD)')
                     ->numeric()
                     ->required(),
                 Select::make('status')
