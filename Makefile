@@ -13,7 +13,7 @@ webapp:
 	docker-compose exec webapp sh
 
 clear-cache:
-	docker-compose exec webapp php artisan optimize
+	docker-compose exec webapp php artisan optimize:clear
 
 restart:
 	docker-compose down && docker-compose up -d

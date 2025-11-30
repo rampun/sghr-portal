@@ -2,7 +2,22 @@
 
 namespace App\Filament\Resources\Users\Schemas;
 
+use Filament\Schemas\Components\Utilities\Get;
+use App\Enums\UserRoleEnum;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
+use App\Enums\CompanySizeEnum;
+use App\Enums\IndustryEnum;
+use App\Enums\CountryEnum;
+use App\Enums\UserStatusEnum;
+use App\Enums\ExperienceLevelEnum;
+use App\Enums\EducationLevelEnum;
+use Filament\Forms\Components\Textarea;
+use Filament\Schemas\Components\Section;
+use Filament\Forms\Components\TagsInput;
+use Filament\Forms\Components\FileUpload;
+
 
 class UserForm
 {
@@ -10,7 +25,123 @@ class UserForm
     {
         return $schema
             ->components([
-                //
+                Section::make('General Information')
+                    ->components([
+                        TextInput::make('first_name')
+                            ->autocapitalize('words')
+                            ->required()
+                            ->maxLength(255),
+                        TextInput::make('last_name')
+                            ->autocapitalize('words')
+                            ->required()
+                            ->maxLength(255),
+                        TextInput::make('email')
+                            ->placeholder('example@example.com')
+                            ->required()
+                            ->email()
+                            ->unique()
+                            ->maxLength(255),
+                        TextInput::make('phone')
+                            ->label('Phone Number (including country code)')
+                            ->placeholder('+1234567890')
+                            ->tel()
+                            ->required()
+                            ->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/'),
+                        TextInput::make('password')
+                            ->required()
+                            ->password()
+                            ->maxLength(255),
+                        Select::make('role')
+                            ->options(UserRoleEnum::class)
+                            ->live()
+                            ->required(),
+                        Select::make('status')
+                            ->options(UserStatusEnum::class)
+                            ->required(),
+                    ])->columnSpan('full')
+                    ->columns(2),
+
+                // Conditional Job Seeker fields
+                Section::make('Job Seeker Information')
+                    ->components([
+                        Select::make('education_level')
+                            ->label('Education Level')
+                            ->options(EducationLevelEnum::class)
+                            ->required(),
+                        TagsInput::make('user_skills')
+                            ->label('Skills')
+                            ->required(),
+                        Select::make('user_industry')
+                            ->label('Industry')
+                            ->options(IndustryEnum::class)
+                            ->required(),
+                        Select::make('user_country')
+                            ->label('Country')
+                            ->options(CountryEnum::class)
+                            ->required(),
+                        TextInput::make('current_company')
+                            ->label('Current Company')
+                            ->required()
+                            ->autocapitalize('words')
+                            ->maxLength(255),
+                        TextInput::make('current_position')
+                            ->label('Current Position')
+                            ->required()
+                            ->autocapitalize('words')
+                            ->maxLength(255),
+                        Select::make('experience_level')
+                            ->label('Experience Level')
+                            ->options(ExperienceLevelEnum::class)
+                            ->required(),
+                        TextInput::make('total_exeperience_years')
+                            ->label('Total Experience (Years)')
+                            ->numeric()
+                            ->minValue(0)
+                            ->required(),
+                        TextInput::make('expected_salary')
+                            ->label('Expected Salary (in USD)')
+                            ->numeric()
+                            ->minValue(0)
+                            ->required(),
+                        FileUpload::make('resume_url')
+                            ->label('Resume')
+                            ->required()
+
+                    ])->columnSpan('full')
+                    ->columns(2)
+                    ->visible(fn(Get $get): bool => $get('role') === UserRoleEnum::JOB_SEEKER),
+
+                // Conditional employer fields
+                Section::make('Employer Information')
+                    ->components([
+                        TextInput::make('company_name')
+                            ->required()
+                            ->maxLength(255),
+                        TextInput::make('company_website')
+                            ->label('Website')
+                            ->placeholder('https://www.example.com')
+                            ->url()
+                            ->maxLength(255),
+                        Textarea::make('company_description')
+                            ->label('Description')
+                            ->rows(3)
+                            ->maxLength(1000)
+                            ->required(),
+                        Select::make('company_size')
+                            ->label('Company Size')
+                            ->options(CompanySizeEnum::class)
+                            ->required(),
+                        Select::make('company_industry')
+                            ->label('Industry')
+                            ->options(IndustryEnum::class)
+                            ->required(),
+                        Select::make('company_country')
+                            ->label('Country')
+                            ->options(CountryEnum::class)
+                            ->required()
+                    ])->columnSpan('full')
+                    ->columns(2)
+                    ->visible(fn(Get $get): bool => $get('role') === UserRoleEnum::EMPLOYER)
             ]);
     }
 }

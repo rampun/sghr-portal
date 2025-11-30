@@ -8,16 +8,17 @@ use Filament\Schemas\Schema;
 use Illuminate\Contracts\Support\Htmlable;
 use SensitiveParameter;
 
-class LoginForm extends Login
+class AdminLoginForm extends Login
 {
     public function getHeading(): string|Htmlable|null
     {
-        return 'Custom Login';
+        return 'Admin Login';
     }
 
     public function getSubheading(): string|Htmlable|null
     {
-        return 'Sub heading';
+        return null;
+        return 'Login to HR Admin';
     }
 
 
@@ -27,13 +28,12 @@ class LoginForm extends Login
 
             $this->getEmailFormComponent(),
             $this->getPasswordFormComponent(),
-            Select::make('role')
-                ->options([
-                    '1' => 'Candidate',
-                    '2' => 'Employer',
-                    '3' => 'HR Admin',
-                ])
-                ->native(false),
+            // Select::make('role')
+            //     ->options([
+            //         '1' => 'Candidate',
+            //         '2' => 'Employer',
+            //     ])
+            //     ->native(false),
             $this->getRememberFormComponent(),
         ]);
     }
@@ -47,7 +47,7 @@ class LoginForm extends Login
         return [
             'email' => $data['email'],
             'password' => $data['password'],
-            'role' => $data['role'],
+            // 'role' => $data['role'],
         ];
     }
 }
