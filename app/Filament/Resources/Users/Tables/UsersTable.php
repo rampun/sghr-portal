@@ -27,6 +27,7 @@ class UsersTable
                     ->searchable(),
                 TextColumn::make('phone')
                     ->searchable(),
+                TextColumn::make('role'),
                 TextColumn::make('status')
                     ->badge(),
                 TextColumn::make('created_at')
