@@ -8,24 +8,23 @@ use Filament\Schemas\Schema;
 use Illuminate\Contracts\Support\Htmlable;
 use SensitiveParameter;
 
-class AdminLoginForm extends Login
+class JobSeekerLoginForm extends Login
 {
     public function getHeading(): string|Htmlable|null
     {
-        return 'Admin Login';
+        return 'Job Seeker Login';
     }
 
     public function getSubheading(): string|Htmlable|null
     {
         return null;
-        return 'Login to HR Admin Portal';
+        return 'Login to Job Seeker Portal';
     }
 
 
     public function form(Schema $schema): Schema
     {
         return $schema->components([
-
             $this->getEmailFormComponent(),
             $this->getPasswordFormComponent(),
             $this->getRememberFormComponent(),

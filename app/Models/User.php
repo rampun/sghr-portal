@@ -17,8 +17,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\JobAds;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasUuids, SoftDeletes;
@@ -107,5 +109,23 @@ class User extends Authenticatable
     public function jobs()
     {
         return $this->hasMany(JobAds::class);
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        // check admin panel
+        if ($panel->getId() === 'admin') {
+            return $this->role === UserRoleEnum::HR_ADMIN && $this->status === UserStatusEnum::ACTIVE;
+        }
+
+        if ($panel->getId() === 'employer') {
+            return $this->role === UserRoleEnum::EMPLOYER && $this->status === UserStatusEnum::ACTIVE;
+        }
+
+        if ($panel->getId() === 'jobseeker') {
+            return $this->role === UserRoleEnum::JOB_SEEKER && $this->status === UserStatusEnum::ACTIVE;
+        }
+
+        return false;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Helper\JobSeekerLoginForm;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -24,11 +25,13 @@ class UserPanelProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->id('user')
-            ->path('user')
+            ->id('jobseeker')
+            ->path('jobseeker')
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Blue,
             ])
+            ->registration()
+            ->login(JobSeekerLoginForm::class)
             ->discoverResources(in: app_path('Filament/User/Resources'), for: 'App\Filament\User\Resources')
             ->discoverPages(in: app_path('Filament/User/Pages'), for: 'App\Filament\User\Pages')
             ->pages([
