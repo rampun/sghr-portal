@@ -1,13 +1,5 @@
 <?php
 
-use App\Enums\AdminLevelEnum;
-use App\Enums\UserRoleEnum;
-use App\Enums\CompanySizeEnum;
-use App\Enums\IndustryEnum;
-use App\Enums\CountryEnum;
-use App\Enums\ExperienceLevelEnum;
-use App\Enums\EducationLevelEnum;
-use App\Enums\UserStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -30,31 +22,31 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken()->nullable();
-            $table->enum('status', UserStatusEnum::cases())->default(UserStatusEnum::ACTIVE);
-            $table->enum('role', UserRoleEnum::cases())->nullable();
+            $table->string('status')->nullable();
+            $table->string('role')->nullable();
 
             // employer specific fields
             $table->string('company_name')->nullable();
-            $table->enum('company_size', CompanySizeEnum::cases())->nullable();
+            $table->string('company_size')->nullable();
             $table->string('company_website')->nullable();
             $table->text('company_description')->nullable();
-            $table->enum('company_industry', IndustryEnum::cases())->nullable();
-            $table->enum('company_country', CountryEnum::cases())->nullable();
+            $table->string('company_industry')->nullable();
+            $table->string('company_country')->nullable();
 
             // job seeker specific fields
             $table->string('resume_url')->nullable();
-            $table->enum('experience_level', ExperienceLevelEnum::cases())->nullable();
+            $table->string('experience_level')->nullable();
             $table->string('current_position')->nullable();
             $table->string('current_company')->nullable();
-            $table->enum('education_level', EducationLevelEnum::cases())->nullable();
+            $table->string('education_level')->nullable();
             $table->integer('total_exeperience_years')->nullable();
             $table->decimal('expected_salary', 10, 2)->nullable();
-            $table->enum('user_country', CountryEnum::cases())->nullable();
-            $table->enum('user_industry', IndustryEnum::cases())->nullable();
+            $table->string('user_country')->nullable();
+            $table->string('user_industry')->nullable();
             $table->json('user_skills')->nullable(); // Consider JSON type   
 
             // admin specific fields
-            $table->enum('admin_level', AdminLevelEnum::cases())->nullable();
+            $table->string('admin_level')->nullable();
             $table->text('admin_notes')->nullable();
 
             // common fields
