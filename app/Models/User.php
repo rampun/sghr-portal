@@ -83,6 +83,7 @@ class User extends Authenticatable implements FilamentUser
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'user_skills' => 'array',
+            'resume_url' => 'string',
             'status' => UserStatusEnum::class,
             'role' => UserRoleEnum::class,
             'education_level' => EducationLevelEnum::class,

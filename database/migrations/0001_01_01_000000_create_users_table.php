@@ -32,6 +32,8 @@ return new class extends Migration
             $table->text('company_description')->nullable();
             $table->string('company_industry')->nullable();
             $table->string('company_country')->nullable();
+            $table->string('logo_url')->nullable();
+
 
             // job seeker specific fields
             $table->string('resume_url')->nullable();

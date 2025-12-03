@@ -99,12 +99,17 @@ class UserForm
                             ->minValue(0)
                             ->required(),
                         TextInput::make('expected_salary')
-                            ->label('Expected Salary (USD)')
+                            ->label('Expected Salary (USD per month)')
                             ->numeric()
                             ->minValue(0)
                             ->required(),
                         FileUpload::make('resume_url')
                             ->label('Resume')
+                            ->acceptedFileTypes(['application/pdf'])
+                            ->maxSize(2048) // 2MB
+                            ->disk('cloudinary')
+                            ->maxFiles(1)
+                            ->directory('sghr_assets/resumes')
                             ->required()
 
                     ])->columnSpan('full')
@@ -134,6 +139,14 @@ class UserForm
                         Select::make('company_industry')
                             ->label('Industry')
                             ->options(IndustryEnum::class)
+                            ->required(),
+                        FileUpload::make('logo_url')
+                            ->label('Company Logo')
+                            ->image(['png', 'jpg', 'jpeg'])
+                            ->maxSize(2048) // 2MB
+                            ->disk('cloudinary')
+                            ->maxFiles(1)
+                            ->directory('sghr_assets/logos')
                             ->required(),
                         Select::make('company_country')
                             ->label('Country')
