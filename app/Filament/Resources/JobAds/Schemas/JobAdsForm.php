@@ -55,13 +55,6 @@ class JobAdsForm
                 Select::make('status')
                     ->options(StatusEnum::class)
                     ->required(),
-                DatePicker::make('start_date')
-                    ->label('Ad Start Date')
-                    ->required(),
-                Select::make('duration')
-                    ->label('Ad Duration')
-                    ->options(AdDurationEnum::class)
-                    ->required(),
             ]);
     }
 }

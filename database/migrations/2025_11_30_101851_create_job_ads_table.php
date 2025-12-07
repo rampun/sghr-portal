@@ -23,8 +23,6 @@ return new class extends Migration
             $table->integer('salary_min_range')->nullable();
             $table->integer('salary_max_range')->nullable();
             $table->string('status')->nullable();
-            $table->date('start_date')->nullable();
-            $table->string('duration')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -39,6 +39,24 @@ services:
       - .:/var/www/html
     depends_on:
       - db
+ #node 
+  node:
+    build:
+      context: .
+      dockerfile: Dockerfile.node
+    container_name: node-js
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+      - node_modules:/var/www/html/node_modules
+    networks:
+      - sghr_network
+    # For development with hot reload
+    ports:
+      - "5173:5173"
+    command: >
+      sh -c "npm run dev -- --host"
+
 
 # database servie
   db:
@@ -92,6 +110,7 @@ services:
 volumes:
   mysql_data:
     driver: local
+  node_modules:
 
 networks:
   sghr_network:
