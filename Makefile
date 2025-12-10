@@ -12,6 +12,9 @@ down:
 webapp:
 	docker-compose exec webapp sh
 
+nodejs:
+	docker-compose exec node sh
+
 clear-cache:
 	docker-compose exec webapp php artisan optimize:clear
 

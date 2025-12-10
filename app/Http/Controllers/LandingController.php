@@ -10,7 +10,6 @@ class LandingController extends Controller
 {
     public function index(Request $request)
     {
-
         // Get filter parameters
         // $category = $request->get('category');
         // $search = $request->get('search');
