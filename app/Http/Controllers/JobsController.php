@@ -16,6 +16,12 @@ class JobsController extends Controller
     public function show(Request $request)
     {
         $job = JobAds::find($request->id);
-        return view('pages.jobs.single', ['job' => $job]);
+        // recommended jobs
+        $recommendedJobs = JobAds::where('industry', $job->industry)
+            ->where('status', StatusEnum::ACTIVE->value)
+            ->where('id', '<>', $job->id)
+            ->take(5)
+            ->get();
+        return view('pages.jobs.single', compact('job', 'recommendedJobs'));
     }
 }

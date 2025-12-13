@@ -183,88 +183,35 @@
     <div class="col-span-4 card shadow-md">
         <div class="card-body">
             <div class="header">
-                <h2 class="text-md font-bold">Jobs you might be interested in</h2>
-                <div class="flex justify-between gap-4 mt-4 mb-4">
-                    <div class="job_content">
-                        <h3 class="text-normal font-bold mb-1">Software Engineer</h3>
-                        <p class="mb-2">Leapfrof Technology</p>
-                        <div class="flex text-gray-600 items-center gap-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
-                            </svg>
-                            <span>
-                                Hong Kong
-                            </span>
-                        </div>
-                    </div>
-                    <div class="logo_posted flex flex-col text-right gap-2">
-                        <figure>
-                            <img
-                                class="object-cover w-[32px] h-[32px]"
-                                src="/logo-black.png"
-                                alt="X Logo" />
-                        </figure>
-                        <p class="text-gray-600">Posted <span>4 days ago</span></p>
-                    </div>
-                </div>
-                <div class="flex w-full flex-col">
-                    <div class="divider bg-gray-200 h-[1px]"></div>
-                </div>
+                <h2 class="text-lg font-bold">Recommended Jobs</h2>
 
-                <!-- Job #2 -->
-                <div class="flex justify-between gap-4 mt-4 mb-4">
-                    <div class="job_content">
-                        <h3 class="text-normal font-bold mb-1">Jr. Intern Engineer</h3>
-                        <p class="mb-2">Facebook</p>
-                        <div class="flex text-gray-600 items-center gap-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
-                            </svg>
-                            <span>
-                                Silicon Valley
-                            </span>
+                <!-- Recomended jobs -->
+                @if($recommendedJobs->count())
+                @foreach($recommendedJobs as $recommendedJob)
+                <a href="{{ route('jobs.show', ['id' => $recommendedJob->id]) }}" style="text-decoration: none; color: inherit;">
+                    <div class="flex justify-between gap-4 mt-4 mb-4">
+                        <div class="job_content">
+                            <h3 class="text-normal font-bold mb-1">{{ $recommendedJob->title }}</h3>
+                            <p class="mb-2">{{ $recommendedJob->employer->company_name }}</p>
+                            <div class="flex text-gray-600 items-center gap-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                                </svg>
+                                <span>{{ App\Enums\Users\CountryEnum::from($recommendedJob->country)->getLabel() }}</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="logo_posted flex flex-col float-right gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="48" height="48" viewBox="0 0 48 48">
-                            <path fill="#3F51B5" d="M42,37c0,2.762-2.238,5-5,5H11c-2.761,0-5-2.238-5-5V11c0-2.762,2.239-5,5-5h26c2.762,0,5,2.238,5,5V37z"></path>
-                            <path fill="#FFF" d="M34.368,25H31v13h-5V25h-3v-4h3v-2.41c0.002-3.508,1.459-5.59,5.592-5.59H35v4h-2.287C31.104,17,31,17.6,31,18.723V21h4L34.368,25z"></path>
-                        </svg>
-                        <p class="text-gray-600">Posted <span>1 day ago</span></p>
-                    </div>
-                </div>
+                </a>
                 <div class="flex w-full flex-col">
                     <div class="divider bg-gray-200 h-[1px]"></div>
                 </div>
-
-                <!-- Job #3 -->
-                <div class="flex justify-between gap-4 mt-4 mb-4">
-                    <div class="job_content">
-                        <h3 class="text-normal font-bold mb-1">Jr. Intern Engineer</h3>
-                        <p class="mb-2">Facebook</p>
-                        <div class="flex text-gray-600 items-center gap-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
-                            </svg>
-                            <span>
-                                Silicon Valley
-                            </span>
-                        </div>
-                    </div>
-                    <div class="logo_posted flex flex-col float-right gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="48" height="48" viewBox="0 0 48 48">
-                            <path fill="#3F51B5" d="M42,37c0,2.762-2.238,5-5,5H11c-2.761,0-5-2.238-5-5V11c0-2.762,2.239-5,5-5h26c2.762,0,5,2.238,5,5V37z"></path>
-                            <path fill="#FFF" d="M34.368,25H31v13h-5V25h-3v-4h3v-2.41c0.002-3.508,1.459-5.59,5.592-5.59H35v4h-2.287C31.104,17,31,17.6,31,18.723V21h4L34.368,25z"></path>
-                        </svg>
-                        <p class="text-gray-600">Posted <span>1 day ago</span></p>
-                    </div>
+                @endforeach
+                @else
+                <div>
+                    <p>No recommended jobs</p>
                 </div>
-                <div class="flex w-full flex-col">
-                    <div class="divider bg-gray-200 h-[1px]"></div>
-                </div>
+                @endif
             </div>
         </div>
     </div>
