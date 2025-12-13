@@ -14,7 +14,7 @@
             @include('partials.header')
         </header>
         <main class="py-6 bg-gray-50 min-h-dvh">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 @yield('content')
             </div>
         </main>

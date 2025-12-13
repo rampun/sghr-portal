@@ -48,6 +48,7 @@ class User extends Authenticatable implements FilamentUser
         'company_description',
         'company_industry',
         'company_country',
+        'logo_url',
         'resume_url',
         'experience_level',
         'current_position',
@@ -59,7 +60,7 @@ class User extends Authenticatable implements FilamentUser
         'user_industry',
         'user_skills',
         'admin_level',
-        'admin_notes'
+        'admin_notes',
     ];
 
     /**
@@ -84,6 +85,7 @@ class User extends Authenticatable implements FilamentUser
             'password' => 'hashed',
             'user_skills' => 'array',
             'resume_url' => 'string',
+            'logo_url' => 'string',
             'status' => UserStatusEnum::class,
             'role' => UserRoleEnum::class,
             'education_level' => EducationLevelEnum::class,

@@ -9,12 +9,14 @@ use App\Enums\Jobs\LocationEnum;
 use App\Enums\Jobs\StatusEnum;
 use App\Enums\Jobs\TypeEnum;
 use App\Enums\Users\UserRoleEnum;
-use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\RichEditor;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Schema;
+use Filament\Forms\Components\TagsInput;
+use App\Enums\Users\CountryEnum;
 
 class JobAdsForm
 {
@@ -28,9 +30,8 @@ class JobAdsForm
                     ->label('Employer')
                     ->relationship(name: 'employer', titleAttribute: 'company_name', modifyQueryUsing: fn(Builder $query) => $query->WhereNotNull('company_name')->where('role', UserRoleEnum::EMPLOYER))
                     ->required(),
-                Textarea::make('description')
+                RichEditor::make('description')
                     ->required()
-                    ->rows(5)
                     ->columnSpanFull(),
                 Select::make('experience')
                     ->options(ExperienceLevelEnum::class)
@@ -51,6 +52,18 @@ class JobAdsForm
                 TextInput::make('salary_max_range')
                     ->label('Salary Maximum Range (USD/month)')
                     ->numeric()
+                    ->required(),
+                TagsInput::make('required_skills')
+                    ->label('Required Skills')
+                    ->required(),
+                Select::make('country')
+                    ->label('Country')
+                    ->options(CountryEnum::class)
+                    ->required(),
+                TextInput::make('no_of_employee')
+                    ->label('No. of employees')
+                    ->numeric()
+                    ->minValue(1)
                     ->required(),
                 Select::make('status')
                     ->options(StatusEnum::class)

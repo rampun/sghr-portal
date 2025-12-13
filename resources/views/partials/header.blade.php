@@ -1,5 +1,5 @@
 <nav class="shadow-xl">
-    <div class="navbar max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="navbar max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="navbar-start">
             <div class="dropdown">
                 <div tabindex="0" role="button" class="btn btn-ghost lg:hidden text-black">

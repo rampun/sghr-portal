@@ -13,7 +13,7 @@ Route::middleware('web')->group(function () {
 
     Route::prefix('jobs')->name('jobs.')->group(function () {
         Route::get('/', [JobsController::class, 'index'])->name('index');
-        Route::get('/{title}', [JobsController::class, 'show'])->name('show');
+        Route::get('/{id}', [JobsController::class, 'show'])->name('show');
         // Route::get('/{id}', [LandingController::class, 'show'])->name('show');
         // Route::get('/export/csv', [LandingController::class, 'export'])->name('export');
         // Route::get('/statistics', [LandingController::class, 'statistics'])->name('statistics');

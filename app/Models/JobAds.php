@@ -35,6 +35,9 @@ class JobAds extends Model
         'salary_min_range',
         'salary_max_range',
         'status',
+        'no_of_employee',
+        'country',
+        'required_skills',
         'start_date',
     ];
 
@@ -47,6 +50,8 @@ class JobAds extends Model
             'experience' => ExperienceLevelEnum::class,
             'industry' => IndustryEnum::class,
             'duration' => AdDurationEnum::class,
+            'required_skills' => 'array',
+            'description' => 'array',
         ];
     }
 

@@ -3,7 +3,13 @@
 @section('title', 'Job list')
 
 @section('content')
-
+<div class="breadcrumbs text-sm">
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/jobs">Jobs</a></li>
+        <li>{{ $job->title }}</li>
+    </ul>
+</div>
 <div class="grid grid-cols-12 gap-8 mt-8">
     <div class="col-span-8">
         <div class="card shadow-md">
@@ -11,43 +17,38 @@
                 <div class="header">
                     <div class="flex justify-between">
                         <div class="content">
-                            <h2 class="card-title">Senior Web Developer</h2>
-                            <p class="text-gray-600 mt-1">X Corporation</p>
+                            <h2 class="card-title">{{ $job->title }}</h2>
+                            <p class="text-gray-600 mt-1">{{ $job->employer->company_name }}</p>
                             <div class="highlights flex flex-col gap-1 mt-2">
                                 <div class="flex text-gray-600 items-center gap-1">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 0 0 .75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 0 0-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0 1 12 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 0 1-.673-.38m0 0A2.18 2.18 0 0 1 3 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 0 1 3.413-.387m7.5 0V5.25A2.25 2.25 0 0 0 13.5 3h-3a2.25 2.25 0 0 0-2.25 2.25v.894m7.5 0a48.667 48.667 0 0 0-7.5 0M12 12.75h.008v.008H12v-.008Z" />
                                     </svg>
-                                    <span>
-                                        Mid Level (3-5 years)
-                                    </span>
+                                    <span>{{ App\Enums\Users\ExperienceLevelEnum::from($job->experience->value)->getLabel() }}</span>
                                 </div>
                                 <div class="flex text-gray-600 items-center gap-1">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                     </svg>
-
-                                    <span>
-                                        $3k - $5k
-                                    </span>
+                                    <span>${{ number_format($job->salary_min_range)}}-${{ number_format($job->salary_max_range) }} (USD/month)</span>
                                 </div>
                                 <div class="flex text-gray-600 items-center gap-1">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
                                     </svg>
-                                    <span>
-                                        Hong Kong
-                                    </span>
+                                    <span>{{ App\Enums\Users\CountryEnum::from($job->country)->getLabel() }}</span>
                                 </div>
                             </div>
                         </div>
                         <div class="logo">
                             <figure>
-                                <img
-                                    class="object-cover w-[32px] h-[32px]"
-                                    src="/logo-black.png"
-                                    alt="X Logo" />
+                                <x-cloudinary::image
+                                    public-id="{{ $job->employer->logo_url }}"
+                                    width="48"
+                                    height="48"
+                                    crop="fit"
+                                    alt="{{ $job->employer->company_title }} logo" />
                             </figure>
                         </div>
                     </div>
@@ -56,13 +57,47 @@
                     </div>
                     <div class="meta flex gap-6 justify-between items-center">
                         <div class="flex gap-2">
-                            <p class="posted">Posted: <span>4 days ago</span></p>|
-                            <p class="posted">Openings: <span>1</span></p>|
-                            <p class="posted">Applicants: <span>3</span></p>
+                            <p class="flex gap-2 items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
+                                    <path fill-rule="evenodd" d="M6.75 2.25A.75.75 0 0 1 7.5 3v1.5h9V3A.75.75 0 0 1 18 3v1.5h.75a3 3 0 0 1 3 3v11.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V7.5a3 3 0 0 1 3-3H6V3a.75.75 0 0 1 .75-.75Zm13.5 9a1.5 1.5 0 0 0-1.5-1.5H5.25a1.5 1.5 0 0 0-1.5 1.5v7.5a1.5 1.5 0 0 0 1.5 1.5h13.5a1.5 1.5 0 0 0 1.5-1.5v-7.5Z" clip-rule="evenodd" />
+                                </svg>
+                                <span>
+                                    {{ date_format($job->created_at, 'Y-m-d') }}
+                                </span>
+                            </p>|
+                            <p class="flex gap-2 items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
+                                    <path fill-rule="evenodd" d="M8.25 6.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM15.75 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM2.25 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM6.31 15.117A6.745 6.745 0 0 1 12 12a6.745 6.745 0 0 1 6.709 7.498.75.75 0 0 1-.372.568A12.696 12.696 0 0 1 12 21.75c-2.305 0-4.47-.612-6.337-1.684a.75.75 0 0 1-.372-.568 6.787 6.787 0 0 1 1.019-4.38Z" clip-rule="evenodd" />
+                                    <path d="M5.082 14.254a8.287 8.287 0 0 0-1.308 5.135 9.687 9.687 0 0 1-1.764-.44l-.115-.04a.563.563 0 0 1-.373-.487l-.01-.121a3.75 3.75 0 0 1 3.57-4.047ZM20.226 19.389a8.287 8.287 0 0 0-1.308-5.135 3.75 3.75 0 0 1 3.57 4.047l-.01.121a.563.563 0 0 1-.373.486l-.115.04c-.567.2-1.156.349-1.764.441Z" />
+                                </svg>
+                                <span>
+                                    {{ $job->no_of_employee }}
+                                </span>
+                            </p>|
+                            <p class="flex gap-2 items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
+                                    <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" />
+                                </svg>
+                                <span>
+                                    0
+                                </span>
+                            </p>
                         </div>
                         <div class="register_login flex gap-2 items-center">
+
+                            <button>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-indigo-500 ">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
+                                </svg>
+                            </button>
+                            <button>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 fill-indigo-500">
+                                    <path fill-rule="evenodd" d="M6.32 2.577a49.255 49.255 0 0 1 11.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 0 1-1.085.67L12 18.089l-7.165 3.583A.75.75 0 0 1 3.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93Z" clip-rule="evenodd" />
+                                </svg>
+
+                            </button>
                             <a class="btn btn-outline btn-primary rounded-3xl">Register to apply</a>
-                            <a class="btn btn-primary text-white rounded-3xl" href="/jobseeker">Login to appy</a>
+                            <a class="btn btn-primary text-white rounded-3xl bg-indigo-500" href="/jobseeker">Login to appy</a>
                             <!-- <a class="btn btn-primary text-white rounded-3xl" href="#">Apply</a> -->
                         </div>
                     </div>
@@ -73,44 +108,21 @@
         <div class="card shadow-md">
             <div class="card-body">
                 <div class="job_description">
-                    <h3 class="text-md font-bold">Job description</h3>
-                    <div>
-                        <div>
-                            <div> We are looking for Housekeeping Associates to join our team in the hospitality industry. The ideal candidate should have 0-2 years of experience and be able to work effectively in a fast-paced environment. </div>
-                            <div> <br> <b> Roles and Responsibility </b> <br> <span> </span> </div>
-                            <ul>
-                                <li> Maintain high standards of cleanliness and hygiene in guest rooms and public areas. </li>
-                                <li> Provide exceptional customer service to guests, responding promptly to their needs and resolving any issues professionally. </li>
-                                <li> Collaborate with other departments to ensure seamless operations and excellent guest experiences. </li>
-                                <li> Develop and implement effective cleaning schedules to minimize downtime and maximize efficiency. </li>
-                                <li> Identify and report maintenance or repair needs to the appropriate personnel. </li>
-                                <li> Participate in ongoing training and education to enhance skills and knowledge. </li>
-                            </ul>
-                            <div> <br> <b> Job Requirements </b> <br> <span> </span> </div>
-                            <ul>
-                                <li> Ability to work well under pressure and manage multiple tasks simultaneously. </li>
-                                <li> Excellent communication and interpersonal skills, with the ability to work effectively with colleagues and guests. </li>
-                                <li> Strong attention to detail and commitment to delivering high-quality results. </li>
-                                <li> Familiarity with cleaning procedures and protocols, and the ability to follow instructions accurately. </li>
-                                <li> Basic knowledge of hospitality industry practices and procedures is an advantage. </li>
-                                <li> Ability to lift, push, and pull heavy objects, stand for long periods, and work in a physically demanding environment. </li>
-                            </ul>
-                        </div>
-                    </div>
+                    {!! $job->description !!}
                 </div>
                 <div class="job_meta">
                     <ul>
-                        <li><b>Industry:</b> <span>Information Technology</span></li>
-                        <li><b>Employment Type:</b> <span>Full-time</span></li>
-                        <li><b>Education:</b><span> N/A</span></li>
+                        <li><b>Industry:</b> <span>{{ App\Enums\Users\IndustryEnum::from($job->industry->value)->getLabel() }}</span></li>
+                        <li><b>Employment Type:</b> <span>{{ App\Enums\Jobs\TypeEnum::from($job->type->value)->getLabel() }}</span></li>
+                        <!-- <li><b>Education:</b><span> N/A</span></li> -->
                     </ul>
                 </div>
                 <div class="keyskill">
                     <h3 class="text-md font-bold">Key Skills</h3>
                     <div class="flex gap-2 justify-start mt-2">
-                        <div class="rounded-2xl w-auto badge badge-sm bg-gray-200 text-gray-800 text-normal border-0">Cleaning</div>
-                        <div class="rounded-2xl w-auto badge badge-sm bg-gray-200 text-gray-800 text-normal border-0">Time manaement</div>
-                        <div class="rounded-2xl w-auto badge badge-sm bg-gray-200 text-gray-800 text-normal border-0">Can do attitude</div>
+                        @foreach($job->required_skills as $required_skill)
+                        <div class="rounded-2xl w-auto badge badge-sm bg-gray-200 text-gray-800 text-normal border-0">{{ $required_skill }}</div>
+                        @endforeach
                     </div>
                 </div>
                 <div class="flex w-full flex-col">
@@ -146,15 +158,21 @@
         <div class="card shadow-md">
             <div class="card-body">
                 <div class="header">
-                    <div class="flex justify-between">
-                        <div class="content">
+                    <div class="">
+                        <div class="">
                             <div>
                                 <h2 class="text-md font-bold">About company</h2>
-                                <p class="text-gray-600 mt-1">X Corporation Company</p>
+                                <p class="text-gray-600 mt-1 font-bold">{{ $job->employer->company_name }}</p>
+                                <p class="text-gray-600 mt-1">{{ $job->employer->company_description }}</p>
+                            </div>
+                            <div class="flex w-full flex-col">
+                                <div class="divider bg-gray-200 h-[1px]"></div>
                             </div>
                             <div>
                                 <h2 class="text-md font-bold">Company Info</h2>
-                                <p> Address: Test addresss </p>
+                                <p><b>Website:</b> {{ $job->employer->website ?? 'N/A'}} </p>
+                                <p><b>Size:</b> {{ App\Enums\Users\CompanySizeEnum::from($job->employer->company_size->value)->getLabel() }} </p>
+                                <p><b>Inudstry:</b> {{ App\Enums\Users\IndustryEnum::from($job->industry->value)->getLabel() }} </p>
                             </div>
                         </div>
                     </div>
