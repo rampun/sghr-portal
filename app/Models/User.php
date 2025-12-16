@@ -11,21 +11,21 @@ use App\Enums\Users\ExperienceLevelEnum;
 use App\Enums\Users\IndustryEnum;
 use App\Enums\Users\UserRoleEnum;
 use App\Enums\Users\UserStatusEnum;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\Models\JobAds;
-use Filament\Models\Contracts\FilamentUser;
-use Filament\Panel;
 
 class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasUuids, SoftDeletes;
+    use HasFactory, HasUuids, Notifiable, SoftDeletes;
 
     public $incrementing = false; // Disable auto-incrementing
+
     protected $keyType = 'string';
 
     /**

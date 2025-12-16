@@ -47,7 +47,7 @@ class JobAdsInfolist
                     ->placeholder('-'),
                 TextEntry::make('deleted_at')
                     ->date()
-                    ->visible(fn(JobAds $record): bool => $record->trashed()),
+                    ->visible(fn (JobAds $record): bool => $record->trashed()),
             ]);
     }
 }

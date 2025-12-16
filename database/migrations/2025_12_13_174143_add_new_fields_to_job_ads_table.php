@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('job_ads', function (Blueprint $table) {
-            $table->json('required_skills')->nullable(); // Consider JSON type   
+            $table->json('required_skills')->nullable(); // Consider JSON type
             $table->unsignedInteger('no_of_employee');
             $table->string('country')->nullable();
         });

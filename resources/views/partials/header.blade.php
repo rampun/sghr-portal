@@ -1,5 +1,5 @@
 <nav class="shadow-xl">
-    <div class="navbar max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="navbar max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="navbar-start">
             <div class="dropdown">
                 <div tabindex="0" role="button" class="btn btn-ghost lg:hidden text-black">
@@ -20,7 +20,9 @@
                     </li> -->
                     <li><a>Companies</a></li>
                     <li><a>Resume</a></li>
+                    @guest
                     <li><a>Employer Login</a></li>
+                    @endguest
 
                 </ul>
             </div>
@@ -40,13 +42,19 @@
                 </li> -->
                 <li><a>Companies</a></li>
                 <li><a>Resume</a></li>
+                @guest
                 <li><a>Employer Login</a></li>
+                @endguest
 
             </ul>
         </div>
         <div class="navbar-end flex gap-2">
+            @if (auth()->user())
+            <a class="btn btn-outline btn-primary rounded-3xl" href="/jobseeker">My Dashboard</a>
+            @else
             <a class="btn btn-outline btn-primary rounded-3xl" href="/jobseeker">Login</a>
             <a class="btn btn-secondary text-white rounded-3xl">Register</a>
+            @endif
         </div>
     </div>
 </nav>

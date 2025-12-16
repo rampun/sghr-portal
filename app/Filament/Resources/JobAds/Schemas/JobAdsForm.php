@@ -2,21 +2,19 @@
 
 namespace App\Filament\Resources\JobAds\Schemas;
 
-use App\Enums\Users\ExperienceLevelEnum;
-use App\Enums\Users\IndustryEnum;
-use App\Enums\Jobs\AdDurationEnum;
 use App\Enums\Jobs\LocationEnum;
 use App\Enums\Jobs\StatusEnum;
 use App\Enums\Jobs\TypeEnum;
+use App\Enums\Users\CountryEnum;
+use App\Enums\Users\ExperienceLevelEnum;
+use App\Enums\Users\IndustryEnum;
 use App\Enums\Users\UserRoleEnum;
 use Filament\Forms\Components\RichEditor;
-use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
-use Filament\Schemas\Schema;
 use Filament\Forms\Components\TagsInput;
-use App\Enums\Users\CountryEnum;
+use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Schema;
+use Illuminate\Database\Eloquent\Builder;
 
 class JobAdsForm
 {
@@ -28,7 +26,7 @@ class JobAdsForm
                     ->required(),
                 Select::make('user_id')
                     ->label('Employer')
-                    ->relationship(name: 'employer', titleAttribute: 'company_name', modifyQueryUsing: fn(Builder $query) => $query->WhereNotNull('company_name')->where('role', UserRoleEnum::EMPLOYER))
+                    ->relationship(name: 'employer', titleAttribute: 'company_name', modifyQueryUsing: fn (Builder $query) => $query->WhereNotNull('company_name')->where('role', UserRoleEnum::EMPLOYER))
                     ->required(),
                 RichEditor::make('description')
                     ->required()

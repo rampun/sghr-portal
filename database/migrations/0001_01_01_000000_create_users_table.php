@@ -34,7 +34,6 @@ return new class extends Migration
             $table->string('company_country')->nullable();
             $table->string('logo_url')->nullable();
 
-
             // job seeker specific fields
             $table->string('resume_url')->nullable();
             $table->string('experience_level')->nullable();
@@ -45,7 +44,7 @@ return new class extends Migration
             $table->decimal('expected_salary', 10, 2)->nullable();
             $table->string('user_country')->nullable();
             $table->string('user_industry')->nullable();
-            $table->json('user_skills')->nullable(); // Consider JSON type   
+            $table->json('user_skills')->nullable(); // Consider JSON type
 
             // admin specific fields
             $table->string('admin_level')->nullable();

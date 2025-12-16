@@ -10,6 +10,7 @@
         <li>{{ $job->title }}</li>
     </ul>
 </div>
+
 <div class="grid grid-cols-12 gap-8 mt-8">
     <div class="col-span-8">
         <div class="card shadow-md">
@@ -57,48 +58,99 @@
                     </div>
                     <div class="meta flex gap-6 justify-between items-center">
                         <div class="flex gap-2">
-                            <p class="flex gap-2 items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
+                            <p class="flex gap-1 items-center">
+                                <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
                                     <path fill-rule="evenodd" d="M6.75 2.25A.75.75 0 0 1 7.5 3v1.5h9V3A.75.75 0 0 1 18 3v1.5h.75a3 3 0 0 1 3 3v11.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V7.5a3 3 0 0 1 3-3H6V3a.75.75 0 0 1 .75-.75Zm13.5 9a1.5 1.5 0 0 0-1.5-1.5H5.25a1.5 1.5 0 0 0-1.5 1.5v7.5a1.5 1.5 0 0 0 1.5 1.5h13.5a1.5 1.5 0 0 0 1.5-1.5v-7.5Z" clip-rule="evenodd" />
-                                </svg>
+                                </svg> -->
+                                <span>Posted:</span>
                                 <span>
                                     {{ date_format($job->created_at, 'Y-m-d') }}
                                 </span>
                             </p>|
-                            <p class="flex gap-2 items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
+                            <p class="flex gap-1 items-center">
+                                <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
                                     <path fill-rule="evenodd" d="M8.25 6.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM15.75 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM2.25 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM6.31 15.117A6.745 6.745 0 0 1 12 12a6.745 6.745 0 0 1 6.709 7.498.75.75 0 0 1-.372.568A12.696 12.696 0 0 1 12 21.75c-2.305 0-4.47-.612-6.337-1.684a.75.75 0 0 1-.372-.568 6.787 6.787 0 0 1 1.019-4.38Z" clip-rule="evenodd" />
                                     <path d="M5.082 14.254a8.287 8.287 0 0 0-1.308 5.135 9.687 9.687 0 0 1-1.764-.44l-.115-.04a.563.563 0 0 1-.373-.487l-.01-.121a3.75 3.75 0 0 1 3.57-4.047ZM20.226 19.389a8.287 8.287 0 0 0-1.308-5.135 3.75 3.75 0 0 1 3.57 4.047l-.01.121a.563.563 0 0 1-.373.486l-.115.04c-.567.2-1.156.349-1.764.441Z" />
-                                </svg>
+                                </svg> -->
+                                <span>
+                                    Openings:
+                                </span>
                                 <span>
                                     {{ $job->no_of_employee }}
                                 </span>
                             </p>|
-                            <p class="flex gap-2 items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
+                            <p class="flex gap-1 items-center">
+                                <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
                                     <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" />
-                                </svg>
+                                </svg> -->
                                 <span>
-                                    0
+                                    Applicants:
+                                </span>
+                                <span>
+                                    {{ $noOfApplicants }}
                                 </span>
                             </p>
                         </div>
                         <div class="register_login flex gap-2 items-center">
-
-                            <button>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-indigo-500 ">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
-                                </svg>
-                            </button>
-                            <button>
+                            @if (auth()->user())
+                            @if($isSaved)
+                            <form action="{{ route('saved-jobs.destroy') }}" method="POST">
+                                @csrf <!-- Laravel CSRF token -->
+                                @method('DELETE') <!-- Spoof the DELETE method -->
+                                <input type="hidden" name="user_id" value="{{ auth()->id() }}">
+                                <input type="hidden" name="job_ad_id" value="{{ $job->id }}">
+                                <button type="submit" class="cursor-pointer">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 fill-indigo-500">
+                                        <path fill-rule="evenodd" d="M6.32 2.577a49.255 49.255 0 0 1 11.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 0 1-1.085.67L12 18.089l-7.165 3.583A.75.75 0 0 1 3.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93Z" clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                            </form>
+                            @else
+                            <form action="{{ route('saved-jobs.store') }}" method="POST">
+                                @csrf <!-- Laravel CSRF token -->
+                                <input type="hidden" name="user_id" value="{{ auth()->id() }}">
+                                <input type="hidden" name="job_ad_id" value="{{ $job->id }}">
+                                <button type="submit" class="cursor-pointer">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-indigo-500 ">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
+                                    </svg>
+                                </button>
+                            </form>
+                            @endif
+                            @else
+                            <!-- need login -->
+                            <button type="submit" class="cursor-pointer">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 fill-indigo-500">
                                     <path fill-rule="evenodd" d="M6.32 2.577a49.255 49.255 0 0 1 11.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 0 1-1.085.67L12 18.089l-7.165 3.583A.75.75 0 0 1 3.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93Z" clip-rule="evenodd" />
                                 </svg>
-
                             </button>
+                            @endif
+
+                            @if (auth()->user())
+                            <form action="{{ route('job-applications.store') }}" method="POST">
+                                @csrf <!-- Laravel CSRF token -->
+                                <input type="hidden" name="user_id" value="{{ auth()->id() }}">
+                                <input type="hidden" name="job_ad_id" value="{{ $job->id }}">
+                                <input type="hidden" name="status" value="PENDING">
+
+                                @if($isJobApplied)
+                                <button class="py-2 px-4 rounded-3xl font-bold
+                disabled:text-gray-400 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                                    disabled>
+                                    Applied
+                                </button>
+                                @else
+                                <button
+                                    type="submit"
+                                    class="btn btn-primary text-white rounded-3xl bg-indigo-500">
+                                    Apply
+                                </button>
+                                @endif
+                            </form>
+                            @else
                             <a class="btn btn-outline btn-primary rounded-3xl">Register to apply</a>
                             <a class="btn btn-primary text-white rounded-3xl bg-indigo-500" href="/jobseeker">Login to appy</a>
-                            <!-- <a class="btn btn-primary text-white rounded-3xl" href="#">Apply</a> -->
+                            @endif
                         </div>
                     </div>
                 </div>

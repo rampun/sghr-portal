@@ -1,24 +1,30 @@
 <?php
 
+use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\JobsController;
 use App\Http\Controllers\LandingController;
+use App\Http\Controllers\SavedJobsController;
 use Illuminate\Support\Facades\Route;
-
-
 
 Route::middleware('web')->group(function () {
 
     Route::get('/', [LandingController::class, 'index'])->name('index');
 
-
     Route::prefix('jobs')->name('jobs.')->group(function () {
         Route::get('/', [JobsController::class, 'index'])->name('index');
         Route::get('/{id}', [JobsController::class, 'show'])->name('show');
-        // Route::get('/{id}', [LandingController::class, 'show'])->name('show');
-        // Route::get('/export/csv', [LandingController::class, 'export'])->name('export');
-        // Route::get('/statistics', [LandingController::class, 'statistics'])->name('statistics');
     });
 
-    // Home route redirects to jobs
-    // Route::redirect('/', '/jobs');
+    // job applications
+    Route::prefix('job-applications')->name('job-applications.')->group(function () {
+        Route::get('/{id}', [JobApplicationController::class, 'show'])->name('show');
+        Route::post('/', [JobApplicationController::class, 'store'])->name('store');
+    });
+
+    // saved jobs
+    Route::prefix('saved-jobs')->name('saved-jobs.')->group(function () {
+        Route::get('/{id}', [SavedJobsController::class, 'show'])->name('show');
+        Route::post('/', [SavedJobsController::class, 'store'])->name('store');
+        Route::delete('/', [SavedJobsController::class, 'destroy'])->name('destroy');
+    });
 });

@@ -3,14 +3,16 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Helper\JobSeekerLoginForm;
+use App\Filament\Pages\Dashboard;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use App\Filament\Pages\Dashboard;
+use Filament\Navigation\NavigationItem;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Filament\Support\Enums\Width;
 use Filament\Widgets\AccountWidget;
 use Filament\Widgets\FilamentInfoWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -19,7 +21,6 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use Filament\Support\Enums\Width;
 
 class UserPanelProvider extends PanelProvider
 {
@@ -41,9 +42,16 @@ class UserPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/User/Widgets'), for: 'App\Filament\User\Widgets')
             ->spa()
+            ->sidebarCollapsibleOnDesktop()
             ->widgets([
                 // AccountWidget::class,
                 // FilamentInfoWidget::class,
+            ])
+            ->navigationItems([
+                NavigationItem::make('Explore Jobs')
+                    ->url(url('/jobs'), shouldOpenInNewTab: true)
+                    ->icon('heroicon-o-briefcase')
+                    ->sort(6),
             ])
             ->middleware([
                 EncryptCookies::class,

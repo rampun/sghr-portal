@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Filament\User\Resources\ApplicationHistories\Schemas;
+namespace App\Filament\User\Resources\JobApplications\Schemas;
 
 use Filament\Schemas\Schema;
 
-class ApplicationHistoryInfolist
+class JobApplicationForm
 {
     public static function configure(Schema $schema): Schema
     {

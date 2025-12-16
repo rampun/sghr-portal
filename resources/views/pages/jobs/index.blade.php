@@ -3,6 +3,12 @@
 @section('title', 'Job list')
 
 @section('content')
+<div class="breadcrumbs text-sm">
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li>Jobs</li>
+    </ul>
+</div>
 
 <div class="grid grid-cols-12 gap-8 mt-8">
     <!-- filter -->

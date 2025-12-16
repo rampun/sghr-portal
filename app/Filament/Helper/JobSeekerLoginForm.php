@@ -3,7 +3,6 @@
 namespace App\Filament\Helper;
 
 use Filament\Auth\Pages\Login;
-use Filament\Forms\Components\Select;
 use Filament\Schemas\Schema;
 use Illuminate\Contracts\Support\Htmlable;
 use SensitiveParameter;
@@ -18,9 +17,9 @@ class JobSeekerLoginForm extends Login
     public function getSubheading(): string|Htmlable|null
     {
         return null;
+
         return 'Login to Job Seeker Portal';
     }
-
 
     public function form(Schema $schema): Schema
     {

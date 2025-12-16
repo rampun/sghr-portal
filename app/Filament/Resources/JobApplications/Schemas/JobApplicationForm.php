@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\JobApplications\Schemas;
 
+use App\Enums\JobApplication\StatusEnum;
+use Filament\Forms\Components\Select;
 use Filament\Schemas\Schema;
 
 class JobApplicationForm
@@ -10,7 +12,9 @@ class JobApplicationForm
     {
         return $schema
             ->components([
-                //
+                Select::make('status')
+                    ->options(StatusEnum::class)
+                    ->required(),
             ]);
     }
 }

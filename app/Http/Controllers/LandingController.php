@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\JobAds;
 use Filament\Schemas\Components\View;
+use Illuminate\Http\Request;
 
 class LandingController extends Controller
 {
@@ -52,6 +52,7 @@ class LandingController extends Controller
         $items = $query->paginate($perPage);
 
         $categories = [];
+
         // Return view for web requests
         // return view('landing', compact('items', 'categories', 'search', 'category', 'sort', 'direction'));
         return view('pages.landing.index', compact('items', 'categories'));

@@ -11,14 +11,13 @@ use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Filament\Support\Enums\Width;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use Filament\Support\Enums\Width;
-
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -31,6 +30,7 @@ class AdminPanelProvider extends PanelProvider
             ->login(AdminLoginForm::class)
             ->spa()
             ->navigation()
+            ->sidebarCollapsibleOnDesktop()
             ->maxContentWidth(Width::Full)
             ->colors([
                 'primary' => Color::Teal,

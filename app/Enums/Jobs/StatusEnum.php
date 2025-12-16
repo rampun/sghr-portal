@@ -5,7 +5,7 @@ namespace App\Enums\Jobs;
 use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasLabel;
 
-enum StatusEnum: string implements HasLabel, HasColor
+enum StatusEnum: string implements HasColor, HasLabel
 {
     case ACTIVE = 'ACTIVE';
     case INACTIVE = 'INACTIVE';
@@ -26,7 +26,7 @@ enum StatusEnum: string implements HasLabel, HasColor
     {
         return match ($this) {
             self::ACTIVE => 'success',
-            self::INACTIVE => 'secondary',
+            self::INACTIVE => 'gray',
             self::FILLED => 'warning',
             self::EXPIRED => 'danger',
         };

@@ -2,17 +2,15 @@
 
 namespace App\Models;
 
-use App\Enums\Jobs\TypeEnum;
+use App\Enums\Jobs\AdDurationEnum;
 use App\Enums\Jobs\LocationEnum;
+use App\Enums\Jobs\StatusEnum;
+use App\Enums\Jobs\TypeEnum;
 use App\Enums\Users\ExperienceLevelEnum;
 use App\Enums\Users\IndustryEnum;
-use App\Enums\Jobs\AdDurationEnum;
-use App\Enums\Jobs\StatusEnum;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
-
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class JobAds extends Model
 {
@@ -20,12 +18,12 @@ class JobAds extends Model
     use HasUuids, SoftDeletes;
 
     public $incrementing = false; // Disable auto-incrementing
+
     protected $keyType = 'string';
 
     protected $fillable = [
         'user_id',
         'title',
-        'description',
         'location',
         'type',
         'location',
@@ -38,7 +36,6 @@ class JobAds extends Model
         'no_of_employee',
         'country',
         'required_skills',
-        'start_date',
     ];
 
     protected function casts()

@@ -2,22 +2,21 @@
 
 namespace App\Filament\Resources\Users\Schemas;
 
-use Filament\Schemas\Components\Utilities\Get;
-use App\Enums\Users\UserRoleEnum;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
-use Filament\Schemas\Schema;
 use App\Enums\Users\CompanySizeEnum;
-use App\Enums\Users\IndustryEnum;
 use App\Enums\Users\CountryEnum;
-use App\Enums\Users\UserStatusEnum;
-use App\Enums\Users\ExperienceLevelEnum;
 use App\Enums\Users\EducationLevelEnum;
-use Filament\Forms\Components\Textarea;
-use Filament\Schemas\Components\Section;
-use Filament\Forms\Components\TagsInput;
+use App\Enums\Users\ExperienceLevelEnum;
+use App\Enums\Users\IndustryEnum;
+use App\Enums\Users\UserRoleEnum;
+use App\Enums\Users\UserStatusEnum;
 use Filament\Forms\Components\FileUpload;
-
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TagsInput;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Schema;
 
 class UserForm
 {
@@ -110,11 +109,11 @@ class UserForm
                             ->disk('cloudinary')
                             ->maxFiles(1)
                             ->directory('sghr_assets/resumes')
-                            ->required()
+                            ->required(),
 
                     ])->columnSpan('full')
                     ->columns(2)
-                    ->visible(fn(Get $get): bool => $get('role') === UserRoleEnum::JOB_SEEKER),
+                    ->visible(fn (Get $get): bool => $get('role') === UserRoleEnum::JOB_SEEKER),
 
                 // Conditional employer fields
                 Section::make('Employer Information')
@@ -151,10 +150,10 @@ class UserForm
                         Select::make('company_country')
                             ->label('Country')
                             ->options(CountryEnum::class)
-                            ->required()
+                            ->required(),
                     ])->columnSpan('full')
                     ->columns(2)
-                    ->visible(fn(Get $get): bool => $get('role') === UserRoleEnum::EMPLOYER)
+                    ->visible(fn (Get $get): bool => $get('role') === UserRoleEnum::EMPLOYER),
             ]);
     }
 }

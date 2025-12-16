@@ -5,7 +5,7 @@ namespace App\Enums\Users;
 use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasLabel;
 
-enum UserStatusEnum: string implements HasLabel, HasColor
+enum UserStatusEnum: string implements HasColor, HasLabel
 {
     case ACTIVE = 'ACTIVE';
     case INACTIVE = 'INACTIVE';
@@ -24,7 +24,7 @@ enum UserStatusEnum: string implements HasLabel, HasColor
     {
         return match ($this) {
             self::ACTIVE => 'success',
-            self::INACTIVE => 'secondary',
+            self::INACTIVE => 'gray',
             self::SUSPENDED => 'danger',
         };
     }
