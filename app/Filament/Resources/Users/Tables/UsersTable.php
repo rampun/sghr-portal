@@ -34,7 +34,7 @@ class UsersTable
                     ->sortable(),
             ])
             ->filters([
-                TrashedFilter::make(),
+                // TrashedFilter::make(),
             ])
             ->recordActions([
                 ViewAction::make(),
