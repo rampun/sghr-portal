@@ -32,11 +32,12 @@ class SavedJobsController extends Controller
     {
         try {
             DB::beginTransaction();
-            $savedJobs = new SavedJobs();
+            $savedJobs = new SavedJobs;
             $savedJobs->user_id = $request->user_id;
             $savedJobs->job_ad_id = $request->job_ad_id;
             $savedJobs->save();
             DB::commit();
+
             return redirect()->route('jobs.show', $request->job_ad_id);
         } catch (Exception $exception) {
             DB::rollBack();
@@ -78,6 +79,7 @@ class SavedJobsController extends Controller
                 ->where('job_ad_id', $request->job_ad_id)
                 ->delete();
             DB::commit();
+
             return redirect()->route('jobs.show', $request->job_ad_id);
         } catch (Exception $exception) {
             DB::rollBack();

@@ -32,13 +32,14 @@ class JobApplicationController extends Controller
     {
         try {
             DB::beginTransaction();
-            $jobApplication = new JobApplication();
+            $jobApplication = new JobApplication;
             $jobApplication->user_id = $request->user_id;
             $jobApplication->job_ad_id = $request->job_ad_id;
             $jobApplication->status = $request->status;
             $jobApplication->save();
 
             DB::commit();
+
             return redirect()->route('jobs.show', $request->job_ad_id);
         } catch (Exception $exception) {
             DB::rollBack();
