@@ -3,17 +3,17 @@
 namespace App\Filament\Employer\Resources\Users\Pages;
 
 use App\Filament\Employer\Resources\Users\UserResource;
-use Filament\Actions\CreateAction;
-use Filament\Resources\Pages\ListRecords;
+use Filament\Actions\EditAction;
+use Filament\Resources\Pages\ViewRecord;
 
-class ListUsers extends ListRecords
+class ViewUser extends ViewRecord
 {
     protected static string $resource = UserResource::class;
 
     protected function getHeaderActions(): array
     {
         return [
-            // CreateAction::make(),
+            // EditAction::make(),
         ];
     }
 }

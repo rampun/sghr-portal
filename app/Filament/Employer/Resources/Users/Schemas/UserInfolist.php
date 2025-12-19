@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\Users\Schemas;
+namespace App\Filament\Employer\Resources\Users\Schemas;
 
 use App\Enums\Users\UserRoleEnum;
 use Filament\Infolists\Components\TextEntry;
@@ -43,19 +43,6 @@ class UserInfolist
                     ])->columnSpan('full')
                     ->columns(2)
                     ->visible(fn(Get $get): bool => $get('role') === UserRoleEnum::JOB_SEEKER),
-
-                // Conditional Employer fields
-                Section::make('Employer Information')
-                    ->components([
-                        TextEntry::make('company_name'),
-                        TextEntry::make('company_size'),
-                        TextEntry::make('company_website'),
-                        TextEntry::make('company_description'),
-                        TextEntry::make('company_industry'),
-                        TextEntry::make('company_country'),
-                    ])->columnSpan('full')
-                    ->columns(2)
-                    ->visible(fn(Get $get): bool => $get('role') === UserRoleEnum::EMPLOYER),
             ]);
     }
 }

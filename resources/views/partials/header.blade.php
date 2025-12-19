@@ -21,7 +21,7 @@
                     <li><a>Companies</a></li>
                     <li><a>Resume</a></li>
                     @guest
-                    <li><a>Employer Login</a></li>
+                    <li><a href="/employer">Employer Login</a></li>
                     @endguest
 
                 </ul>
@@ -43,7 +43,7 @@
                 <li><a>Companies</a></li>
                 <li><a>Resume</a></li>
                 @guest
-                <li><a>Employer Login</a></li>
+                <li><a href="/employer">Employer Login</a></li>
                 @endguest
 
             </ul>

@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Helper\EmployerLoginForm;
+use Filament\Support\Enums\Width;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -38,7 +39,9 @@ class EmployerPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Employer/Widgets'), for: 'App\Filament\Employer\Widgets')
             ->spa()
+            ->navigation()
             ->sidebarCollapsibleOnDesktop()
+            ->maxContentWidth(Width::Full)
             ->widgets([
                 // AccountWidget::class,
                 // FilamentInfoWidget::class,
