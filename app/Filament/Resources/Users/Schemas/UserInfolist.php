@@ -42,7 +42,7 @@ class UserInfolist
                         TextEntry::make('resume_url')->label('Resume URL'),
                     ])->columnSpan('full')
                     ->columns(2)
-                    ->visible(fn(Get $get): bool => $get('role') === UserRoleEnum::JOB_SEEKER),
+                    ->visible(fn (Get $get): bool => $get('role') === UserRoleEnum::JOB_SEEKER),
 
                 // Conditional Employer fields
                 Section::make('Employer Information')
@@ -55,7 +55,7 @@ class UserInfolist
                         TextEntry::make('company_country'),
                     ])->columnSpan('full')
                     ->columns(2)
-                    ->visible(fn(Get $get): bool => $get('role') === UserRoleEnum::EMPLOYER),
+                    ->visible(fn (Get $get): bool => $get('role') === UserRoleEnum::EMPLOYER),
             ]);
     }
 }

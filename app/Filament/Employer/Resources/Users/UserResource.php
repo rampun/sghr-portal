@@ -3,7 +3,6 @@
 namespace App\Filament\Employer\Resources\Users;
 
 use App\Filament\Employer\Resources\Users\Pages\CreateUser;
-use App\Filament\Employer\Resources\Users\Pages\DashboardOverview;
 use App\Filament\Employer\Resources\Users\Pages\EditUser;
 use App\Filament\Employer\Resources\Users\Pages\ListUsers;
 use App\Filament\Employer\Resources\Users\Pages\ViewUser;

@@ -7,16 +7,12 @@ use App\Enums\Users\ExperienceLevelEnum;
 use App\Enums\Users\IndustryEnum;
 use App\Enums\Users\UserRoleEnum;
 use App\Enums\Users\UserStatusEnum;
-use Cloudinary\Api\Provisioning\UserRole;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Actions\ForceDeleteBulkAction;
-use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
-use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
