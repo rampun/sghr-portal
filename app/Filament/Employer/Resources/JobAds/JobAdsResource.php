@@ -26,6 +26,8 @@ class JobAdsResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'Job Ads';
 
+    protected static ?string $navigationLabel = 'My Job Ads';
+
     public static function form(Schema $schema): Schema
     {
         return JobAdsForm::configure($schema);

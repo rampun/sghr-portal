@@ -37,17 +37,12 @@ class JobAdsInfolist
                 TextEntry::make('status')
                     ->badge()
                     ->placeholder('-'),
-                TextEntry::make('start_date')
-                    ->date()
-                    ->placeholder('-'),
-                TextEntry::make('duration')
-                    ->placeholder('-'),
                 TextEntry::make('employer.company_name')
                     ->label('Employer Name')
                     ->placeholder('-'),
                 TextEntry::make('deleted_at')
                     ->date()
-                    ->visible(fn (JobAds $record): bool => $record->trashed()),
+                    ->visible(fn(JobAds $record): bool => $record->trashed()),
             ]);
     }
 }
