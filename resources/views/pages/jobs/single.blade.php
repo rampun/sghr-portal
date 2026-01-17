@@ -160,6 +160,7 @@
                     <ul>
                         <li><b>Industry:</b> <span>{{ App\Enums\Users\IndustryEnum::from($job->industry->value)->getLabel() }}</span></li>
                         <li><b>Employment Type:</b> <span>{{ App\Enums\Jobs\TypeEnum::from($job->type->value)->getLabel() }}</span></li>
+                        <li><b>Remote Option:</b> <span>{{ App\Enums\Jobs\LocationEnum::from($job->location->value)->getLabel() }}</span></li>
                         <!-- <li><b>Education:</b><span> N/A</span></li> -->
                     </ul>
                 </div>

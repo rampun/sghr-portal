@@ -5,7 +5,6 @@ namespace App\Policies;
 use App\Enums\Users\UserRoleEnum;
 use App\Models\JobAds;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class JobAdsPolicy
 {

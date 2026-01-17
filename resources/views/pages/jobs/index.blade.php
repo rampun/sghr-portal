@@ -10,185 +10,391 @@
     </ul>
 </div>
 
-<div class="grid grid-cols-12 gap-8 mt-8">
-    <!-- filter -->
-    <div class="col-span-4 card w-full card-md flex flex-col gap-10">
-        <!-- Job Type -->
-        <div class="card-body shadow-md rounded-md job_type">
-            <!-- Job type -->
-            <div>
-                <h3 class="text-md font-bold mb-2">
-                    Job type
-                </h3>
-                <div class="flex flex-col gap-2">
-                    @foreach (App\Enums\Jobs\TypeEnum::cases() as $type)
-                    <label class="label text-gray-600">
-                        <input type="checkbox" name="{{ $type->value }}" class="checkbox checkbox-primary checkbox-sm" />
-                        <span class="">{{ $type->getLabel() }}</span>
-                    </label>
-                    @endforeach
-                </div>
-                <div class="flex w-full flex-col">
-                    <div class="divider bg-gray-200 h-[1px]"></div>
-                </div>
-            </div>
-            <!-- Experience -->
-            <div>
-                <h3 class="text-md font-bold mb-2">
-                    Experience Level
-                </h3>
-                <div class="flex flex-col gap-2">
-                    @foreach (App\Enums\Users\ExperienceLevelEnum::cases() as $experienceLevel)
-                    <label class="label text-gray-600">
-                        <input type="checkbox" name="{{ $experienceLevel->value }}" class="checkbox checkbox-primary checkbox-sm" />
-                        <span class="">{{ $experienceLevel->getLabel() }}</span>
-                    </label>
-                    @endforeach
-                </div>
-                <div class="flex w-full flex-col">
-                    <div class="divider bg-gray-200 h-[1px]"></div>
-                </div>
-            </div>
-
-            <!-- Salary -->
-            <div>
-                <h3 class="text-md font-bold mb-2">
-                    Salary(in USD per month)
-                </h3>
-                <div class="flex gap-2 justify-between">
-                    <fieldset class="fieldset">
-                        <input type="number" class="input input-sm text-gray-600 bg-gray-50 w-[120px] border-gray-600" placeholder="Min." />
-                    </fieldset>
-                    <fieldset class="fieldset">
-                        <input type="number" class="input input-sm text-gray-600 bg-gray-50 w-[120px] border-gray-600" placeholder="Max." />
-                    </fieldset>
-                </div>
-                <div class="flex w-full flex-col">
-                    <div class="divider bg-gray-200 h-[1px]"></div>
-                </div>
-            </div>
-
-            <!-- Remote type -->
-            <div>
-                <h3 class="text-md font-bold mb-2">
-                    Remote option
-                </h3>
-                <div class="flex flex-col gap-2">
-                    @foreach (App\Enums\Jobs\LocationEnum::cases() as $location)
-                    <label class="label text-gray-600">
-                        <input type="checkbox" name="{{ $location->value }}" class="checkbox checkbox-primary checkbox-sm" />
-                        <span class="">{{ $location->getLabel() }}</span>
-                    </label>
-                    @endforeach
-                </div>
-                <div class="flex w-full flex-col">
-                    <div class="divider bg-gray-200 h-[1px]"></div>
-                </div>
-            </div>
-
-            <!-- Location -->
-            <div>
-                <h3 class="text-md font-bold mb-2">
-                    Location
-                </h3>
-                <div class="flex flex-col gap-2">
-                    @foreach (App\Enums\Users\CountryEnum::cases() as $country)
-                    <label class="label text-gray-600">
-                        <input type="checkbox" name="{{ $country->value }}" class="checkbox checkbox-primary checkbox-sm" />
-                        <span class="">{{ $country->getLabel() }}</span>
-                    </label>
-                    @endforeach
-                </div>
-                <div class="flex w-full flex-col">
-                    <div class="divider bg-gray-200 h-[1px]"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- filtered job list -->
-    <div class="col-span-8">
-        <div class="flex text-black justify-between">
-            <p class="text-normal"> 1-20 of 300 jobs</p>
-            <p class="text-normal">Sort by</p>
-        </div>
-
-        <div class="card w-full card-md flex flex-col gap-10">
-            @foreach($jobs as $job)
-            <a href="{{ route('jobs.show', ['id' => $job->id]) }}" style="text-decoration: none; color: inherit;">
-                <div class="card-body shadow-md rounded-md hover:shadow-xl hover:cursor-pointer transition-all duration-300">
-                    <div class="grid grid-cols-12 gap-4 mb-1">
-                        <div class="col-span-1">
-                            <figure>
-                                <x-cloudinary::image
-                                    public-id="{{ $job->employer->logo_url }}"
-                                    width="48"
-                                    height="48"
-                                    crop="fit"
-                                    alt="{{ $job->employer->company_title }} logo" />
-                            </figure>
-                        </div>
-                        <div class="col-span-7">
-                            <h2 class="card-title">{{ $job->title }}</h2>
-                            <div class="flex gap-4">
-                                <span class="company text-gray-600">{{ $job->employer->company_name }}</span>
-                                <p class="location flex items-center gap-1">
-                                    <span class="text-gray-600">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
-                                        </svg>
-
-
-                                    </span>
-                                    <span class="text-gray-600">{{ App\Enums\Users\CountryEnum::from($job->country)->getLabel() }}</span>
-                            </div>
-                        </div>
-                        <div class="col-span-4 text-right">
-                            <p class="font-bold">
-                                ${{ number_format($job->salary_min_range)}}-${{ number_format($job->salary_max_range) }} (USD/month)
-                            </p>
-                        </div>
+<div x-data="jobFilter()" x-init="initFilters()" class="container mx-auto py-8">
+    <div class="grid grid-cols-12 gap-8 mt-8">
+        <!-- filter -->
+        <div class="col-span-3 card w-full card-md flex flex-col gap-10">
+            <div class="card-body shadow-md rounded-md job_type">
+                <!-- Search -->
+                <div>
+                    <h3 class="text-md font-bold mb-2">
+                        Search for
+                    </h3>
+                    <div class="flex gap-2 justify-between">
+                        <input x-model="filters.s"
+                            @input.debounce.500ms="applyFilters()"
+                            type="text"
+                            class="input input-sm text-gray-600 bg-gray-50 w-[240px] border-gray-600"
+                            name="s"
+                            value="<?= $_GET['s'] ?? '' ?>"
+                            placeholder="jobs, skills" />
                     </div>
-                    <div class="grid mb-1">
-                        <p class="line-clamp-3 text-normal">
-                            {{ strip_tags($job->description) }}
-                        </p>
+                    <div class="flex w-full flex-col">
+                        <div class="divider bg-gray-200 h-[1px]"></div>
                     </div>
-                    <div class="flex gap-2 justify-start mb-1">
-                        @foreach($job->required_skills as $required_skill)
-                        <div class="rounded-2xl w-auto badge badge-sm bg-gray-200 text-gray-800 text-normal border-0">{{ $required_skill }}</div>
+                </div>
+
+                <!-- Job type -->
+                <div>
+                    <h3 class="text-md font-bold mb-2">
+                        Job type
+                    </h3>
+                    <div class="flex flex-col gap-2">
+                        @foreach (App\Enums\Jobs\TypeEnum::cases() as $type)
+                        <label class="label text-gray-600">
+                            <input
+                                type="checkbox"
+                                name="{{ $type->value }}"
+                                class="checkbox checkbox-primary checkbox-sm"
+                                value="{{ $type->value }}"
+                                x-model="filters.job_type"
+                                @change="applyFilters()" />
+                            <span class="">{{ $type->getLabel() }}</span>
+                        </label>
                         @endforeach
                     </div>
-                    <div class="flex justify-between items-center">
-                        <div class="text-gray-600">
-                            <p>Posted on: {{ date_format($job->created_at, 'Y-m-d') }}</p>
-                        </div>
-                        <div class="">
-                            <p class="flex text-right gap-1 items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
-                                </svg>
-                                <span>
-                                    Save
-                                </span>
-                            </p>
-
-
-                        </div>
+                    <div class="flex w-full flex-col">
+                        <div class="divider bg-gray-200 h-[1px]"></div>
                     </div>
                 </div>
-            </a>
-            @endforeach
-        </div>
-        <!-- <div class="pagination">
-            <div class="join">
-                <button class="join-item btn">1</button>
-                <button class="join-item btn btn-active">2</button>
-                <button class="join-item btn">3</button>
-                <button class="join-item btn">4</button>
+                <!-- Experience -->
+                <div>
+                    <h3 class="text-md font-bold mb-2">
+                        Experience Level
+                    </h3>
+                    <div class="flex flex-col gap-2">
+                        @foreach (App\Enums\Users\ExperienceLevelEnum::cases() as $experienceLevel)
+                        <label class="label text-gray-600">
+                            <input
+                                type="checkbox"
+                                name="{{ $experienceLevel->value }}"
+                                class="checkbox checkbox-primary checkbox-sm"
+                                value="{{ $experienceLevel->value }}"
+                                x-model="filters.experience"
+                                @change="applyFilters()" />
+                            <span class="">{{ $experienceLevel->getLabel() }}</span>
+                        </label>
+                        @endforeach
+                    </div>
+                    <div class="flex w-full flex-col">
+                        <div class="divider bg-gray-200 h-[1px]"></div>
+                    </div>
+                </div>
+
+                <!-- Salary -->
+                <div>
+                    <h3 class="text-md font-bold mb-2">
+                        Salary(in USD per month)
+                    </h3>
+                    <div class="flex gap-2 justify-between">
+                        <fieldset class="fieldset">
+                            <input
+                                type="number"
+                                class="input input-sm text-gray-600 bg-gray-50 w-[100px] border-gray-600"
+                                placeholder="Min"
+                                x-model="filters.min_salary"
+                                @input.debounce.500ms="applyFilters()" />
+                        </fieldset>
+                        <fieldset class="fieldset">
+                            <input
+                                type="number"
+                                class="input input-sm text-gray-600 bg-gray-50 w-[100px] border-gray-600"
+                                placeholder="Max."
+                                x-model="filters.max_salary"
+                                @input.debounce.500ms="applyFilters()" />
+                        </fieldset>
+                    </div>
+                    <div class="flex w-full flex-col">
+                        <div class="divider bg-gray-200 h-[1px]"></div>
+                    </div>
+                </div>
+
+                <!-- Remote type -->
+                <div>
+                    <h3 class="text-md font-bold mb-2">
+                        Remote option
+                    </h3>
+                    <div class="flex flex-col gap-2">
+                        @foreach (App\Enums\Jobs\LocationEnum::cases() as $location)
+                        <label class="label text-gray-600">
+                            <input
+                                type="checkbox"
+                                name="{{ $location->value }}"
+                                class="checkbox checkbox-primary checkbox-sm"
+                                value="{{ $location->value }}"
+                                x-model="filters.remote"
+                                @change="applyFilters()" />
+                            <span class="">{{ $location->getLabel() }}</span>
+                        </label>
+                        @endforeach
+                    </div>
+                    <div class="flex w-full flex-col">
+                        <div class="divider bg-gray-200 h-[1px]"></div>
+                    </div>
+                </div>
+
+                <!-- Location -->
+                <div>
+                    <h3 class="text-md font-bold mb-2">
+                        Country
+                    </h3>
+                    <div class="flex flex-col gap-2">
+                        @foreach (App\Enums\Users\CountryEnum::cases() as $country)
+                        <label class="label text-gray-600">
+                            <input
+                                type="checkbox"
+                                name="{{ $country->value }}"
+                                class="checkbox checkbox-primary checkbox-sm"
+                                value="{{ $country->value }}"
+                                x-model="filters.country"
+                                @change="applyFilters()" />
+                            <span class="">{{ $country->getLabel() }}</span>
+                        </label>
+                        @endforeach
+                    </div>
+                    <div class="flex w-full flex-col">
+                        <div class="divider bg-gray-200 h-[1px]"></div>
+                    </div>
+                </div>
             </div>
-        </div> -->
+        </div>
+
+        <!-- Job Listings -->
+        <div class="col-span-9">
+            <!-- Results Count -->
+            <div class="mb-6">
+                <p class="text-gray-600" x-text="`Found ${totalJobs} jobs`"></p>
+            </div>
+
+            <!-- Active Filters -->
+            <div class="mb-4 flex flex-wrap gap-2" x-show="hasActiveFilters()">
+                <template x-for="(value, key) in activeFilters" :key="key">
+                    <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm flex items-center">
+                        <span x-text="getFilterLabel(key, value)"></span>
+                        <button @click="removeFilter(key)" class="ml-2 text-blue-600 hover:text-blue-800">
+                            &times;
+                        </button>
+                    </span>
+                </template>
+            </div>
+
+            <!-- Jobs List -->
+            <div id="jobs-container">
+                @include('partials.job_list', ['jobs' => $jobs])
+            </div>
+
+            <!-- Loading Indicator -->
+            <div x-show="loading" class="text-center py-8">
+                <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                <p class="mt-2">Loading jobs...</p>
+            </div>
+        </div>
+
     </div>
 </div>
-
 @endsection
+
+@push('sghrl-scripts')
+<script>
+    function jobFilter() {
+        return {
+            filters: {
+                s: '',
+                job_type: [],
+                min_salary: '',
+                max_salary: '',
+                remote: [],
+                experience: [],
+                country: [],
+                // page: 1
+            },
+            loading: false,
+             totalJobs: {{ $jobs->total() }},
+            initFilters() {
+                // Get filters from URL
+                const urlParams = new URLSearchParams(window.location.search);
+
+                this.filters.s = urlParams.get('s') || '';
+
+                const job_type = urlParams.get('job_type');
+                this.filters.job_type = job_type ? job_type.split(',') : [];
+
+                const experience = urlParams.get('experience');
+                this.filters.experience = experience ? experience.split(',') : [];
+
+                this.filters.min_salary = urlParams.get('min_salary') || '';
+                this.filters.max_salary = urlParams.get('max_salary') || '';
+
+                const remote = urlParams.get('remote');
+                this.filters.remote = remote ? remote.split(',') : [];
+
+                const country = urlParams.get('country');
+                this.filters.country = country ? country.split(',') : [];
+
+
+                // this.filters.page = urlParams.get('page') || 1;
+            },
+
+            async fetchData(url) {
+                try {
+                    const response = await fetch(url, {
+                        headers: {
+                            'Accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    });
+
+                    // Manually check for non-network errors (e.g., 404 Not Found)
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    // Wait for the response body to be parsed as JSON
+                    const data = await response.json();
+                    document.getElementById('jobs-container').innerHTML = data.jobs;
+                    this.totalJobs = data.total_jobs;
+
+                } catch (error) {
+                    console.error("There was a problem with your fetch request:", error);
+                } finally {
+                    this.loading = false;
+                }
+            },
+
+
+            applyFilters() {
+                this.loading = true;
+                console.log("Applying filters:", this.filters);
+
+                // Build URL with filters
+                const url = new URL('{{ route("jobs.index") }}');
+
+                // Add filters to URL
+                Object.keys(this.filters).forEach(key => {
+                    const value = this.filters[key];
+                    if (value) {
+                        if (Array.isArray(value) && value.length > 0) {
+                            url.searchParams.set(key, value.join(','));
+                        } else if (!Array.isArray(value)) {
+                            url.searchParams.set(key, value);
+                        }
+                    }
+                });
+
+                // Update browser URL (without reloading page)
+                window.history.pushState({}, '', url.toString());
+
+                // Call the function
+                this.fetchData(url.toString());
+            },
+
+
+            clearFilters() {
+                this.filters = {
+                    s: '',
+                    job_type: [],
+                    min_salary: '',
+                    max_salary: '',
+                    remote: [],
+                    experience: [],
+                    country: [],
+                    page: 1
+                };
+
+                // Clear URL and reload
+                window.history.pushState({}, '', '{{ route("jobs.index") }}');
+                this.applyFilters();
+            },
+
+            removeFilter(filterKey) {
+                if (Array.isArray(this.filters[filterKey])) {
+                    this.filters[filterKey] = [];
+                } else {
+                    this.filters[filterKey] = '';
+                }
+                this.applyFilters();
+            },
+
+            hasActiveFilters() {
+                return Object.values(this.filters).some(value => {
+                    if (Array.isArray(value)) return value.length > 0;
+                    return value !== '' && value !== null;
+                });
+            },
+
+            get activeFilters() {
+                const active = {};
+                Object.keys(this.filters).forEach(key => {
+                    const value = this.filters[key];
+                    if (value) {
+                        if (Array.isArray(value) && value.length > 0) {
+                            active[key] = value;
+                        } else if (!Array.isArray(value) && value !== '') {
+                            active[key] = value;
+                        }
+                    }
+                });
+                return active;
+            },
+
+            getFilterLabel(key, value) {
+                const labels = {
+                    's': `Search: ${value}`,
+                    'job_type': `Job Type: ${this.formatJobType(value)}`,
+                    'remote': `Remote: ${this.formatRemoteOption(value)}`,
+                    'min_salary': `Min Salary: $${value}`,
+                    'max_salary': `Max Salary: $${value}`,
+                    'experience': `Experience: ${this.formatExperience(value)}`,
+                    'country': `Country: ${this.formatCountry(value)}`,
+                };
+                return labels[key] || `${key}: ${value}`;
+            },
+
+            formatJobType(type) {
+                const types = {
+                    'FULL_TIME': 'Full Time',
+                    'PART_TIME': 'Part Time',
+                    'CONTRACT': 'Contract',
+                    'INTERNSHIP': 'Internship',
+                };
+                return types[type] || type;
+            },
+
+            formatExperience(experience) {
+                const experiences = {
+                    'ENTRY_LEVEL': 'Entry Level (0-2 years)',
+                    'MID_LEVEL': 'Mid Level (3-5 years)',
+                    'SENIOR_LEVEL': 'Senior Level (6-10 years)',
+                    'MANAGEMENT': 'Management (10+ years)',
+                    'EXECUTIVE': 'Executive (15+ years)',
+                };
+                return experiences[experience] || experience;
+            },
+            formatRemoteOption(remote) {
+                const options = {
+                    'ONSITE': 'Onsite',
+                    'REMOTE': 'Remote',
+                    'HYBRID': 'Hybrid',
+                };
+                return options[remote] || remote;
+            },
+
+            formatCountry(country) {
+                const countries = {
+                    'IN': 'India',
+                    'HK': 'Hong Kong',
+                    'NP': 'Nepal',
+                    'MO': 'Macau',
+                    'MY': 'Malaysia',
+                    'QA': 'Qatar',
+                    'UA': 'United Arab Emirates',
+                    'PH': 'Philippines',
+                    // Add other countries as needed
+                };
+                return countries[country] || country;
+            }
+        }
+    }
+</script>
+
+@endpush
