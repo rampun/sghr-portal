@@ -252,7 +252,7 @@
     </div>
 
     <div class="mt-24 text-center bg-gradient-to-r from-blue-300 to-blue-600 py-12 px-6 rounded-xl text-white">
-        <h2 class="text-3xl font-semibold ">Your Career Journey Starts Here</h2>
+        <h2 class="text-2xl font-semibold ">Your Career Journey Starts Here</h2>
         <p class="mt-4 max-w-2xl mx-auto">Discover your next career opportunity with SGHRL, where global talent meets exceptional opportunities.</p>
     </div>
 
