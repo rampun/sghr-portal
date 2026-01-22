@@ -48,7 +48,7 @@
             </div>
             <div class="flex justify-between items-center">
                 <div class="text-gray-600">
-                    <p>Posted on: {{ date_format($job->created_at, 'Y-m-d') }}</p>
+                    <p>Posted {{ \Carbon\Carbon::parse($job->created_at)->diffForHumans() }}</p>
                 </div>
                 <!-- <div class="">
                             <p class="flex text-right gap-1 items-center">

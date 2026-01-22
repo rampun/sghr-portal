@@ -13,7 +13,6 @@ class JobsController extends Controller
 {
     public function index(Request $request)
     {
-
         $jobs = $this->getFilteredJobs($request);
         if ($request->wantsJson()) {
             try {
@@ -30,7 +29,6 @@ class JobsController extends Controller
                 ], 500);
             }
         }
-
         return view('pages.jobs.index', ['jobs' => $jobs]);
     }
 
@@ -63,7 +61,10 @@ class JobsController extends Controller
             $query->where(function ($query) use ($search) {
                 $query->where('title', 'LIKE', "%{$search}%")
                     ->orWhere('description', 'LIKE', "%{$search}%")
-                    ->orWhere('required_skills', 'LIKE', "%{$search}%");
+                    ->orWhere('required_skills', 'LIKE', "%{$search}%")
+                    ->orWhere('industry', 'LIKE', "%{$search}%")
+                    ->orWhere('location', 'LIKE', "%{$search}%")
+                    ->orWhere('type', 'LIKE', "%{$search}%");
             });
         }
 

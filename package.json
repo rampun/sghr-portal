@@ -15,6 +15,7 @@
         "vite": "^7.0.7"
     },
     "dependencies": {
+        "@fontsource/montserrat": "^5.2.8",
         "alpinejs": "^3.15.2"
     }
 }
