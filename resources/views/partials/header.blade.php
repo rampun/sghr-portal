@@ -52,8 +52,8 @@
             @if (auth()->user())
             <a class="btn btn-outline btn-primary rounded-3xl" href="/jobseeker">My Dashboard</a>
             @else
-            <a class="btn btn-outline btn-primary rounded-3xl" href="/jobseeker">Login</a>
-            <a class="btn btn-secondary text-white rounded-3xl">Register</a>
+            <a class="btn btn-outline btn-primary rounded-3xl" href="/jobseeker/login">Login</a>
+            <a class="btn btn-secondary text-white rounded-3xl" href="/jobseeker/register">Register</a>
             @endif
         </div>
     </div>

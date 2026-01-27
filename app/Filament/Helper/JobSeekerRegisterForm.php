@@ -3,6 +3,7 @@
 namespace App\Filament\Helper;
 
 use App\Enums\Users\UserRoleEnum;
+use App\Enums\Users\UserStatusEnum;
 use App\Models\User;
 use Filament\Auth\Pages\Register as BaseRegister;
 use Filament\Forms\Components\TextInput;
@@ -49,6 +50,7 @@ class JobSeekerRegisterForm extends BaseRegister
                 'password' => Hash::make($data['password']),
                 'email_verified_at' => null, // Ensure email is not verified initially
                 'role' => UserRoleEnum::JOB_SEEKER,
+                'status' => UserStatusEnum::ACTIVE,
             ]);
 
             // Fire registered event
