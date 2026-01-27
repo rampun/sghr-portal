@@ -29,6 +29,7 @@ class JobsController extends Controller
                 ], 500);
             }
         }
+
         return view('pages.jobs.index', ['jobs' => $jobs]);
     }
 

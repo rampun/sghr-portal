@@ -3,7 +3,6 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Enums\Users\CompanySizeEnum;
 use App\Enums\Users\CountryEnum;
 use App\Enums\Users\EducationLevelEnum;
@@ -13,14 +12,14 @@ use App\Enums\Users\UserRoleEnum;
 use App\Enums\Users\UserStatusEnum;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\Notifications\VerifyEmail;
 
-class User extends Authenticatable implements MustVerifyEmail, FilamentUser
+class User extends Authenticatable implements FilamentUser, MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, HasUuids, Notifiable, SoftDeletes;
@@ -133,10 +132,9 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
         return false;
     }
 
-
     // Add this method to your User model
     public function sendEmailVerificationNotification()
     {
-        $this->notify(new \App\Notifications\VerifyEmail());
+        $this->notify(new \App\Notifications\VerifyEmail);
     }
 }

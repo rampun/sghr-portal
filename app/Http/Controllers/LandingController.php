@@ -17,7 +17,6 @@ class LandingController extends Controller
             ->get()
             ->take(4);
 
-
         return view('pages.landing.index', [
             'recommendedJobs' => $recommendedJobs,
         ]);

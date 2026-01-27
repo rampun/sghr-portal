@@ -3,16 +3,15 @@
 namespace App\Filament\Helper;
 
 use App\Enums\Users\UserRoleEnum;
+use App\Models\User;
 use Filament\Auth\Pages\Register as BaseRegister;
-use Illuminate\Contracts\Support\Htmlable;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Schemas\Components\Component;
 use Filament\Schemas\Schema;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
-use App\Models\User;
-use Filament\Notifications\Notification;
-
+use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Facades\Hash;
 
 class JobSeekerRegisterForm extends BaseRegister
 {

@@ -1,11 +1,11 @@
 <?php
 
 // app/Notifications/CustomVerifyEmail.php
+
 namespace App\Notifications;
 
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\URL;
 
 class VerifyEmail extends Notification

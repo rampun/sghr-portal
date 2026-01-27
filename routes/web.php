@@ -1,14 +1,11 @@
 <?php
 
+use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\JobsController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\SavedJobsController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\VerifyEmailController;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Client\Request;
 
 Route::middleware('web')->group(function () {
 
