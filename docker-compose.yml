@@ -57,6 +57,35 @@ services:
     command: >
       sh -c "npm run dev -- --host"
 
+# mailhog
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: sghr-mailhog
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.mailhog_router.rule=Host(`mailhog.${DOMAIN}`)
+      - traefik.http.routers.mailhog_router.service=mailhog_service
+      - traefik.http.services.mailhog_service.loadbalancer.server.port=8025
+    restart: unless-stopped
+    ports:
+      - "1025:1025"  # SMTP port
+      - "8025:8025"  # Web UI port
+    environment:
+      MH_STORAGE: maildir
+      MH_MAILDIR_PATH: /tmp
+      MH_UI_BIND_ADDR: 0.0.0.0:8025
+      MH_API_BIND_ADDR: 0.0.0.0:8025
+      MH_SMTP_BIND_ADDR: 0.0.0.0:1025
+    volumes:
+      - mailhog-data:/tmp
+    networks:
+        - sghr_network
+    command: >
+      MailHog
+      -smtp-bind-addr 0.0.0.0:1025
+      -ui-bind-addr 0.0.0.0:8025
+      -storage maildir
+      -maildir-path /tmp
 
 # database servie
   db:
@@ -111,6 +140,8 @@ volumes:
   mysql_data:
     driver: local
   node_modules:
+  mailhog-data:
+    driver: local
 
 networks:
   sghr_network:

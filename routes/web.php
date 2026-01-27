@@ -5,6 +5,10 @@ use App\Http\Controllers\JobsController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\SavedJobsController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\VerifyEmailController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Client\Request;
 
 Route::middleware('web')->group(function () {
 
@@ -27,4 +31,9 @@ Route::middleware('web')->group(function () {
         Route::post('/', [SavedJobsController::class, 'store'])->name('store');
         Route::delete('/', [SavedJobsController::class, 'destroy'])->name('destroy');
     });
+
+    // verify email
+    Route::get('/email/verify/{id}/{hash}', VerifyEmailController::class)
+        ->middleware(['signed', 'throttle:6,1'])
+        ->name('verification.verify');
 });

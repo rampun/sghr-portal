@@ -52,11 +52,7 @@ class JobApplicationController extends Controller
             // send email to candidate
             $emailReceipientJobSeeker = User::find($request->user_id);
             Mail::to($emailReceipientJobSeeker->email)
-                ->queue(new JobApplied($jobApplication, 'Job Application successful', 'mail.jobs.job_applied_applicant_template'));
-
-
-            sleep(15);
-
+                ->send(new JobApplied($jobApplication, 'Job Application successful', 'mail.jobs.job_applied_applicant_template'));
 
             // send email to HR admins
             $hrAdminRecipient = User::where('role', UserRoleEnum::HR_ADMIN)
@@ -65,7 +61,7 @@ class JobApplicationController extends Controller
             foreach ($hrAdminRecipient as $user) {
                 try {
                     Mail::to($user->email)
-                        ->queue(new JobApplied($jobApplication, 'New Job Application Received', 'mail.jobs.job_applied_hr_template'));
+                        ->send(new JobApplied($jobApplication, 'New Job Application Received', 'mail.jobs.job_applied_hr_template'));
 
                     Log::info('Successfully sent to: ' . $user->email);
                 } catch (\Exception $e) {
@@ -73,8 +69,6 @@ class JobApplicationController extends Controller
                         'error' => $e->getMessage(),
                     ]);
                 }
-
-                sleep(15);
             }
 
             return redirect()->route('jobs.show', $request->job_ad_id);

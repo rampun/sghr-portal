@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Helper\JobSeekerLoginForm;
+use App\Filament\Helper\JobSeekerRegisterForm;
 use App\Filament\Pages\Dashboard;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -13,14 +14,13 @@ use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Support\Enums\Width;
-use Filament\Widgets\AccountWidget;
-use Filament\Widgets\FilamentInfoWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use App\Http\Middleware\RedirectIfUnverified;
 
 class UserPanelProvider extends PanelProvider
 {
@@ -32,7 +32,7 @@ class UserPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Blue,
             ])
-            ->registration()
+            ->registration(JobSeekerRegisterForm::class)
             ->login(JobSeekerLoginForm::class)
             ->discoverResources(in: app_path('Filament/User/Resources'), for: 'App\Filament\User\Resources')
             ->discoverPages(in: app_path('Filament/User/Pages'), for: 'App\Filament\User\Pages')
@@ -44,6 +44,9 @@ class UserPanelProvider extends PanelProvider
             ->spa()
             ->sidebarCollapsibleOnDesktop()
             ->navigation()
+            ->passwordReset()
+            ->emailVerification()
+            ->emailVerificationRoutePrefix('email-verification') // Add this line
             ->widgets([
                 // AccountWidget::class,
                 // FilamentInfoWidget::class,
