@@ -14,18 +14,18 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Hash;
 
-class JobSeekerRegisterForm extends BaseRegister
+class EmployerRegisterForm extends BaseRegister
 {
     public function getHeading(): string|Htmlable|null
     {
-        return 'Job Seeker Registration';
+        return 'Employer Registration';
     }
 
     public function getSubheading(): string|Htmlable|null
     {
         return null;
 
-        return 'Register to Job Seeker Portal';
+        return 'Register to Employer Portal';
     }
 
     public function form(Schema $schema): Schema
@@ -49,12 +49,12 @@ class JobSeekerRegisterForm extends BaseRegister
                 'email' => $data['email'],
                 'password' => Hash::make($data['password']),
                 'email_verified_at' => null, // Ensure email is not verified initially
-                'role' => UserRoleEnum::JOB_SEEKER,
+                'role' => UserRoleEnum::EMPLOYER,
                 'status' => UserStatusEnum::ACTIVE,
             ]);
 
-            // // Fire registered event
-            // event(new Registered($user));
+            // Fire registered event
+            event(new Registered($user));
 
             // Show success notification IN THE CURRENT PANEL
             Notification::make()

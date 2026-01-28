@@ -14,6 +14,7 @@ use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Support\Enums\Width;
+use Filament\View\PanelsRenderHook;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -46,6 +47,15 @@ class UserPanelProvider extends PanelProvider
             ->passwordReset()
             ->emailVerification()
             ->emailVerificationRoutePrefix('email-verification') // Add this line
+            ->darkMode(false) // Disables dark mode
+            ->renderHook(
+                PanelsRenderHook::AUTH_LOGIN_FORM_AFTER,
+                fn () => view('partials.auth.register-link'),
+            )
+            ->renderHook(
+                PanelsRenderHook::AUTH_REGISTER_FORM_AFTER,
+                fn () => view('partials.auth.login-link'),
+            )
             ->widgets([
                 // AccountWidget::class,
                 // FilamentInfoWidget::class,

@@ -493,7 +493,7 @@
                 </svg>
             </div>
             <h1>Application Received!</h1>
-            <p>A new application have been received for {{ $jobApplication->job->title }} at {{ $jobApplication->job->employer->name }}</p>
+            <p>A new application have been received for {{ $jobApplication->job->title }} at {{ $jobApplication->job->employer->company_name }}</p>
         </div>
 
         <!-- Main Content -->

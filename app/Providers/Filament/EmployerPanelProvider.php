@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Helper\EmployerLoginForm;
+use App\Filament\Helper\EmployerRegisterForm;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -12,6 +13,7 @@ use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Support\Enums\Width;
+use Filament\View\PanelsRenderHook;
 use Filament\Widgets\AccountWidget;
 use Filament\Widgets\FilamentInfoWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -31,6 +33,7 @@ class EmployerPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Amber,
             ])
+            ->registration(EmployerRegisterForm::class)
             ->login(EmployerLoginForm::class)
             ->discoverResources(in: app_path('Filament/Employer/Resources'), for: 'App\Filament\Employer\Resources')
             ->discoverPages(in: app_path('Filament/Employer/Pages'), for: 'App\Filament\Employer\Pages')
@@ -40,8 +43,20 @@ class EmployerPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Employer/Widgets'), for: 'App\Filament\Employer\Widgets')
             ->spa()
             ->navigation()
+            ->passwordReset()
+            ->emailVerification()
+            ->emailVerificationRoutePrefix('email-verification') // Add this line
             ->sidebarCollapsibleOnDesktop()
             ->maxContentWidth(Width::Full)
+            ->darkMode(false) // Disables dark mode
+            ->renderHook(
+                PanelsRenderHook::AUTH_LOGIN_FORM_AFTER,
+                fn () => view('partials.auth.register-link'),
+            )
+            ->renderHook(
+                PanelsRenderHook::AUTH_REGISTER_FORM_AFTER,
+                fn () => view('partials.auth.login-link'),
+            )
             ->widgets([
                 // AccountWidget::class,
                 // FilamentInfoWidget::class,

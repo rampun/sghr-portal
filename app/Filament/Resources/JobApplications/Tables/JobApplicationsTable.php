@@ -2,15 +2,15 @@
 
 namespace App\Filament\Resources\JobApplications\Tables;
 
+use App\Enums\JobApplication\StatusEnum;
 use App\Models\JobApplication;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
-use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\TrashedFilter;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class JobApplicationsTable
@@ -36,10 +36,16 @@ class JobApplicationsTable
                     ->date(),
             ])
             ->filters([
-                // TrashedFilter::make(),
+                SelectFilter::make('job_ad_id')
+                    ->label('Job Title')
+                    ->options(function () {
+                        return \App\Models\JobAds::pluck('title', 'id')->toArray();
+                    }),
+                SelectFilter::make('status')
+                    ->label('Status')
+                    ->options(StatusEnum::class),
             ])
             ->recordActions([
-                // ViewAction::make(),
                 EditAction::make(),
             ])
             ->toolbarActions([

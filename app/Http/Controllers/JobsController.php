@@ -30,7 +30,21 @@ class JobsController extends Controller
             }
         }
 
-        return view('pages.jobs.index', ['jobs' => $jobs]);
+        // get avaliable industry
+        $industries = JobAds::select('industry')
+            ->distinct()
+            ->whereNotNull('industry')
+            ->pluck('industry')
+            ->toArray();
+
+        // get available country
+        $countries = JobAds::select('country')
+            ->distinct()
+            ->whereNotNull('country')
+            ->pluck('country')
+            ->toArray();
+
+        return view('pages.jobs.index', ['jobs' => $jobs, 'industries' => $industries, 'countries' => $countries]);
     }
 
     public function filter(Request $request)
@@ -75,6 +89,14 @@ class JobsController extends Controller
                 ? $request->get('job_type')
                 : explode(',', $request->get('job_type'));
             $query->whereIn('type', $jobType);
+        }
+
+        // industry (checkbox/multiple)
+        if ($request->has('industry')) {
+            $jobType = is_array($request->get('industry'))
+                ? $request->get('industry')
+                : explode(',', $request->get('industry'));
+            $query->whereIn('industry', $jobType);
         }
 
         // experience (checkbox/multiple)

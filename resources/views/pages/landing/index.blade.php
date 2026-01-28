@@ -186,57 +186,6 @@
         @endif
     </div>
 
-    <!-- jobs by industry -->
-    <div class="mt-24">
-        <h2 class="text-xl font-bold mb-3">Featured Countries</h2>
-        <div class="grid gap-6 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
-            <div class="card bg-base-100 image-full w-96 shadow-sm ">
-                <figure>
-                    <img
-                        src="assets/hongkong.jpg"
-                        alt="Hong Kong" />
-                </figure>
-                <div class="card-body">
-                    <h2 class="card-title">Hong Kong</h2>
-                    <p class="shadow-2xl">A fast-paced, competitive global finance and trade hub where international experience is highly valued, though local language skills are a key advantage</p>
-                    <div class="card-actions justify-end">
-                        <a href="/jobs?country=HK" class="btn btn-secondary">Explore jobs</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card bg-base-100 image-full w-96 shadow-sm ">
-                <figure>
-                    <img
-                        src="assets/nepal.jpg"
-                        alt="Nepal" />
-                </figure>
-                <div class="card-body">
-                    <h2 class="card-title">Nepal</h2>
-                    <p class="shadow-2xl">A growing market with strong opportunities in tourism, development, and IT outsourcing, where local networks and adaptability are crucial for career growth</p>
-                    <div class="card-actions justify-end">
-                        <a href="/jobs?country=NP" class="btn btn-secondary">Explore jobs</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card bg-base-100 image-full w-96 shadow-sm ">
-                <figure>
-                    <img
-                        src="assets/uae.jpg"
-                        alt="United Arab Emirates" />
-                </figure>
-                <div class="card-body">
-                    <h2 class="card-title">United Arab Emirates</h2>
-                    <p class="shadow-2xl">A dynamic, tax-free hub for expatriates, offering high-growth opportunities in construction, tech, tourism, and finance, with a focus on project-based and contractual roles</p>
-                    <div class="card-actions justify-end">
-                        <a href="/jobs?country=AE" class="btn btn-secondary">Explore jobs</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Bold and aspirational slogan -->
     <div class="flex justify-center mt-32">
         <span class="text-rotate text-4xl">

@@ -34,10 +34,34 @@
                     </div>
                 </div>
 
+                <!-- Job Industry -->
+                <div>
+                    <h3 class="text-md font-bold mb-2">
+                        Industry
+                    </h3>
+                    <div class="flex flex-col gap-2">
+                        @foreach ($industries as $industry)
+                        <label class="label text-gray-600">
+                            <input
+                                type="checkbox"
+                                name="{{ $industry }}"
+                                class="checkbox checkbox-primary checkbox-sm"
+                                value="{{ $industry }}"
+                                x-model="filters.industry"
+                                @change="applyFilters()" />
+                            <span class="">{{ App\Enums\Users\IndustryEnum::from($industry->value)->getLabel() }}</span>
+                        </label>
+                        @endforeach
+                    </div>
+                    <div class="flex w-full flex-col">
+                        <div class="divider bg-gray-200 h-[1px]"></div>
+                    </div>
+                </div>
+
                 <!-- Job type -->
                 <div>
                     <h3 class="text-md font-bold mb-2">
-                        Job type
+                        Type
                     </h3>
                     <div class="flex flex-col gap-2">
                         @foreach (App\Enums\Jobs\TypeEnum::cases() as $type)
@@ -57,6 +81,7 @@
                         <div class="divider bg-gray-200 h-[1px]"></div>
                     </div>
                 </div>
+
                 <!-- Experience -->
                 <div>
                     <h3 class="text-md font-bold mb-2">
@@ -139,16 +164,16 @@
                         Country
                     </h3>
                     <div class="flex flex-col gap-2">
-                        @foreach (App\Enums\Users\CountryEnum::cases() as $country)
+                        @foreach ($countries as $country)
                         <label class="label text-gray-600">
                             <input
                                 type="checkbox"
-                                name="{{ $country->value }}"
+                                name="{{ $country }}"
                                 class="checkbox checkbox-primary checkbox-sm"
-                                value="{{ $country->value }}"
+                                value="{{ $country }}"
                                 x-model="filters.country"
                                 @change="applyFilters()" />
-                            <span class="">{{ $country->getLabel() }}</span>
+                            <span class="">{{ App\Enums\Users\CountryEnum::from($country)->getLabel() }}</span>
                         </label>
                         @endforeach
                     </div>
@@ -201,6 +226,7 @@
             filters: {
                 s: '',
                 job_type: [],
+                industry: [],
                 min_salary: '',
                 max_salary: '',
                 remote: [],
@@ -209,7 +235,7 @@
                 // page: 1
             },
             loading: false,
-             totalJobs: {{ $jobs->total() }},
+            totalJobs: {{$jobs->total()}},
             initFilters() {
                 // Get filters from URL
                 const urlParams = new URLSearchParams(window.location.search);
@@ -218,6 +244,9 @@
 
                 const job_type = urlParams.get('job_type');
                 this.filters.job_type = job_type ? job_type.split(',') : [];
+
+                const industry = urlParams.get('industry');
+                this.filters.industry = industry ? industry.split(',') : [];
 
                 const experience = urlParams.get('experience');
                 this.filters.experience = experience ? experience.split(',') : [];
@@ -264,8 +293,9 @@
 
             applyFilters() {
                 this.loading = true;
-                console.log("Applying filters:", this.filters);
 
+                console.log('Applying filters:', this.filters);
+                
                 // Build URL with filters
                 const url = new URL('{{ route("jobs.index") }}');
 
@@ -293,6 +323,7 @@
                 this.filters = {
                     s: '',
                     job_type: [],
+                    industry: [],
                     min_salary: '',
                     max_salary: '',
                     remote: [],
@@ -340,6 +371,7 @@
             getFilterLabel(key, value) {
                 const labels = {
                     's': `Search: ${value}`,
+                    'industry': `Industry: ${value}`,
                     'job_type': `Job Type: ${this.formatJobType(value)}`,
                     'remote': `Remote: ${this.formatRemoteOption(value)}`,
                     'min_salary': `Min Salary: $${value}`,
