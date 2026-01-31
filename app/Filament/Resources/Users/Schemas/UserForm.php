@@ -46,10 +46,6 @@ class UserForm
                             ->tel()
                             ->required()
                             ->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/'),
-                        TextInput::make('password')
-                            ->required()
-                            ->password()
-                            ->maxLength(255),
                         Select::make('role')
                             ->options(UserRoleEnum::class)
                             ->live()
