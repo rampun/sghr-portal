@@ -3,15 +3,19 @@
 namespace App\Filament\Resources\JobApplications\Tables;
 
 use App\Enums\JobApplication\StatusEnum;
+use App\Mail\ApplicationStatusChanged;
 use App\Models\JobApplication;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
+use Filament\Notifications\Notification;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class JobApplicationsTable
 {
@@ -54,6 +58,35 @@ class JobApplicationsTable
                     ForceDeleteBulkAction::make(),
                     RestoreBulkAction::make(),
                 ]),
+            ])
+            ->actions([
+                EditAction::make()
+                    ->after(function (JobApplication $record) {
+                        // Get the changed fields
+                        $changes = $record->getChanges();
+
+                        // Remove timestamps from changes
+                        unset($changes['updated_at']);
+
+                        // Check if status was changed
+                        if (isset($changes['status'])) {
+                            // Send email
+                            if (in_array($changes['status'], [StatusEnum::ACCEPTED->value, StatusEnum::REJECTED->value])) {
+                                try {
+                                    Mail::to($record->jobseeker->email)->send(new ApplicationStatusChanged($record, $changes['status']));
+                                    Notification::make()
+                                        ->title('Application status change email sent to '.$record->jobseeker->email)
+                                        ->success()
+                                        ->send();
+                                    Log::info('Successfully sent to: '.$record->jobseeker->email);
+                                } catch (\Exception $e) {
+                                    Log::error('Failed to send to '.$record->jobseeker->email, [
+                                        'error' => $e->getMessage(),
+                                    ]);
+                                }
+                            }
+                        }
+                    }),
             ]);
     }
 }

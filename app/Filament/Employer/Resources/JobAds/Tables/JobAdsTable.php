@@ -23,9 +23,6 @@ class JobAdsTable
                     ->searchable(),
                 TextColumn::make('type'),
                 TextColumn::make('location'),
-                TextColumn::make('employer.company_name')
-                    ->label('Employer')
-                    ->searchable(),
                 TextColumn::make('status')
                     ->badge(),
             ])

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Filament\Employer\Resources\Users\Schemas;
+namespace App\Filament\Employer\Resources\JobApplications\Schemas;
 
 use Filament\Schemas\Schema;
 
-class UserForm
+class JobApplicationForm
 {
     public static function configure(Schema $schema): Schema
     {
