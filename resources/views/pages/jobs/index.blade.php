@@ -64,7 +64,7 @@
                         Type
                     </h3>
                     <div class="flex flex-col gap-2">
-                        @foreach (App\Enums\Jobs\TypeEnum::cases() as $type)
+                        @foreach ($types as $type)
                         <label class="label text-gray-600">
                             <input
                                 type="checkbox"
@@ -73,7 +73,7 @@
                                 value="{{ $type->value }}"
                                 x-model="filters.job_type"
                                 @change="applyFilters()" />
-                            <span class="">{{ $type->getLabel() }}</span>
+                            <span class="">{{ App\Enums\Jobs\TypeEnum::from($type->value)->getLabel() }}</span>
                         </label>
                         @endforeach
                     </div>
@@ -88,7 +88,7 @@
                         Experience Level
                     </h3>
                     <div class="flex flex-col gap-2">
-                        @foreach (App\Enums\Users\ExperienceLevelEnum::cases() as $experienceLevel)
+                        @foreach ($experiences as $experienceLevel)
                         <label class="label text-gray-600">
                             <input
                                 type="checkbox"
@@ -97,7 +97,7 @@
                                 value="{{ $experienceLevel->value }}"
                                 x-model="filters.experience"
                                 @change="applyFilters()" />
-                            <span class="">{{ $experienceLevel->getLabel() }}</span>
+                            <span class="">{{ App\Enums\Users\ExperienceLevelEnum::from($experienceLevel->value)->getLabel() }}</span>
                         </label>
                         @endforeach
                     </div>
@@ -140,7 +140,7 @@
                         Remote option
                     </h3>
                     <div class="flex flex-col gap-2">
-                        @foreach (App\Enums\Jobs\LocationEnum::cases() as $location)
+                        @foreach ($remoteOptions as $location)
                         <label class="label text-gray-600">
                             <input
                                 type="checkbox"
@@ -149,7 +149,7 @@
                                 value="{{ $location->value }}"
                                 x-model="filters.remote"
                                 @change="applyFilters()" />
-                            <span class="">{{ $location->getLabel() }}</span>
+                            <span class="">{{ App\Enums\Jobs\LocationEnum::from($location->value)->getLabel() }}</span>
                         </label>
                         @endforeach
                     </div>

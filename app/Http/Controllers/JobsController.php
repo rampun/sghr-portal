@@ -44,7 +44,28 @@ class JobsController extends Controller
             ->pluck('country')
             ->toArray();
 
-        return view('pages.jobs.index', ['jobs' => $jobs, 'industries' => $industries, 'countries' => $countries]);
+        // get available type
+        $types = JobAds::select('type')
+            ->distinct()
+            ->whereNotNull('type')
+            ->pluck('type')
+            ->toArray();
+
+        // get available experience
+        $experiences = JobAds::select('experience')
+            ->distinct()
+            ->whereNotNull('experience')
+            ->pluck('experience')
+            ->toArray();
+
+        // get available remote options
+        $remoteOptions = JobAds::select('location')
+            ->distinct()
+            ->whereNotNull('location')
+            ->pluck('location')
+            ->toArray();
+
+        return view('pages.jobs.index', ['jobs' => $jobs, 'industries' => $industries, 'countries' => $countries, 'types' => $types, 'experiences' => $experiences, 'remoteOptions' => $remoteOptions]);
     }
 
     public function filter(Request $request)
