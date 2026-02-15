@@ -581,7 +581,7 @@
                         <div class="timeline-dot"></div>
                         <div class="timeline-content">
                             <h4>Initial Screening</h4>
-                            <p>If shortlisted, you'll receive an email for initial screening.</p>
+                            <!-- <p>If shortlisted, you'll receive an email for initial screening.</p> -->
                         </div>
                     </div>
 
@@ -589,7 +589,7 @@
                         <div class="timeline-dot"></div>
                         <div class="timeline-content">
                             <h4>Interview Process</h4>
-                            <p>Successful candidates will be invited for interviews.</p>
+                            <!-- <p>Successful candidates will be invited for interviews.</p> -->
                         </div>
                     </div>
 

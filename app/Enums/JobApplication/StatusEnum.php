@@ -10,6 +10,7 @@ enum StatusEnum: string implements HasColor, HasLabel
     case PENDING = 'PENDING';
     case REVIEWED = 'REVIEWED';
     case SHORTLISTED = 'SHORTLISTED';
+    case INTERVIEW_SCHEDULED = 'INTERVIEW_SCHEDULED';
     case REJECTED = 'REJECTED';
     case ACCEPTED = 'ACCEPTED';
 
@@ -19,6 +20,7 @@ enum StatusEnum: string implements HasColor, HasLabel
             self::PENDING => 'Pending',
             self::REVIEWED => 'Reviewed',
             self::SHORTLISTED => 'Shortlisted',
+            self::INTERVIEW_SCHEDULED => 'Interview Scheduled',
             self::REJECTED => 'Rejected',
             self::ACCEPTED => 'Accepted',
         };
@@ -30,6 +32,7 @@ enum StatusEnum: string implements HasColor, HasLabel
             self::PENDING => 'gray',
             self::REVIEWED => 'warning',
             self::SHORTLISTED => 'warning',
+            self::INTERVIEW_SCHEDULED => 'primary',
             self::REJECTED => 'danger',
             self::ACCEPTED => 'success',
         };

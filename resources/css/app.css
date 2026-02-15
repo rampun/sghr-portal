@@ -5,12 +5,21 @@
 @source "../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php";
 @source "../../storage/framework/views/*.php";
 
-@plugin "daisyui";
+@plugin "daisyui" {
+    themes: light --default;
+}
 
 @custom-variant dark (&:where(.dark, .dark *));
+
 
 
 :root:root {
     background-color: white;
     color: black;
+}
+
+
+/* tabs */
+.tab-border>.tab:after {
+    color: black
 }

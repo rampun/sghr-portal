@@ -18,7 +18,7 @@
                             <li><a>Submenu 2</a></li>
                         </ul>
                     </li> -->
-                    <li><a>Companies</a></li>
+                    <li><a href="/employers">Companies</a></li>
                     <li><a>Resume</a></li>
                     @guest
                     <li><a href="/employer">Employer Login</a></li>
@@ -40,7 +40,7 @@
                         </ul>
                     </details>
                 </li> -->
-                <li><a>Companies</a></li>
+                <li><a href="/employers">Companies</a></li>
                 <li><a>Resume</a></li>
                 @guest
                 <li><a href="/employer">Employer Login</a></li>

@@ -18,7 +18,7 @@ class JobApplicationResource extends Resource
 {
     protected static ?string $model = JobApplication::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::Clock;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClock;
 
     protected static ?string $recordTitleAttribute = 'Application History';
 

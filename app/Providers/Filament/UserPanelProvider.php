@@ -4,7 +4,9 @@ namespace App\Providers\Filament;
 
 use App\Filament\Helper\JobSeekerLoginForm;
 use App\Filament\Helper\JobSeekerRegisterForm;
+use App\Filament\Pages\CustomProfilePage;
 use App\Filament\Pages\Dashboard;
+use Filament\Actions\Action;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -21,6 +23,8 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
+use Joaopaulolndev\FilamentEditProfile\Pages\EditProfilePage;
 
 class UserPanelProvider extends PanelProvider
 {
@@ -46,15 +50,18 @@ class UserPanelProvider extends PanelProvider
             ->navigation()
             ->passwordReset()
             ->emailVerification()
+            ->emailChangeVerification()
+            ->globalSearch(false)
             ->emailVerificationRoutePrefix('email-verification') // Add this line
             ->darkMode(false) // Disables dark mode
+            // ->profile(CustomProfilePage::class)
             ->renderHook(
                 PanelsRenderHook::AUTH_LOGIN_FORM_AFTER,
-                fn () => view('partials.auth.register-link'),
+                fn() => view('partials.auth.register-link'),
             )
             ->renderHook(
                 PanelsRenderHook::AUTH_REGISTER_FORM_AFTER,
-                fn () => view('partials.auth.login-link'),
+                fn() => view('partials.auth.login-link'),
             )
             ->widgets([
                 // AccountWidget::class,
@@ -79,6 +86,30 @@ class UserPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+            ])
+            ->plugins([
+                FilamentEditProfilePlugin::make()
+                    ->setTitle('My Profile')
+                    ->setNavigationLabel('My Profile')
+                    ->setNavigationGroup('Setting')
+                    ->setIcon('heroicon-o-user')
+                    ->setSort(1)
+                    ->shouldShowEmailForm()
+                    ->shouldShowAvatarForm(
+                        value: true,
+                        directory: 'sghr_assets/avatars',
+                        rules: 'mimes:jpeg,png|max:1024'
+                    )
+                    ->shouldShowDeleteAccountForm(false)
+                    ->customProfileComponents([
+                        \App\Livewire\CustomProfileComponent::class,
+                    ]),
+            ])
+            ->userMenuItems([
+                'profile' => Action::make('profile')
+                    ->label(fn() => auth()->user()->name)
+                    ->url(fn(): string => EditProfilePage::getUrl())
+                    ->icon('heroicon-m-user-circle'),
             ]);
     }
 }

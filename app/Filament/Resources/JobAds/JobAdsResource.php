@@ -22,7 +22,7 @@ class JobAdsResource extends Resource
 {
     protected static ?string $model = JobAds::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::Briefcase;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBriefcase;
 
     protected static ?string $recordTitleAttribute = 'JobAds';
 

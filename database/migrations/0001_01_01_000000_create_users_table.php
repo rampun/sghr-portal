@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             // common fields
             $table->uuid('id')->primary();
-            $table->string('first_name')->nullable();
-            $table->string('last_name')->nullable();
+            $table->string('name')->nullable();
             $table->string('phone')->nullable();
             $table->string('avatar_url')->nullable();
             $table->string('email')->unique();

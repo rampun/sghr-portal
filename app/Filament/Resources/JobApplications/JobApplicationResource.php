@@ -22,7 +22,7 @@ class JobApplicationResource extends Resource
 {
     protected static ?string $model = JobApplication::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::ClipboardDocument;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClipboardDocument;
 
     protected static ?string $recordTitleAttribute = 'JobApplication';
 
@@ -55,7 +55,7 @@ class JobApplicationResource extends Resource
         return [
             'index' => ListJobApplications::route('/'),
             // 'create' => CreateJobApplication::route('/create'),
-            // 'view' => ViewJobApplication::route('/{record}'),
+            'view' => ViewJobApplication::route('/{record}'),
             // 'edit' => EditJobApplication::route('/{record}/edit'),
         ];
     }

@@ -8,6 +8,7 @@ use App\Models\JobAds;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -27,12 +28,12 @@ class JobApplicationsTable
                     ->label('Applied on')
                     ->date(),
             ])->filters([
-               SelectFilter::make('job_ad_id')
-                   ->label('Job Title')
-                   ->options(function () {
-                       return JobAds::where('user_id', auth()->id())->where('status', JobStatusEnum::ACTIVE->value)->pluck('title', 'id')->toArray();
-                   }),
-           ])
+                SelectFilter::make('job_ad_id')
+                    ->label('Job Title')
+                    ->options(function () {
+                        return JobAds::where('user_id', auth()->id())->where('status', JobStatusEnum::ACTIVE->value)->pluck('title', 'id')->toArray();
+                    }),
+            ])
             ->modifyQueryUsing(function (Builder $query): Builder {
                 return $query->where('status', StatusEnum::SHORTLISTED->value)->whereHas('job', function (Builder $jobQuery) {
                     $jobQuery->where('user_id', auth()->id());
@@ -40,6 +41,7 @@ class JobApplicationsTable
             })
             ->recordActions([
                 // EditAction::make(),
+                ViewAction::make(),
             ])
             ->toolbarActions([
                 // BulkActionGroup::make([

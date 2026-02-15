@@ -63,9 +63,9 @@ class JobApplicationController extends Controller
                     Mail::to($user->email)
                         ->send(new JobApplied($jobApplication, 'New Job Application Received', 'mail.jobs.job_applied_hr_template'));
 
-                    Log::info('Successfully sent to: '.$user->email);
+                    Log::info('Successfully sent to: ' . $user->email);
                 } catch (\Exception $e) {
-                    Log::error('Failed to send to '.$user->email, [
+                    Log::error('Failed to send to ' . $user->email, [
                         'error' => $e->getMessage(),
                     ]);
                 }

@@ -32,17 +32,17 @@ class UserInfolist
                     ->components([
                         TextEntry::make('education_level'),
                         TextEntry::make('experience_level'),
-                        TextEntry::make('industry'),
-                        TextEntry::make('skills'),
+                        TextEntry::make('user_industry'),
+                        TextEntry::make('user_skills'),
                         TextEntry::make('current_company'),
                         TextEntry::make('current_position'),
                         TextEntry::make('total_exeperience_years')->label('Years of Experience'),
                         TextEntry::make('expected_salary')->label('Expected Salary (USD)'),
-                        TextEntry::make('country'),
+                        TextEntry::make('user_country'),
                         TextEntry::make('resume_url')->label('Resume URL'),
                     ])->columnSpan('full')
                     ->columns(2)
-                    ->visible(fn (Get $get): bool => $get('role') === UserRoleEnum::JOB_SEEKER),
+                    ->visible(fn(Get $get): bool => $get('role') === UserRoleEnum::JOB_SEEKER),
 
                 // Conditional Employer fields
                 Section::make('Employer Information')
@@ -55,7 +55,7 @@ class UserInfolist
                         TextEntry::make('company_country'),
                     ])->columnSpan('full')
                     ->columns(2)
-                    ->visible(fn (Get $get): bool => $get('role') === UserRoleEnum::EMPLOYER),
+                    ->visible(fn(Get $get): bool => $get('role') === UserRoleEnum::EMPLOYER),
             ]);
     }
 }

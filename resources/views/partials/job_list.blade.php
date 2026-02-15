@@ -73,6 +73,5 @@
 @else
 <div class="text-center py-12">
     <h3 class="text-xl font-semibold text-gray-700">No jobs found</h3>
-    <p class="text-gray-500 mt-2">Try adjusting your filters</p>
 </div>
 @endif

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\EmployerController;
 use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\JobsController;
 use App\Http\Controllers\LandingController;
@@ -14,6 +15,11 @@ Route::middleware('web')->group(function () {
     Route::prefix('jobs')->name('jobs.')->group(function () {
         Route::get('/', [JobsController::class, 'index'])->name('index');
         Route::get('/{id}', [JobsController::class, 'show'])->name('show');
+    });
+
+    Route::prefix('employers')->name('employers.')->group(function () {
+        Route::get('/', [EmployerController::class, 'index'])->name('index');
+        Route::get('/{id}', [EmployerController::class, 'show'])->name('show');
     });
 
     // job applications

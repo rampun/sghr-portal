@@ -13,7 +13,7 @@ class Overview extends Page
 {
     protected string $view = 'filament.employer.pages.overview';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::Home;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedHome;
 
     protected static ?string $recordTitleAttribute = 'Overview';
 

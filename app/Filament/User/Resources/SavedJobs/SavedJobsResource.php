@@ -20,7 +20,7 @@ class SavedJobsResource extends Resource
 {
     protected static ?string $model = SavedJobs::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::Bookmark;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBookmark;
 
     protected static ?string $recordTitleAttribute = 'Saved';
 

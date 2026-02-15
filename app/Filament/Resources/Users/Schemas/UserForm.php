@@ -26,11 +26,7 @@ class UserForm
             ->components([
                 Section::make('General Information')
                     ->components([
-                        TextInput::make('first_name')
-                            ->autocapitalize('words')
-                            ->required()
-                            ->maxLength(255),
-                        TextInput::make('last_name')
+                        TextInput::make('name')
                             ->autocapitalize('words')
                             ->required()
                             ->maxLength(255),
@@ -61,8 +57,7 @@ class UserForm
                     ->components([
                         Select::make('education_level')
                             ->label('Education Level')
-                            ->options(EducationLevelEnum::class)
-                            ->required(),
+                            ->options(EducationLevelEnum::class),
                         TagsInput::make('user_skills')
                             ->label('Skills')
                             ->required(),
@@ -76,12 +71,10 @@ class UserForm
                             ->required(),
                         TextInput::make('current_company')
                             ->label('Current Company')
-                            ->required()
                             ->autocapitalize('words')
                             ->maxLength(255),
                         TextInput::make('current_position')
                             ->label('Current Position')
-                            ->required()
                             ->autocapitalize('words')
                             ->maxLength(255),
                         Select::make('experience_level')
@@ -91,8 +84,7 @@ class UserForm
                         TextInput::make('total_exeperience_years')
                             ->label('Total Experience (Years)')
                             ->numeric()
-                            ->minValue(0)
-                            ->required(),
+                            ->minValue(0),
                         TextInput::make('expected_salary')
                             ->label('Expected Salary (USD per month)')
                             ->numeric()
@@ -109,7 +101,7 @@ class UserForm
 
                     ])->columnSpan('full')
                     ->columns(2)
-                    ->visible(fn (Get $get): bool => $get('role') === UserRoleEnum::JOB_SEEKER),
+                    ->visible(fn(Get $get): bool => $get('role') === UserRoleEnum::JOB_SEEKER),
 
                 // Conditional employer fields
                 Section::make('Employer Information')
@@ -149,7 +141,7 @@ class UserForm
                             ->required(),
                     ])->columnSpan('full')
                     ->columns(2)
-                    ->visible(fn (Get $get): bool => $get('role') === UserRoleEnum::EMPLOYER),
+                    ->visible(fn(Get $get): bool => $get('role') === UserRoleEnum::EMPLOYER),
             ]);
     }
 }

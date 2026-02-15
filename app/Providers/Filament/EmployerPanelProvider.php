@@ -33,6 +33,7 @@ class EmployerPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Amber,
             ])
+            ->globalSearch(false)
             ->registration(EmployerRegisterForm::class)
             ->login(EmployerLoginForm::class)
             ->discoverResources(in: app_path('Filament/Employer/Resources'), for: 'App\Filament\Employer\Resources')
@@ -46,16 +47,17 @@ class EmployerPanelProvider extends PanelProvider
             ->passwordReset()
             ->emailVerification()
             ->emailVerificationRoutePrefix('email-verification') // Add this line
+            ->emailChangeVerification()
             ->sidebarCollapsibleOnDesktop()
             ->maxContentWidth(Width::Full)
             ->darkMode(false) // Disables dark mode
             ->renderHook(
                 PanelsRenderHook::AUTH_LOGIN_FORM_AFTER,
-                fn () => view('partials.auth.register-link'),
+                fn() => view('partials.auth.register-link'),
             )
             ->renderHook(
                 PanelsRenderHook::AUTH_REGISTER_FORM_AFTER,
-                fn () => view('partials.auth.login-link'),
+                fn() => view('partials.auth.login-link'),
             )
             ->widgets([
                 // AccountWidget::class,

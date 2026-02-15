@@ -11,6 +11,7 @@ use App\Enums\Users\IndustryEnum;
 use App\Enums\Users\UserRoleEnum;
 use App\Enums\Users\UserStatusEnum;
 use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasAvatar;
 use Filament\Panel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -19,7 +20,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable implements FilamentUser, MustVerifyEmail
+class User extends Authenticatable implements FilamentUser, MustVerifyEmail, HasAvatar
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, HasUuids, Notifiable, SoftDeletes;
@@ -34,8 +35,7 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
      * @var list<string>
      */
     protected $fillable = [
-        'first_name',
-        'last_name',
+        'name',
         'email',
         'password',
         'role',
@@ -98,16 +98,16 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
         'password' => 'hashed',
     ];
 
-    public function getNameAttribute(): string
-    {
-        // Example: If you have first_name and last_name
-        if ($this->first_name && $this->last_name) {
-            return "{$this->first_name} {$this->last_name}";
-        }
+    // public function getNameAttribute(): string
+    // {
+    //     // Example: If you have first_name and last_name
+    //     if ($this->first_name && $this->last_name) {
+    //         return "{$this->first_name} {$this->last_name}";
+    //     }
 
-        // Example: If you have a 'username' field instead of 'name'
-        return $this->username ?? ''; // Return username or an empty string if null
-    }
+    //     // Example: If you have a 'username' field instead of 'name'
+    //     return $this->username ?? ''; // Return username or an empty string if null
+    // }
 
     public function jobs()
     {
@@ -136,5 +136,14 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
     public function sendEmailVerificationNotification()
     {
         $this->notify(new \App\Notifications\VerifyEmail);
+    }
+
+    // filament avatar
+    public function getFilamentAvatarUrl(): ?string
+    {
+        if ($this->avatar_url) {
+            return 'https://res.cloudinary.com/' . env('CLOUDINARY_CLOUD_NAME') . '/image/upload/v1770825653/' . $this->avatar_url;
+        }
+        return null;
     }
 }
