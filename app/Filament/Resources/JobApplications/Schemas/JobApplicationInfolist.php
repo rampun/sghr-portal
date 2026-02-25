@@ -5,13 +5,6 @@ namespace App\Filament\Resources\JobApplications\Schemas;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
-use App\Mail\ApplicationStatusChanged;
-use App\Models\JobApplication;
-use Filament\Actions\EditAction;
-use Filament\Notifications\Notification;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
-use App\Enums\JobApplication\StatusEnum;
 
 class JobApplicationInfolist
 {

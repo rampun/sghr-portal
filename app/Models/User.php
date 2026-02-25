@@ -20,7 +20,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable implements FilamentUser, MustVerifyEmail, HasAvatar
+class User extends Authenticatable implements FilamentUser, HasAvatar, MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, HasUuids, Notifiable, SoftDeletes;
@@ -98,17 +98,6 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Has
         'password' => 'hashed',
     ];
 
-    // public function getNameAttribute(): string
-    // {
-    //     // Example: If you have first_name and last_name
-    //     if ($this->first_name && $this->last_name) {
-    //         return "{$this->first_name} {$this->last_name}";
-    //     }
-
-    //     // Example: If you have a 'username' field instead of 'name'
-    //     return $this->username ?? ''; // Return username or an empty string if null
-    // }
-
     public function jobs()
     {
         return $this->hasMany(JobAds::class);
@@ -142,8 +131,9 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Has
     public function getFilamentAvatarUrl(): ?string
     {
         if ($this->avatar_url) {
-            return 'https://res.cloudinary.com/' . env('CLOUDINARY_CLOUD_NAME') . '/image/upload/v1770825653/' . $this->avatar_url;
+            return 'https://res.cloudinary.com/'.env('CLOUDINARY_CLOUD_NAME').'/image/upload/v1770825653/'.$this->avatar_url;
         }
+
         return null;
     }
 }

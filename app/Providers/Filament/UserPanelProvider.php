@@ -45,7 +45,6 @@ class UserPanelProvider extends PanelProvider
                 Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/User/Widgets'), for: 'App\Filament\User\Widgets')
-            ->spa()
             ->sidebarCollapsibleOnDesktop()
             ->navigation()
             ->passwordReset()
@@ -57,11 +56,11 @@ class UserPanelProvider extends PanelProvider
             // ->profile(CustomProfilePage::class)
             ->renderHook(
                 PanelsRenderHook::AUTH_LOGIN_FORM_AFTER,
-                fn() => view('partials.auth.register-link'),
+                fn () => view('partials.auth.register-link'),
             )
             ->renderHook(
                 PanelsRenderHook::AUTH_REGISTER_FORM_AFTER,
-                fn() => view('partials.auth.login-link'),
+                fn () => view('partials.auth.login-link'),
             )
             ->widgets([
                 // AccountWidget::class,
@@ -95,6 +94,7 @@ class UserPanelProvider extends PanelProvider
                     ->setIcon('heroicon-o-user')
                     ->setSort(1)
                     ->shouldShowEmailForm()
+                    ->shouldShowBrowserSessionsForm(false)
                     ->shouldShowAvatarForm(
                         value: true,
                         directory: 'sghr_assets/avatars',
@@ -107,8 +107,8 @@ class UserPanelProvider extends PanelProvider
             ])
             ->userMenuItems([
                 'profile' => Action::make('profile')
-                    ->label(fn() => auth()->user()->name)
-                    ->url(fn(): string => EditProfilePage::getUrl())
+                    ->label(fn () => auth()->user()->name)
+                    ->url(fn (): string => EditProfilePage::getUrl())
                     ->icon('heroicon-m-user-circle'),
             ]);
     }

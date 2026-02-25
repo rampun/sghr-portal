@@ -1,23 +1,26 @@
 <?php
+
 // app/Filament/Pages/CustomEditProfile.php
+
 namespace App\Filament\User\Pages;
 
-use Joaopaulolndev\FilamentEditProfile\Pages\EditProfilePage;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Filament\Schemas\Components\Form;
 use Filament\Schemas\Components\Section;
+use Illuminate\Support\Facades\Auth;
+use Joaopaulolndev\FilamentEditProfile\Pages\EditProfilePage;
 
 class CustomEditProfile extends EditProfilePage
 {
     protected static ?string $slug = 'my-profile';
+
     protected static ?string $navigationLabel = 'My Profile';
+
     protected static ?int $navigationSort = 1;
 
     // Override the form schema to add custom fields
@@ -151,14 +154,14 @@ class CustomEditProfile extends EditProfilePage
             $updateData = array_intersect_key($userData, array_flip($fillableFields));
 
             // Update the user
-            if (!empty($updateData)) {
+            if (! empty($updateData)) {
                 $user->update($updateData);
 
                 // Show success notification
                 $this->notify('success', 'Custom profile fields updated successfully!');
             }
         } catch (\Exception $e) {
-            $this->notify('danger', 'Error updating profile: ' . $e->getMessage());
+            $this->notify('danger', 'Error updating profile: '.$e->getMessage());
         }
     }
 

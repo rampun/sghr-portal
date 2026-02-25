@@ -5,9 +5,9 @@ namespace App\Filament\Resources\JobApplications\Tables;
 use App\Enums\JobApplication\StatusEnum;
 use App\Mail\ApplicationStatusChanged;
 use App\Models\JobApplication;
-use Filament\Actions\EditAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
@@ -26,13 +26,13 @@ class JobApplicationsTable
             ->columns([
                 TextColumn::make('jobseeker.name')
                     ->label('User')
-                    ->url(fn(JobApplication $record): string => route('filament.admin.resources.users.view', $record->user_id))
+                    ->url(fn (JobApplication $record): string => route('filament.admin.resources.users.view', $record->user_id))
                     ->openUrlInNewTab()
                     ->searchable(),
 
                 TextColumn::make('job.title')
                     ->label('Job Title')
-                    ->url(fn(JobApplication $record): string => route('jobs.show', $record->job_ad_id))
+                    ->url(fn (JobApplication $record): string => route('jobs.show', $record->job_ad_id))
                     ->openUrlInNewTab(),
                 TextColumn::make('status')
                     ->badge(),
@@ -67,18 +67,18 @@ class JobApplicationsTable
                                 try {
                                     Mail::to($record->jobseeker->email)->send(new ApplicationStatusChanged($record, $changes['status']));
                                     Notification::make()
-                                        ->title('Application status change email sent to ' . $record->jobseeker->email)
+                                        ->title('Application status change email sent to '.$record->jobseeker->email)
                                         ->success()
                                         ->send();
-                                    Log::info('Successfully sent to: ' . $record->jobseeker->email);
+                                    Log::info('Successfully sent to: '.$record->jobseeker->email);
                                 } catch (\Exception $e) {
-                                    Log::error('Failed to send to ' . $record->jobseeker->email, [
+                                    Log::error('Failed to send to '.$record->jobseeker->email, [
                                         'error' => $e->getMessage(),
                                     ]);
                                 }
                             }
                         }
-                    })
+                    }),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

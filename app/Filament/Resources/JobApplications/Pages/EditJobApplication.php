@@ -2,15 +2,15 @@
 
 namespace App\Filament\Resources\JobApplications\Pages;
 
+use App\Enums\JobApplication\StatusEnum;
 use App\Filament\Resources\JobApplications\JobApplicationResource;
+use App\Mail\ApplicationStatusChanged;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\RestoreAction;
 use Filament\Actions\ViewAction;
-use Filament\Resources\Pages\EditRecord;
-use App\Enums\JobApplication\StatusEnum;
-use App\Mail\ApplicationStatusChanged;
 use Filament\Notifications\Notification;
+use Filament\Resources\Pages\EditRecord;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 

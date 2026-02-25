@@ -101,7 +101,7 @@ class UserForm
 
                     ])->columnSpan('full')
                     ->columns(2)
-                    ->visible(fn(Get $get): bool => $get('role') === UserRoleEnum::JOB_SEEKER),
+                    ->visible(fn (Get $get): bool => $get('role') === UserRoleEnum::JOB_SEEKER),
 
                 // Conditional employer fields
                 Section::make('Employer Information')
@@ -141,7 +141,7 @@ class UserForm
                             ->required(),
                     ])->columnSpan('full')
                     ->columns(2)
-                    ->visible(fn(Get $get): bool => $get('role') === UserRoleEnum::EMPLOYER),
+                    ->visible(fn (Get $get): bool => $get('role') === UserRoleEnum::EMPLOYER),
             ]);
     }
 }

@@ -53,11 +53,11 @@ class EmployerPanelProvider extends PanelProvider
             ->darkMode(false) // Disables dark mode
             ->renderHook(
                 PanelsRenderHook::AUTH_LOGIN_FORM_AFTER,
-                fn() => view('partials.auth.register-link'),
+                fn () => view('partials.auth.register-link'),
             )
             ->renderHook(
                 PanelsRenderHook::AUTH_REGISTER_FORM_AFTER,
-                fn() => view('partials.auth.login-link'),
+                fn () => view('partials.auth.login-link'),
             )
             ->widgets([
                 // AccountWidget::class,
