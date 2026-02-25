@@ -1,24 +1,267 @@
-*.log
-.DS_Store
+# Laravel specific
+/vendor/
+node_modules/
+npm-debug.log
+npm-error.log
+yarn-error.log
+/.idea
+/.vscode
+/.nova
+/.vagrant
+/.phpunit.result.cache
+Homestead.json
+Homestead.yaml
 .env
 .env.backup
 .env.production
-.phpactor.json
+.env.local
+.env.*.local
 .phpunit.result.cache
-/.fleet
-/.idea
-/.nova
-/.phpunit.cache
-/.vscode
-/.zed
-/auth.json
-/node_modules
+storage/*.key
+storage/oauth-*.key
+storage/**/*.key
+storage/debugbar
+storage/logs/*
+!storage/logs/.gitkeep
+storage/framework/cache/data/
+storage/framework/sessions/*
+storage/framework/views/*
+!storage/framework/views/.gitkeep
+storage/insights
+
+# Filament specific
+/public/storage
 /public/build
 /public/hot
-/public/storage
-/storage/*.key
-/storage/pail
-/vendor
-Homestead.json
-Homestead.yaml
+/public/vendor
+/storage/app/public
+/storage/app/private
+/storage/framework/cache
+/storage/framework/testing
+/storage/framework/cache/data/
+/storage/insights
+
+# Uploads and media (Filament FileUpload)
+/public/uploads
+/storage/app/public/uploads
+/storage/app/public/livewire-tmp
+/storage/app/livewire-tmp
+/storage/tmp
+/public/files
+/storage/app/public/files
+/storage/app/public/media
+/storage/app/public/images
+/storage/app/public/avatars
+/storage/app/public/attachments
+
+# Livewire temporary files
+/livewire-tmp/
+/storage/framework/livewire-tmp/
+/livewire-tmp.php
+
+# Database
+*.sqlite
+*.sqlite3
+*.db
+*.dump
+*.sql
+*.mysql
+*.sql.gz
+
+# Compiled assets
+/public/css
+/public/js
+/public/mix-manifest.json
+/public/refresh.svg
+/public/fonts
+/public/vendor
+public/bower_components
+public/*.map
+public/dist
+
+# Testing
+/phpunit.xml
+.phpunit.result.cache
+/phpunit.xml.bak
+/phpunit.xml.old
+/.phpunit
+/.phpunit.result.cache
+phpunit.xml
+.phpunit-watcher.yml
+.phpunit-watcher.yml.bak
+
+# Code coverage
+coverage
+.clover
+.cov
+.clover.xml
+*.clover
+*.cov
+.phpunit.coverage.xml
+.phpunit.coverage.html
+tests/coverage
+.phpunit.coverage
+
+# IDE specific
+/.idea/
+/.vscode/
+/.editorconfig
+.phpstorm.meta.php
+_ide_helper.php
+_ide_helper_models.php
+.php_cs.cache
+.php_cs
+.php_cs.dist
+.php-cs-fixer.cache
+.php-cs-fixer.php
+.php-cs-fixer.dist.php
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
+*.swp
+*.swo
+*.swn
+*.bak
+*.orig
+*.log
+*.cache
+*.pid
+*.seed
+*.pid.lock
+
+# Docker
+docker-compose.override.yml
+docker-compose.dev.yml
+.docker
+docker/data
+docker/mysql
+docker/redis
+docker/nginx/logs
+docker/php/logs
+docker/postgres
+docker/rabbitmq
+
+# Laravel Sail
+docker-compose.yml
+.env.sail
+/sail
+/sail.bat
+/sail.sh
+
+# Packages
+/custom-packages
+/packages/*
+!packages/.gitkeep
+
+# Backup files
+*.backup
+*.old
+*.bak
+*.orig
+*.log
+*.cache
+*.patch
+*.diff
+*.tmp
+*.temp
+
+# Laravel Horizon
+horizon
+
+# Laravel Telescope
+/telescope
+
+# Laravel Nova
+/nova
+
+# Laravel Spark
+/spark
+
+# Ignore sensitive files
+.env
+.env.*
+!.env.example
+!.env.testing
+.phpunit.env
+.phpunit.env.local
+.phpunit.env.testing
+
+# Ignore Composer lock file (optional - remove if you want to track it)
+# composer.lock
+
+# Ignore package lock files (optional)
+package-lock.json
+yarn.lock
+
+# Ignore compiled files
+public/hot
+public/storage
+public/build
+public/mix-manifest.json
+
+# Ignore logs and cache
+storage/logs/*
+!storage/logs/.gitkeep
+storage/framework/cache/*
+!storage/framework/cache/.gitkeep
+storage/framework/sessions/*
+!storage/framework/sessions/.gitkeep
+storage/framework/views/*
+!storage/framework/views/.gitkeep
+storage/framework/testing
+storage/clockwork
+storage/debugbar
+
+# Filament specific cache
+storage/framework/cache/filament
+storage/framework/views/filament
+
+# Ignore IDE helper files
+_ide_helper.php
+_ide_helper_models.php
+.phpstorm.meta.php
+
+# Ignore npm/yarn cache
+.npm
+.yarn
+node_modules
+
+# Ignore compiled assets
+public/css
+public/js
+public/mix-manifest.json
+
+# Ignore temporary uploads
+storage/tmp
+public/tmp
+storage/app/tmp
+
+# Ignore user uploaded content (if you want to track directories, use .gitkeep)
+storage/app/public/*
+!storage/app/public/.gitkeep
+public/uploads/*
+!public/uploads/.gitkeep
+
+# Ignore PHPUnit cache
+.phpunit.result.cache
+
+# Ignore coverage reports
+coverage
+.clover
+.cov
+.clover.xml
+.phpunit.coverage.xml
+.phpunit.coverage.html
+
+# Ignore Laravel Debugbar
+storage/debugbar
+
+# Ignore PHP CS Fixer cache
+.php_cs.cache
+.php-cs-fixer.cache
