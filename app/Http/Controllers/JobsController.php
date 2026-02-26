@@ -169,7 +169,7 @@ class JobsController extends Controller
         //         $query->orderBy('created_at', 'desc');
         // }
 
-        return $query->paginate(2);
+        return $query->paginate(10);
     }
 
     public function show(Request $request)

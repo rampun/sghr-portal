@@ -4,8 +4,8 @@
     <a href="{{ route('jobs.show', ['id' => $job->id]) }}" style="text-decoration: none; color: inherit;">
         <div class="card-body shadow-md rounded-md hover:shadow-xl hover:cursor-pointer transition-all duration-300">
             <div class="grid grid-cols-12 gap-4 mb-1">
-                <div class="col-span-1">
-                    <figure>
+                <div class="col-span-12 lg:col-span-1 mb-2">
+                            <figure class="items-start justify-start lg:items-center lg:justify-center">
                         <x-cloudinary::image
                             public-id="{{ $job->employer->logo_url }}"
                             width="48"
@@ -14,7 +14,7 @@
                             alt="{{ $job->employer->company_title }} logo" />
                     </figure>
                 </div>
-                <div class="col-span-7">
+                <div class="col-span-12 lg:col-span-7">
                     <h2 class="card-title">{{ $job->title }}</h2>
                     <div class="flex gap-4">
                         <span class="company text-gray-600">{{ $job->employer->company_name }}</span>
@@ -30,7 +30,7 @@
                             <span class="text-gray-600">{{ App\Enums\Users\CountryEnum::from($job->country)->getLabel() }}</span>
                     </div>
                 </div>
-                <div class="col-span-4 text-right">
+                <div class="col-span-12 lg:col-span-4 lg:text-right">
                     <p class="font-bold">
                         ${{ number_format($job->salary_min_range)}}-${{ number_format($job->salary_max_range) }} (USD/month)
                     </p>

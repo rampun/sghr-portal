@@ -18,7 +18,7 @@ class EmployerController extends Controller
     {
         $employers = User::where('role', UserRoleEnum::EMPLOYER->value)
             ->where('status', UserStatusEnum::ACTIVE->value)
-            ->paginate(5);
+            ->paginate(10);
 
         return view('pages.employers.index', compact('employers'));
     }

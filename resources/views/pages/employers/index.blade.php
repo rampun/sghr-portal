@@ -14,7 +14,7 @@
     @if(count($employers) === 0)
     <p class="text-gray-600">No companies found.</p>
     @else
-    <div class="grid grid-cols-3 justify-center gap-4 mt-16 text-2xl flex-wrap">
+    <div class="grid grid-cols-1 lg:grid-cols-3 justify-center gap-4 mt-2 lg:mt-16 text-2xl flex-wrap">
         @foreach ($employers as $employer)
         <a class="btn shadow-none hover:shadow-xl rounded-xl bg-white text-black border-1 w-full border-neutral-300 h-[120px] grid grid-cols-4" href="{{ route('employers.show', $employer->id) }}">
             <div class="flex gap-4 items-center col-span-3">
@@ -40,7 +40,9 @@
         </a>
         @endforeach
     </div>
-    {{ $employers->links() }}
+    <div class="mt-6">
+        {{ $employers->links() }}
+    </div>
     @endif
 </div>
 @endsection

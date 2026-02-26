@@ -12,11 +12,11 @@
 </div>
 
 <div class="grid grid-cols-12 gap-8 mt-8">
-    <div class="col-span-8">
+    <div class="col-span-12 lg:col-span-8">
         <div class="card shadow-md">
             <div class="card-body">
                 <div class="header">
-                    <div class="flex justify-between">
+                    <div class="flex justify-between flex-col-reverse lg:flex-row">
                         <div class="content">
                             <h2 class="card-title">{{ $job->title }}</h2>
                             <p class="text-gray-600 mt-1">{{ $job->employer->company_name }}</p>
@@ -42,8 +42,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="logo">
-                            <figure>
+                        <div class="logo mb-2">
+                            <figure class="items-start justify-start lg:items-center lg:justify-center">
                                 <x-cloudinary::image
                                     public-id="{{ $job->employer->logo_url }}"
                                     width="48"
@@ -56,36 +56,32 @@
                     <div class="flex w-full flex-col">
                         <div class="divider bg-gray-200 h-[1px]"></div>
                     </div>
-                    <div class="meta flex gap-6 justify-between items-center">
-                        <div class="flex gap-2">
+                    <div class="meta flex gap-6 justify-between lg:items-center flex-col lg:flex-row">
+                        <div class="flex gap-2 flex-col lg:flex-row">
                             <p class="flex gap-1 items-center">
                                 <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
                                     <path fill-rule="evenodd" d="M6.75 2.25A.75.75 0 0 1 7.5 3v1.5h9V3A.75.75 0 0 1 18 3v1.5h.75a3 3 0 0 1 3 3v11.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V7.5a3 3 0 0 1 3-3H6V3a.75.75 0 0 1 .75-.75Zm13.5 9a1.5 1.5 0 0 0-1.5-1.5H5.25a1.5 1.5 0 0 0-1.5 1.5v7.5a1.5 1.5 0 0 0 1.5 1.5h13.5a1.5 1.5 0 0 0 1.5-1.5v-7.5Z" clip-rule="evenodd" />
                                 </svg> -->
-                                <span>Posted:</span>
+                                <span><strong>Posted:</strong></span>
                                 <span>
                                     {{ date_format($job->created_at, 'Y-m-d') }}
                                 </span>
-                            </p>|
+                            </p>
                             <p class="flex gap-1 items-center">
                                 <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
                                     <path fill-rule="evenodd" d="M8.25 6.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM15.75 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM2.25 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM6.31 15.117A6.745 6.745 0 0 1 12 12a6.745 6.745 0 0 1 6.709 7.498.75.75 0 0 1-.372.568A12.696 12.696 0 0 1 12 21.75c-2.305 0-4.47-.612-6.337-1.684a.75.75 0 0 1-.372-.568 6.787 6.787 0 0 1 1.019-4.38Z" clip-rule="evenodd" />
                                     <path d="M5.082 14.254a8.287 8.287 0 0 0-1.308 5.135 9.687 9.687 0 0 1-1.764-.44l-.115-.04a.563.563 0 0 1-.373-.487l-.01-.121a3.75 3.75 0 0 1 3.57-4.047ZM20.226 19.389a8.287 8.287 0 0 0-1.308-5.135 3.75 3.75 0 0 1 3.57 4.047l-.01.121a.563.563 0 0 1-.373.486l-.115.04c-.567.2-1.156.349-1.764.441Z" />
                                 </svg> -->
-                                <span>
-                                    Openings:
-                                </span>
+                                <span><strong>Openings:</strong></span>
                                 <span>
                                     {{ $job->no_of_employee }}
                                 </span>
-                            </p>|
+                            </p>
                             <p class="flex gap-1 items-center">
                                 <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
                                     <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" />
                                 </svg> -->
-                                <span>
-                                    Applicants:
-                                </span>
+                                <span><strong>Applicants:</strong></span>
                                 <span>
                                     {{ $noOfApplicants }}
                                 </span>
@@ -227,7 +223,7 @@
             </div>
         </div>
     </div>
-    <div class="col-span-4 card shadow-md">
+    <div class="col-span-12 lg:col-span-4 card shadow-md">
         <div class="card-body">
             <div class="header">
                 <h2 class="text-lg font-bold">Recommended Jobs</h2>

@@ -11,9 +11,9 @@
 </div>
 
 <div x-data="jobFilter()" x-init="initFilters()" class="container mx-auto py-8">
-    <div class="grid grid-cols-12 gap-8 mt-8">
+    <div class="grid grid-cols-12 gap-8 mt-2 lg:mt-8">
         <!-- filter -->
-        <div class="col-span-3 card w-full card-md flex flex-col gap-10">
+        <div class="col-span-12 lg:col-span-3 card w-full card-md flex flex-col gap-10">
             <div class="card-body shadow-md rounded-md job_type">
                 <!-- Search -->
                 <div>
@@ -185,7 +185,7 @@
         </div>
 
         <!-- Job Listings -->
-        <div class="col-span-9">
+        <div class="col-span-12 lg:col-span-9">
             <!-- Results Count -->
             <div class="mb-6">
                 <p class="text-gray-600" x-text="`Found ${totalJobs} jobs`"></p>
@@ -235,7 +235,7 @@
                 // page: 1
             },
             loading: false,
-            totalJobs: {{$jobs->total()}},
+            totalJobs: {{$jobs -> total()}},
             initFilters() {
                 // Get filters from URL
                 const urlParams = new URLSearchParams(window.location.search);
@@ -294,8 +294,6 @@
             applyFilters() {
                 this.loading = true;
 
-                console.log('Applying filters:', this.filters);
-                
                 // Build URL with filters
                 const url = new URL('{{ route("jobs.index") }}');
 

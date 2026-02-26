@@ -4,7 +4,6 @@ namespace App\Providers\Filament;
 
 use App\Filament\Helper\JobSeekerLoginForm;
 use App\Filament\Helper\JobSeekerRegisterForm;
-use App\Filament\Pages\CustomProfilePage;
 use App\Filament\Pages\Dashboard;
 use Filament\Actions\Action;
 use Filament\Http\Middleware\Authenticate;

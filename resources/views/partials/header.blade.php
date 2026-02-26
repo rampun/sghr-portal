@@ -19,7 +19,6 @@
                         </ul>
                     </li> -->
                     <li><a href="/employers">Companies</a></li>
-                    <li><a>Resume</a></li>
                     @guest
                     <li><a href="/employer">Employer Login</a></li>
                     @endguest
@@ -41,7 +40,6 @@
                     </details>
                 </li> -->
                 <li><a href="/employers">Companies</a></li>
-                <li><a>Resume</a></li>
                 @guest
                 <li><a href="/employer">Employer Login</a></li>
                 @endguest
