@@ -47,8 +47,12 @@
             </ul>
         </div>
         <div class="navbar-end flex gap-2">
-            @if (auth()->user())
+            @if(auth()->user())
+            @if(auth()->check() && auth()->user()->isJobSeeker())
             <a class="btn btn-outline btn-primary rounded-3xl" href="/jobseeker">My Dashboard</a>
+            @else
+            <a class="btn btn-outline btn-primary rounded-3xl" href="/employer">My Dashboard</a>
+            @endif
             @else
             <a class="btn btn-outline btn-primary rounded-3xl" href="/jobseeker/login">Login</a>
             <a class="btn btn-secondary text-white rounded-3xl" href="/jobseeker/register">Register</a>

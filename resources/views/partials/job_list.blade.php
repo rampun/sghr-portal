@@ -7,11 +7,11 @@
                 <div class="col-span-12 lg:col-span-1 mb-2">
                             <figure class="items-start justify-start lg:items-center lg:justify-center">
                         <x-cloudinary::image
-                            public-id="{{ $job->employer->logo_url }}"
+                            public-id="{{ $job?->employer?->logo_url }}"
                             width="48"
                             height="48"
                             crop="fit"
-                            alt="{{ $job->employer->company_title }} logo" />
+                            alt="{{ $job?->employer?->company_title }} logo" />
                     </figure>
                 </div>
                 <div class="col-span-12 lg:col-span-7">

@@ -212,17 +212,17 @@
         <div class="card w-auto card-md  mt-6 grid gap-6 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-1">
             @foreach($recommendedJobs as $job)
             <div class="lg:col-span-1 md:col-span-2">
-                <a href="{{ route('jobs.show', ['id' => $job->id]) }}" style="text-decoration: none; color: inherit;">
+                <a href="{{ route('jobs.show', ['id' => $job?->id]) }}" style="text-decoration: none; color: inherit;">
                     <div class="card-body shadow-md rounded-md hover:shadow-xl hover:cursor-pointer transition-all duration-300">
                         <div class="flex justify-between gap-4 mb-1">
                             <div class="col-span-6">
                                 <figure>
                                     <x-cloudinary::image
-                                        public-id="{{ $job->employer->logo_url }}"
+                                        public-id="{{ $job?->employer?->logo_url }}"
                                         width="48"
                                         height="48"
                                         crop="fill"
-                                        alt="{{ $job->employer->company_title }} logo" />
+                                        alt="{{ $job?->employer?->company_title }} logo" />
                                 </figure>
                             </div>
                             <div class="col-span-4 text-right">
@@ -233,7 +233,7 @@
                         </div>
                         <div class="flex flex-col gap-1 justify-start mb-1">
                             <p class="font-semibold text-md">{{ $job->title }}</p>
-                            <p>{{ $job->employer->company_name }}</p>
+                            <p>{{ $job?->employer?->company_name }}</p>
                         </div>
                         <div class="flex justify-between items-center">
                             <div class="text-gray-600 flex gap-2 items-center">
@@ -243,7 +243,7 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
                                     </svg>
                                 </span>
-                                <span class="text-gray-600">{{ App\Enums\Users\CountryEnum::from($job->country)->getLabel() }}</span>
+                                <span class="text-gray-600">{{ App\Enums\Users\CountryEnum::from($job?->country)->getLabel() }}</span>
                             </div>
                         </div>
                     </div>

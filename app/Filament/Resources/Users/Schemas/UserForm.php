@@ -36,6 +36,11 @@ class UserForm
                             ->email()
                             ->unique()
                             ->maxLength(255),
+                        TextInput::make('password')
+                            ->required(fn ($record) => $record === null) // Required only on update
+                            ->visible(fn ($record) => $record === null) // Show only on update
+                            ->password()
+                            ->maxLength(255),
                         TextInput::make('phone')
                             ->label('Phone Number (including country code)')
                             ->placeholder('+1234567890')

@@ -31,8 +31,7 @@ class JobSeekerRegisterForm extends BaseRegister
     public function form(Schema $schema): Schema
     {
         return $schema->components([
-            $this->getFirstNameFormComponent(),
-            $this->getLastNameFormComponent(),
+            $this->getFullNameFormComponent(),
             $this->getEmailFormComponent(),
             $this->getPasswordFormComponent(),
             $this->getPasswordConfirmationFormComponent(),
@@ -44,8 +43,7 @@ class JobSeekerRegisterForm extends BaseRegister
         try {
             // Create user
             $user = User::create([
-                'first_name' => $data['first_name'],
-                'last_name' => $data['last_name'],
+                'name' => $data['name'],
                 'email' => $data['email'],
                 'password' => Hash::make($data['password']),
                 'email_verified_at' => null, // Ensure email is not verified initially
@@ -123,19 +121,10 @@ class JobSeekerRegisterForm extends BaseRegister
             ->dehydrated(false);
     }
 
-    protected function getFirstNameFormComponent(): Component
+    protected function getFullNameFormComponent(): Component
     {
-        return TextInput::make('first_name')
-            ->label('First Name')
-            ->required()
-            ->maxLength(255)
-            ->autofocus();
-    }
-
-    protected function getLastNameFormComponent(): Component
-    {
-        return TextInput::make('last_name')
-            ->label('Last Name')
+        return TextInput::make('name')
+            ->label('Full Name')
             ->required()
             ->maxLength(255)
             ->autofocus();

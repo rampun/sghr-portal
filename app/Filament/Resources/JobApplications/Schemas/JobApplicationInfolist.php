@@ -24,11 +24,8 @@ class JobApplicationInfolist
                 // Conditional Job Seeker fields
                 Section::make('Applicant Information')
                     ->components([
-                        TextEntry::make('jobseeker.first_name')
-                            ->label('First Name')
-                            ->placeholder('-'),
-                        TextEntry::make('jobseeker.last_name')
-                            ->label('Last Name')
+                        TextEntry::make('jobseeker.name')
+                            ->label('Full Name')
                             ->placeholder('-'),
                         TextEntry::make('jobseeker.education_level'),
                         TextEntry::make('jobseeker.experience_level'),

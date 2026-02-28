@@ -136,4 +136,22 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, MustVerif
 
         return null;
     }
+
+    // Check if user is a job seeker
+    public function isJobSeeker(): bool
+    {
+        return $this->role === UserRoleEnum::JOB_SEEKER;
+    }
+
+    // Check if user is an employer
+    public function isEmployer(): bool
+    {
+        return $this->role === UserRoleEnum::EMPLOYER;
+    }
+
+    // Check if user is admin
+    public function isAdmin(): bool
+    {
+        return $this->role === UserRoleEnum::HR_ADMIN;
+    }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\Jobs\AdDurationEnum;
 use App\Enums\Jobs\LocationEnum;
 use App\Enums\Jobs\StatusEnum;
 use App\Enums\Jobs\TypeEnum;
@@ -24,6 +23,7 @@ class JobAds extends Model
     protected $fillable = [
         'user_id',
         'title',
+        'description',
         'location',
         'type',
         'location',
@@ -46,7 +46,6 @@ class JobAds extends Model
             'status' => StatusEnum::class,
             'experience' => ExperienceLevelEnum::class,
             'industry' => IndustryEnum::class,
-            'duration' => AdDurationEnum::class,
             'required_skills' => 'array',
             'description' => 'array',
         ];
