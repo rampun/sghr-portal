@@ -4,29 +4,10 @@ FROM php:8.3-fpm-alpine
 # Set working directory
 WORKDIR /var/www/html
 
-# Install system dependencies for all PHP extensions
-RUN apk add --no-cache \
-    # For pdo_mysql, pdo_pgsql
-    libpq-dev \
-    mysql-client \
-    # For zip
-    libzip-dev \
-    # For intl
-    icu-dev \
-    icu-libs \
-    # For soap
-    libxml2-dev \
-    # For gd (if you need it later)
-    freetype-dev \
-    libjpeg-turbo-dev \
-    libpng-dev \
-    # Build tools (will be removed)
-    autoconf \
-    g++ \
-    make \
-    $PHPIZE_DEPS \
-    # Install PHP extensions
-    && docker-php-ext-install -j$(nproc) \
+# Download and use the community installer
+ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+RUN chmod +x /usr/local/bin/install-php-extensions && \
+    install-php-extensions \
     pdo_mysql \
     pdo_pgsql \
     zip \
@@ -36,10 +17,7 @@ RUN apk add --no-cache \
     exif \
     iconv \
     intl \
-    soap \
-    # Clean up build dependencies to keep image small
-    && apk del autoconf g++ make $PHPIZE_DEPS
-
+    soap
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
