@@ -5,7 +5,7 @@ RUN apk add --no-cache --virtual .build-deps \
     $PHPIZE_DEPS \
     freetype-dev libjpeg-turbo-dev libpng-dev zlib-dev libwebp-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
-    && docker-php-ext-install -j"$(nproc)" gd pdo_mysql pdo_pgsql zip bcmath opcache pcntl exif intl soap \
+    && docker-php-ext-install -j"$(nproc)" gd pdo_mysql pdo_pgsql zip bcmath opcache pcntl exif iconv intl soap \
     && apk del .build-deps
 
 
