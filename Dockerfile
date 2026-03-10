@@ -1,16 +1,18 @@
 # php.Dockerfile
 FROM php:8.3-fpm-alpine
 
-
 RUN apk add --no-cache --virtual .build-deps \
     $PHPIZE_DEPS \
-    libpng-dev libjpeg-turbo-dev freetype-dev icu-dev libzip-dev postgresql-dev oniguruma-dev libxml2-dev \
+    freetype-dev libjpeg-turbo-dev libpng-dev zlib-dev libwebp-dev \
+    icu-dev libzip-dev postgresql-dev oniguruma-dev libxml2-dev \
     && apk add --no-cache \
     git curl mysql-client \
-    libpng libjpeg-turbo freetype icu-libs libzip libpq libxml2 oniguruma \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd pdo_mysql pdo_pgsql zip bcmath opcache pcntl exif intl soap \
+    freetype libjpeg-turbo libpng zlib libwebp \
+    icu-libs libzip libpq libxml2 oniguruma \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
+    && docker-php-ext-install -j"$(nproc)" gd pdo_mysql pdo_pgsql zip bcmath opcache pcntl exif intl soap \
     && apk del .build-deps
+
 
 # Set working directory
 WORKDIR /var/www/html
