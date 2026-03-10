@@ -1,0 +1,48 @@
+name: Laravel Deployment to Hostinger VPS
+
+on:
+  push:
+    branches: [ "production" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'
+        extensions: mbstring, bcmath, zip
+
+    - name: Install Composer Dependencies
+      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+    - name: Install NPM Dependencies
+      run: npm install
+
+    - name: Build Frontend
+      run: npm run build
+
+    - name: Prepare Environment File
+      run: |
+        echo "${{ secrets.DEPLOYMENT_ENV_FILE }}" | base64 --decode > .env
+
+    - name: Deploy to VPS
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          cd ${{ secrets.SERVER_DESTINATION }}
+          git pull origin production
+          composer install --no-interaction
+          php artisan migrate --force
+          php artisan config:clear
+          php artisan cache:clear
+          npm install
+          npm run build
+          sudo systemctl restart nginx
