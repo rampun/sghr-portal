@@ -1,6 +1,9 @@
 # docker-compose.yml (base file)
 services:
   webapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: webapp
     volumes:
       - ./storage:/var/www/html/storage

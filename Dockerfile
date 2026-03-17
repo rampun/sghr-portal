@@ -64,7 +64,7 @@ RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/bootstrap/cache
 
 # Create production .env if not exists
-RUN if [ ! -f .env ]; then cp .env.example .env; fi
+RUN if [ ! -f .env ]; then cp .env.prod .env; fi
 
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
