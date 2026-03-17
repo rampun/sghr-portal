@@ -1,36 +1,30 @@
+# docker-compose.yml (base file)
 services:
-  traefik:
-    image: traefik:3.5.4
-    container_name: traefik
-    command:
-      - --providers.docker=true
-      - --providers.docker.exposedbydefault=false
-      - --entrypoints.web.address=:80
-      - --entrypoints.websecure.address=:443
-      - --certificatesresolvers.myresolver.acme.tlschallenge=true
-      - --certificatesresolvers.myresolver.acme.email=${LE_EMAIL}
-      - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
-    labels:
-      - traefik.enable=true
-    ports:
-      - 80:80
-      - 443:443
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./letsencrypt:/letsencrypt
-    networks:
-      - sghr_network
   webapp:
-    container_name: webapp
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: webapp
     volumes:
-      - .:/var/www/html
+      - ./storage:/var/www/html/storage
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=${MYSQL_DATABASE}
+      - DB_USERNAME=${MYSQL_USER}
+      - DB_PASSWORD=${MYSQL_PASSWORD}
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - sghr_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "php-fpm", "-t"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
   db:
     image: mysql:8.0
     container_name: mysql
@@ -43,40 +37,18 @@ services:
       - mysql_data:/var/lib/mysql
     networks:
       - sghr_network
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin:5
-    container_name: phpmyadmin
-    environment:
-      UPLOAD_LIMIT: 500M
-      PMA_HOST: mysql
-      PMA_USER: root
-      PMA_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.phpmyadmin.rule=Host(`phpmyadmin.${DOMAIN}`)
-    depends_on:
-      - db
-    networks:
-      - sghr_network
-  nginx:
-    image: nginx:alpine
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.laravel.rule=Host(`${DOMAIN}`)
-      - traefik.http.services.laravel.loadbalancer.server.port=80
-    volumes:
-      - .:/var/www/html
-      - ./.docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
-    depends_on:
-      - webapp
-    networks:
-      - sghr_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
 networks:
   sghr_network:
     external: true
+    name: sghr_network
+
 volumes:
   mysql_data:
-    driver: local
-  node_modules: 
-  mailhog-data:
     driver: local

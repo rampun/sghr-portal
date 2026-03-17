@@ -1,4 +1,4 @@
-# Dockerfile
+# Dockerfile.prod - Multi-stage build for production
 # Node build stage
 FROM node:20-alpine AS node-builder
 WORKDIR /app
@@ -6,7 +6,8 @@ COPY package*.json ./
 COPY yarn.lock* ./
 COPY pnpm-lock.yaml* ./
 RUN npm ci --production=false || npm install
-COPY . .
+COPY resources/ ./resources/
+COPY vite.config.js ./
 RUN npm run build
 
 # PHP stage
@@ -14,7 +15,6 @@ FROM php:8.3-fpm-alpine
 
 # Install system dependencies
 RUN apk add --no-cache \
-    nginx \
     curl \
     git \
     zip \
@@ -29,13 +29,11 @@ ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/do
 RUN chmod +x /usr/local/bin/install-php-extensions && \
     install-php-extensions \
     pdo_mysql \
-    pdo_pgsql \
     zip \
     bcmath \
     opcache \
     pcntl \
     exif \
-    iconv \
     intl \
     soap \
     gd \
@@ -62,9 +60,6 @@ RUN mkdir -p storage/framework/{sessions,views,cache} \
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage \
     && chmod -R 755 /var/www/html/bootstrap/cache
-
-# Create production .env if not exists
-RUN if [ ! -f .env ]; then cp .env.example .env; fi
 
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction

@@ -1,20 +1,8 @@
-# Dockerfile
-# Node build stage
-FROM node:20-alpine AS node-builder
-WORKDIR /app
-COPY package*.json ./
-COPY yarn.lock* ./
-COPY pnpm-lock.yaml* ./
-RUN npm ci --production=false || npm install
-COPY . .
-RUN npm run build
-
-# PHP stage
+# Dockerfile.dev
 FROM php:8.3-fpm-alpine
 
 # Install system dependencies
 RUN apk add --no-cache \
-    nginx \
     curl \
     git \
     zip \
@@ -22,24 +10,26 @@ RUN apk add --no-cache \
     libzip-dev \
     libpng-dev \
     libxml2-dev \
-    oniguruma-dev
+    oniguruma-dev \
+    nodejs \
+    npm \
+    yarn
 
 # Install PHP extensions
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 RUN chmod +x /usr/local/bin/install-php-extensions && \
     install-php-extensions \
     pdo_mysql \
-    pdo_pgsql \
     zip \
     bcmath \
     opcache \
     pcntl \
     exif \
-    iconv \
     intl \
     soap \
     gd \
-    redis
+    redis \
+    xdebug
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -47,11 +37,12 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy built assets from node stage
-COPY --from=node-builder /app/public/build /var/www/html/public/build
-
-# Copy application files
-COPY . /var/www/html
+# Configure Xdebug for development
+RUN echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.client_port=9003" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.idekey=VSCODE" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 # Create Laravel required directories
 RUN mkdir -p storage/framework/{sessions,views,cache} \
@@ -63,20 +54,6 @@ RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage \
     && chmod -R 755 /var/www/html/bootstrap/cache
 
-# Create production .env if not exists
-RUN if [ ! -f .env ]; then cp .env.example .env; fi
-
-# Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader --no-interaction
-
-# Generate optimized cache
-RUN php artisan config:cache \
-    && php artisan route:cache \
-    && php artisan view:cache
-
 EXPOSE 9000
-
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD php-fpm -t || exit 1
 
 CMD ["php-fpm"]

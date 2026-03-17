@@ -185,7 +185,7 @@ horizon
 
 # Ignore sensitive files
 .env
-.env.*
+!.env.*
 !.env.example
 !.env.testing
 .phpunit.env

@@ -10,14 +10,46 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
+      
+      - name: Create production env file
+        run: |
+          echo "APP_ENV=production" >> .env
+          echo "APP_DEBUG=false" >> .env
+          echo "APP_URL=https://${{ secrets.DOMAIN }}" >> .env
+          echo "LE_EMAIL=${{ secrets.LE_EMAIL }}" >> .env
+          echo "DOMAIN=${{ secrets.DOMAIN }}" >> .env
+          echo "MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" >> .env
+          echo "MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}" >> .env
+          echo "MYSQL_USER=${{ secrets.MYSQL_USER }}" >> .env
+          echo "MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}" >> .env
+          echo "PMA_ALLOW_IP=${{ secrets.PMA_ALLOW_IP }}" >> .env
 
       - name: Deploy to Hostinger
         uses: hostinger/deploy-on-vps@v2
         with:
           api-key: ${{ secrets.HOSTINGER_API_KEY }}
           virtual-machine: ${{ vars.HOSTINGER_VM_ID }}
-          project-name: sghr
           environment-variables: |
             APP_KEY=${{ secrets.APP_KEY }}
             DB_PASSWORD=${{ secrets.DATABASE_PASSWORD }}
             MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}
+          script: |
+            
+            # Create network if not exists
+            docker network create sghr_network 2>/dev/null || true
+            
+            # Pull latest code
+            git pull origin production
+            
+            # Copy env file
+            echo "${{ secrets.ENV_FILE }}" > .env
+            
+            # Deploy with production compose
+            docker-compose -f docker-compose.prod.yml pull
+            docker-compose -f docker-compose.prod.yml up -d --build
+            
+            # Run migrations
+            docker-compose -f docker-compose.prod.yml exec -T webapp php artisan migrate --force
+            
+            # Clean up
+            docker system prune -f

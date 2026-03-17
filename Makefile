@@ -1,22 +1,41 @@
-include .env
+# Makefile
+.PHONY: help dev prod dev-down prod-down dev-build prod-build
 
-.env:
-	cp .env.example .env
+help:
+	@echo "Available commands:"
+	@echo "  make dev        - Start development environment"
+	@echo "  make dev-down   - Stop development environment"
+	@echo "  make dev-build  - Rebuild development environment"
+	@echo "  make prod       - Start production environment"
+	@echo "  make prod-down  - Stop production environment"
+	@echo "  make prod-build - Rebuild production environment"
+	@echo "  make logs       - View logs"
+	@echo "  make shell      - Open shell in webapp container"
 
-up:
-	docker-compose up -d
+dev:
+	docker network create sghr_network 2>/dev/null || true
+	docker-compose -f docker-compose.dev.yml up -d
 
-down:
-	docker-compose down
+dev-down:
+	docker-compose -f docker-compose.dev.yml down
 
-webapp:
-	docker-compose exec webapp sh
+dev-build:
+	docker-compose -f docker-compose.dev.yml build --no-cache
+	docker-compose -f docker-compose.dev.yml up -d
 
-nodejs:
-	docker-compose exec node sh
+prod:
+	docker network create sghr_network 2>/dev/null || true
+	docker-compose -f docker-compose.prod.yml up -d
 
-clear-cache:
-	docker-compose exec webapp php artisan optimize:clear
+prod-down:
+	docker-compose -f docker-compose.prod.yml down
 
-restart:
-	docker-compose down && docker-compose up -d
+prod-build:
+	docker-compose -f docker-compose.prod.yml build --no-cache
+	docker-compose -f docker-compose.prod.yml up -d
+
+logs:
+	docker-compose -f docker-compose.dev.yml logs -f
+
+shell:
+	docker-compose -f docker-compose.dev.yml exec webapp sh

@@ -1,0 +1,99 @@
+# docker-compose.prod.yml
+version: '3.8'
+
+services:
+  traefik:
+    image: traefik:3.5.4
+    container_name: traefik-prod
+    command:
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --certificatesresolvers.letsencrypt.acme.tlschallenge=true
+      - --certificatesresolvers.letsencrypt.acme.email=${LE_EMAIL}
+      - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
+      - --certificatesresolvers.letsencrypt.acme.httpchallenge=true
+      - --certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web
+      # Redirect HTTP to HTTPS
+      - --entrypoints.web.http.redirections.entrypoint.to=websecure
+      - --entrypoints.web.http.redirections.entrypoint.scheme=https
+      # Disable dashboard in production
+      - --api.dashboard=false
+    ports:
+      - "80:80"
+      - "443:443"
+    labels:
+      - "traefik.enable=true"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./letsencrypt:/letsencrypt
+    networks:
+      - sghr_network
+    restart: unless-stopped
+
+  webapp:
+    extends:
+      file: docker-compose.yml
+      service: webapp
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    environment:
+      - APP_ENV=production
+      - APP_DEBUG=false
+    volumes:
+      # In production, only mount storage, not the entire app
+      - ./storage:/var/www/html/storage
+      # Don't mount vendor or node_modules - they're built into the image
+
+  db:
+    extends:
+      file: docker-compose.yml
+      service: db
+    # No port exposure in production
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:5
+    container_name: phpmyadmin-prod
+    environment:
+      UPLOAD_LIMIT: 500M
+      PMA_HOST: mysql
+      PMA_USER: ${PMA_USER:-root}
+      PMA_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.phpmyadmin.rule=Host(`phpmyadmin.${DOMAIN}`)"
+      - "traefik.http.routers.phpmyadmin.entrypoints=websecure"
+      - "traefik.http.routers.phpmyadmin.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.phpmyadmin.middlewares=phpmyadmin-ipwhitelist"
+      - "traefik.http.middlewares.phpmyadmin-ipwhitelist.ipwhitelist.sourcerange=${PMA_ALLOW_IP:-127.0.0.1/32}"
+    depends_on:
+      - db
+    networks:
+      - sghr_network
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx-prod
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.laravel.rule=Host(`${DOMAIN}`) || Host(`www.${DOMAIN}`)"
+      - "traefik.http.routers.laravel.entrypoints=websecure"
+      - "traefik.http.routers.laravel.tls.certresolver=letsencrypt"
+      - "traefik.http.services.laravel.loadbalancer.server.port=80"
+      - "traefik.http.routers.laravel.middlewares=laravel-headers"
+      - "traefik.http.middlewares.laravel-headers.headers.customrequestheaders.X-Forwarded-Proto=https"
+    volumes:
+      - ./public:/var/www/html/public:ro
+      - ./.docker/nginx/default.prod.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - webapp
+    networks:
+      - sghr_network
+    restart: unless-stopped
+
+networks:
+  sghr_network:
+    external: true
