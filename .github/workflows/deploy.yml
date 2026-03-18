@@ -38,20 +38,33 @@ jobs:
             MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}
           script: |
             
-            cd /var/www/sghr-app
+            cd /var/www/sghr-portal
+             
+            # Backup current state
+            docker-compose -f docker-compose.prod.yml ps -q > /tmp/running-containers.backup
             
-            # Use production compose file
-            docker-compose -f docker-compose.prod.yml down
+            # Pull latest changes
+            git pull origin main
+            
+            # Build and deploy with production compose
+            echo "🚀 Building and starting new containers..."
             docker-compose -f docker-compose.prod.yml up -d --build
-
-            # Create network if not exists
-            docker network create sghr_network 2>/dev/null || true
             
-            # Pull latest code
-            git pull origin production
+            # Wait for health checks
+            echo "⏳ Waiting for health checks..."
+            sleep 10
             
-            # Copy env file
-            echo "${{ secrets.ENV_FILE }}" > .env
+            # Check if services are healthy
+            if docker-compose -f docker-compose.prod.yml ps | grep -q "unhealthy"; then
+              echo "❌ Health check failed! Rolling back..."
+              docker-compose -f docker-compose.prod.yml down
+              # Restore previous version
+              exit 1
+            else
+              echo "✅ Deployment successful!"
+              # Clean up old images
+              docker image prune -f
+            fi
             
             # Run migrations
             docker-compose -f docker-compose.prod.yml exec -T webapp php artisan migrate --force
