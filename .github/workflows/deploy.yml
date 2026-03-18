@@ -23,7 +23,10 @@ jobs:
           echo "MYSQL_USER=${{ secrets.MYSQL_USER }}" >> .env
           echo "MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}" >> .env
           echo "PMA_ALLOW_IP=${{ secrets.PMA_ALLOW_IP }}" >> .env
-
+      
+      - name: Build
+        run: npm run build # The build command of your project
+        
       - name: Deploy to Hostinger
         uses: hostinger/deploy-on-vps@v2
         with:
@@ -38,6 +41,12 @@ jobs:
             MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}
           script: |
             
+            cd /var/www/sghr-app
+            
+            # Use production compose file
+            docker-compose -f docker-compose.prod.yml down
+            docker-compose -f docker-compose.prod.yml up -d --build
+
             # Create network if not exists
             docker network create sghr_network 2>/dev/null || true
             
@@ -46,10 +55,6 @@ jobs:
             
             # Copy env file
             echo "${{ secrets.ENV_FILE }}" > .env
-            
-            # Deploy with production compose
-            docker-compose -f docker-compose.prod.yml pull
-            docker-compose -f docker-compose.prod.yml up -d --build
             
             # Run migrations
             docker-compose -f docker-compose.prod.yml exec -T webapp php artisan migrate --force
