@@ -23,9 +23,6 @@ jobs:
           echo "MYSQL_USER=${{ secrets.MYSQL_USER }}" >> .env
           echo "MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}" >> .env
           echo "PMA_ALLOW_IP=${{ secrets.PMA_ALLOW_IP }}" >> .env
-      
-      - name: Build
-        run: npm run build # The build command of your project
         
       - name: Deploy to Hostinger
         uses: hostinger/deploy-on-vps@v2
