@@ -33,6 +33,9 @@ jobs:
             APP_KEY=${{ secrets.APP_KEY }}
             DB_PASSWORD=${{ secrets.DATABASE_PASSWORD }}
             MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}
+            MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}
+            MYSQL_USER=${{ secrets.MYSQL_USER }}
+            MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}
           script: |
             
             # Create network if not exists
