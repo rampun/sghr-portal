@@ -44,7 +44,7 @@ jobs:
             docker-compose -f docker-compose.prod.yml ps -q > /tmp/running-containers.backup
             
             # Pull latest changes
-            git pull origin main
+            git pull origin production
             
             # Build and deploy with production compose
             echo "🚀 Building and starting new containers..."
