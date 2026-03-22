@@ -97,3 +97,7 @@ services:
 networks:
   sghr_network:
     external: true
+
+volumes:
+  mysql_data:
+    driver: local
