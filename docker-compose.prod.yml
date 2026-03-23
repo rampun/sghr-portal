@@ -45,7 +45,7 @@ services:
   webapp:
     build:
       context: .
-      dockerfile: Dockerfile.prod
+      dockerfile: Dockerfile
     container_name: webapp-prod
     volumes:
       - ./storage:/var/www/html/storage
