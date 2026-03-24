@@ -45,10 +45,12 @@ services:
   webapp:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
     container_name: webapp-prod
     volumes:
       - ./storage:/var/www/html/storage
+      - ./tmp:/tmp/php  # Mount temp directory
+      - ./tmp:/var/tmp/php  # Mount alternate temp directory
     environment:
       - APP_ENV=production
       - APP_DEBUG=false
@@ -58,14 +60,21 @@ services:
       - DB_DATABASE=${MYSQL_DATABASE}
       - DB_USERNAME=${MYSQL_USER}
       - DB_PASSWORD=${MYSQL_PASSWORD}
+      # PHP temp directory environment variable
+      - TMPDIR=/tmp/php
+      - TEMP=/tmp/php
+      - TMP=/tmp/php
     depends_on:
       db:
         condition: service_healthy
     networks:
       - sghr_network
     restart: unless-stopped
-    labels:
-      - "traefik.enable=false"
+    healthcheck:
+      test: ["CMD", "php-fpm", "-t"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   db:
     image: mysql:8.0

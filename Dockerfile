@@ -3,10 +3,9 @@
 FROM node:20-alpine AS node-builder
 WORKDIR /app
 COPY package*.json ./
-COPY yarn.lock* ./
-COPY pnpm-lock.yaml* ./
 RUN npm ci --production=false || npm install
-COPY . .
+COPY resources/ ./resources/
+COPY vite.config.js ./
 RUN npm run build
 
 # PHP stage
@@ -14,7 +13,6 @@ FROM php:8.3-fpm-alpine
 
 # Install system dependencies
 RUN apk add --no-cache \
-    nginx \
     curl \
     git \
     zip \
@@ -22,20 +20,22 @@ RUN apk add --no-cache \
     libzip-dev \
     libpng-dev \
     libxml2-dev \
-    oniguruma-dev
+    oniguruma-dev \
+    libjpeg-turbo-dev \
+    freetype-dev \
+    shadow \
+    sudo
 
 # Install PHP extensions
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 RUN chmod +x /usr/local/bin/install-php-extensions && \
     install-php-extensions \
     pdo_mysql \
-    pdo_pgsql \
     zip \
     bcmath \
     opcache \
     pcntl \
     exif \
-    iconv \
     intl \
     soap \
     gd \
@@ -47,24 +47,42 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy built assets from node stage
-COPY --from=node-builder /app/public/build /var/www/html/public/build
+# Create necessary directories including temp
+RUN mkdir -p storage/framework/{sessions,views,cache} \
+    && mkdir -p storage/logs \
+    && mkdir -p storage/app \
+    && mkdir -p bootstrap/cache \
+    && mkdir -p public/build \
+    && mkdir -p /tmp/php \
+    && mkdir -p /var/tmp/php
+
+# Set permissions
+RUN chown -R www-data:www-data /var/www/html \
+    && chown -R www-data:www-data /tmp/php \
+    && chown -R www-data:www-data /var/tmp/php \
+    && chmod -R 755 /var/www/html/storage \
+    && chmod -R 755 /var/www/html/bootstrap/cache \
+    && chmod -R 755 /var/www/html/public \
+    && chmod 777 /tmp/php \
+    && chmod 777 /var/tmp/php
+
+# Configure PHP
+RUN echo "upload_max_filesize = 100M" > /usr/local/etc/php/conf.d/uploads.ini \
+    && echo "post_max_size = 100M" >> /usr/local/etc/php/conf.d/uploads.ini \
+    && echo "memory_limit = 256M" >> /usr/local/etc/php/conf.d/uploads.ini \
+    && echo "max_execution_time = 300" >> /usr/local/etc/php/conf.d/uploads.ini \
+    && echo "max_input_time = 300" >> /usr/local/etc/php/conf.d/uploads.ini
+
+# Set PHP temp directory
+RUN echo "sys_temp_dir = /tmp/php" >> /usr/local/etc/php/conf.d/temp.ini \
+    && echo "upload_tmp_dir = /tmp/php" >> /usr/local/etc/php/conf.d/temp.ini \
+    && echo "session.save_path = /tmp/php" >> /usr/local/etc/php/conf.d/temp.ini
 
 # Copy application files
 COPY . /var/www/html
 
-# Create Laravel required directories
-RUN mkdir -p storage/framework/{sessions,views,cache} \
-    && mkdir -p storage/logs \
-    && mkdir -p bootstrap/cache
-
-# Set permissions
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html/storage \
-    && chmod -R 755 /var/www/html/bootstrap/cache
-
-# Create production .env if not exists
-RUN if [ ! -f .env ]; then cp .env.prod .env; fi
+# Copy built assets from node stage
+COPY --from=node-builder /app/public/build /var/www/html/public/build
 
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
