@@ -105,16 +105,13 @@ services:
     container_name: nginx-prod
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.laravel.rule=Host(`${DOMAIN}`) || Host(`www.${DOMAIN}`)"
+      - "traefik.http.routers.laravel.rule=Host(`sghrl.com`) || Host(`www.sghrl.com`)"
       - "traefik.http.routers.laravel.entrypoints=websecure"
       - "traefik.http.routers.laravel.tls.certresolver=letsencrypt"
       - "traefik.http.services.laravel.loadbalancer.server.port=80"
-      - "traefik.http.routers.laravel.middlewares=security-headers"
-      - "traefik.http.middlewares.security-headers.headers.customrequestheaders.X-Forwarded-Proto=https"
-      - "traefik.http.middlewares.security-headers.headers.sslredirect=true"
-      - "traefik.http.middlewares.security-headers.headers.stsincludesubdomains=true"
-      - "traefik.http.middlewares.security-headers.headers.stspreload=true"
-      - "traefik.http.middlewares.security-headers.headers.forceSTSHeader=true"
+      - "traefik.http.routers.laravel.middlewares=https-redirect"
+      - "traefik.http.middlewares.https-redirect.headers.customrequestheaders.X-Forwarded-Proto=https"
+      - "traefik.http.middlewares.https-redirect.headers.customrequestheaders.X-Forwarded-For=https"
     volumes:
       - ./public:/var/www/html/public:ro
       - ./.docker/nginx/default.prod.conf:/etc/nginx/conf.d/default.conf:ro

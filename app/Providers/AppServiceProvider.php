@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Livewire\CustomProfileComponent as EditProfileForm;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 
@@ -21,6 +22,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Force HTTPS in production
+        if (config('app.env') === 'production') {
+            URL::forceScheme('https');
+
+            // Also force for asset URLs
+            $this->app['url']->forceScheme('https');
+        }
+
         Livewire::component('edit_profile_form', EditProfileForm::class);
     }
 }

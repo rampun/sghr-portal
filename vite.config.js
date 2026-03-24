@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
-import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
     plugins: [
@@ -12,7 +11,6 @@ export default defineConfig({
             refresh: true,
             buildDirectory: 'build',
         }),
-        tailwindcss(),
     ],
     build: {
         manifest: true,
@@ -22,14 +20,13 @@ export default defineConfig({
                 manualChunks: undefined,
             },
         },
-        // Ensure CSS is extracted
-        cssCodeSplit: true,
-        sourcemap: false,
-        minify: 'terser',
+        // Force relative paths
+        assetsInlineLimit: 0,
+        // Generate relative URLs
+        base: '/build/',
     },
     server: {
-        hmr: {
-            host: 'localhost',
-        },
+        https: false,
+        host: '0.0.0.0',
     },
 });
