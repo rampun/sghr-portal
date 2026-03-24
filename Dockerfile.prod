@@ -1,0 +1,91 @@
+# Dockerfile.prod
+# Node build stage
+FROM node:20-alpine AS node-builder
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+COPY yarn.lock* ./
+COPY pnpm-lock.yaml* ./
+
+# Install dependencies including Tailwind and daisyUI
+RUN npm ci --production=false || npm install
+
+# Copy source files
+COPY resources/ ./resources/
+COPY vite.config.js ./
+COPY tailwind.config.js ./
+COPY postcss.config.js ./
+
+# Build assets
+RUN npm run build
+
+# PHP stage
+FROM php:8.3-fpm-alpine
+
+# Install system dependencies
+RUN apk add --no-cache \
+    curl \
+    git \
+    zip \
+    unzip \
+    libzip-dev \
+    libpng-dev \
+    libxml2-dev \
+    oniguruma-dev \
+    libjpeg-turbo-dev \
+    freetype-dev \
+    nginx \
+    supervisor
+
+# Install PHP extensions
+ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+RUN chmod +x /usr/local/bin/install-php-extensions && \
+    install-php-extensions \
+    pdo_mysql \
+    zip \
+    bcmath \
+    opcache \
+    pcntl \
+    exif \
+    intl \
+    soap \
+    gd \
+    redis
+
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Set working directory
+WORKDIR /var/www/html
+
+# Create necessary directories
+RUN mkdir -p storage/framework/{sessions,views,cache} \
+    && mkdir -p storage/logs \
+    && mkdir -p storage/app \
+    && mkdir -p bootstrap/cache \
+    && mkdir -p public/build
+
+# Copy application files
+COPY . /var/www/html
+
+# Copy built assets from node stage
+COPY --from=node-builder /app/public/build /var/www/html/public/build
+
+# Set permissions
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html/storage \
+    && chmod -R 755 /var/www/html/bootstrap/cache \
+    && chmod -R 755 /var/www/html/public
+
+# Install PHP dependencies
+RUN composer install --no-dev --optimize-autoloader --no-interaction
+
+# Generate optimized cache
+RUN php artisan config:cache \
+    && php artisan route:cache \
+    && php artisan view:cache
+
+EXPOSE 9000
+
+CMD ["php-fpm"]
