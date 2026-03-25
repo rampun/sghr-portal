@@ -7,26 +7,24 @@ services:
       # Docker provider
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
+      - --providers.docker.network=sghr_network
       
       # Entrypoints
       - --entrypoints.web.address=:80
       - --entrypoints.websecure.address=:443
       
-      # HTTP to HTTPS redirect
+      # HTTP to HTTPS redirect (ENABLE THIS)
       - --entrypoints.web.http.redirections.entrypoint.to=websecure
       - --entrypoints.web.http.redirections.entrypoint.scheme=https
+      - --entrypoints.web.http.redirections.entrypoint.permanent=true
       
-      # Let's Encrypt configuration
-      - --certificatesresolvers.letsencrypt.acme.httpchallenge=true
-      - --certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web
-      - --certificatesresolvers.letsencrypt.acme.email=${LE_EMAIL}
-      - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
-    
-      # Add these headers
-      - --entrypoints.websecure.forwardedHeaders.insecure=true
-      - --entrypoints.websecure.proxyProtocol.trustedIPs=0.0.0.0/0
+      # Let's Encrypt configuration - IMPORTANT FIXES
+      - --certificatesresolvers.myresolver.acme.httpchallenge=true
+      - --certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web
+      - --certificatesresolvers.myresolver.acme.email=${LE_EMAIL}
+      - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
       
-      # Optional: Enable dashboard (protected)
+      # Enable dashboard (optional)
       - --api.dashboard=true
       - --api.insecure=false
       
@@ -53,40 +51,28 @@ services:
     container_name: webapp-prod
     volumes:
       - ./storage:/var/www/html/storage
-      - ./tmp:/tmp/php  # Mount temp directory
-      - ./tmp:/var/tmp/php  # Mount alternate temp directory
     environment:
       - APP_ENV=production
       - APP_DEBUG=false
       - APP_URL=https://${DOMAIN}
+      - ASSET_URL=https://${DOMAIN}
       - DB_HOST=db
       - DB_PORT=3306
       - DB_DATABASE=${MYSQL_DATABASE}
       - DB_USERNAME=${MYSQL_USER}
       - DB_PASSWORD=${MYSQL_PASSWORD}
-      # PHP temp directory environment variable
-      - TMPDIR=/tmp/php
-      - TEMP=/tmp/php
-      - TMP=/tmp/php
+      - TRUSTED_PROXIES=*
     depends_on:
       db:
         condition: service_healthy
     networks:
       - sghr_network
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "php-fpm", "-t"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
 
   db:
     image: mysql:8.0
     container_name: mysql-prod
-    command: 
-      - --default-authentication-plugin=mysql_native_password
-      - --character-set-server=utf8mb4
-      - --collation-server=utf8mb4_unicode_ci
+    command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -94,7 +80,6 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./mysql_init:/docker-entrypoint-initdb.d  # Optional: init scripts
     networks:
       - sghr_network
     restart: unless-stopped
@@ -111,11 +96,11 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.laravel.rule=Host(`sghrl.com`) || Host(`www.sghrl.com`)"
       - "traefik.http.routers.laravel.entrypoints=websecure"
-      - "traefik.http.routers.laravel.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.laravel.tls.certresolver=myresolver"
       - "traefik.http.services.laravel.loadbalancer.server.port=80"
-      - "traefik.http.routers.laravel.middlewares=https-redirect"
-      - "traefik.http.middlewares.https-redirect.headers.customrequestheaders.X-Forwarded-Proto=https"
-      - "traefik.http.middlewares.https-redirect.headers.customrequestheaders.X-Forwarded-For=https"
+      - "traefik.http.routers.laravel.middlewares=security-headers"
+      - "traefik.http.middlewares.security-headers.headers.customrequestheaders.X-Forwarded-Proto=https"
+      - "traefik.http.middlewares.security-headers.headers.sslredirect=true"
     volumes:
       - ./public:/var/www/html/public:ro
       - ./.docker/nginx/default.prod.conf:/etc/nginx/conf.d/default.conf:ro
@@ -135,9 +120,8 @@ services:
       UPLOAD_LIMIT: 500M
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.phpmyadmin.rule=Host(`pma.${DOMAIN}`)"
       - "traefik.http.routers.phpmyadmin.entrypoints=websecure"
-      - "traefik.http.routers.phpmyadmin.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.phpmyadmin.tls.certresolver=myresolver"
       - "traefik.http.services.phpmyadmin.loadbalancer.server.port=80"
     depends_on:
       - db
