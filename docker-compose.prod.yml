@@ -13,18 +13,18 @@ services:
       - --entrypoints.web.address=:80
       - --entrypoints.websecure.address=:443
       
-      # HTTP to HTTPS redirect (ENABLE THIS)
+      # HTTP to HTTPS redirect
       - --entrypoints.web.http.redirections.entrypoint.to=websecure
       - --entrypoints.web.http.redirections.entrypoint.scheme=https
       - --entrypoints.web.http.redirections.entrypoint.permanent=true
       
-      # Let's Encrypt configuration - IMPORTANT FIXES
+      # Let's Encrypt configuration
       - --certificatesresolvers.myresolver.acme.httpchallenge=true
       - --certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web
       - --certificatesresolvers.myresolver.acme.email=${LE_EMAIL}
       - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
       
-      # Enable dashboard (optional)
+      # Enable dashboard
       - --api.dashboard=true
       - --api.insecure=false
       
@@ -41,8 +41,6 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.dashboard.rule=Host(`traefik.${DOMAIN}`)"
       - "traefik.http.routers.dashboard.service=api@internal"
-      - "traefik.http.routers.dashboard.middlewares=auth"
-      - "traefik.http.middlewares.auth.basicauth.users=${TRAEFIK_AUTH}"
 
   webapp:
     build:
@@ -94,13 +92,12 @@ services:
     container_name: nginx-prod
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.laravel.rule=Host(`sghrl.com`) || Host(`www.sghrl.com`)"
+      - "traefik.http.routers.laravel.rule=Host(`${DOMAIN}`) || Host(`www.${DOMAIN}`)"
       - "traefik.http.routers.laravel.entrypoints=websecure"
       - "traefik.http.routers.laravel.tls.certresolver=myresolver"
       - "traefik.http.services.laravel.loadbalancer.server.port=80"
       - "traefik.http.routers.laravel.middlewares=security-headers"
       - "traefik.http.middlewares.security-headers.headers.customrequestheaders.X-Forwarded-Proto=https"
-      - "traefik.http.middlewares.security-headers.headers.sslredirect=true"
     volumes:
       - ./public:/var/www/html/public:ro
       - ./.docker/nginx/default.prod.conf:/etc/nginx/conf.d/default.conf:ro
@@ -120,6 +117,7 @@ services:
       UPLOAD_LIMIT: 500M
     labels:
       - "traefik.enable=true"
+      - "traefik.http.routers.phpmyadmin.rule=Host(`pma.${DOMAIN}`)"
       - "traefik.http.routers.phpmyadmin.entrypoints=websecure"
       - "traefik.http.routers.phpmyadmin.tls.certresolver=myresolver"
       - "traefik.http.services.phpmyadmin.loadbalancer.server.port=80"
