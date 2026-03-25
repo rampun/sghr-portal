@@ -22,7 +22,12 @@ services:
       - --certificatesresolvers.myresolver.acme.httpchallenge=true
       - --certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web
       - --certificatesresolvers.myresolver.acme.email=${LE_EMAIL}
-      - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
+      # - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
+      # Update docker-compose to use manual certs
+      # Add to traefik volumes:
+      - ./certs:/certs:ro
+      # Add to traefik command:
+      - --certificatesresolvers.myresolver.acme.storage=/certs/acme.json
       
       # Enable dashboard
       - --api.dashboard=true
