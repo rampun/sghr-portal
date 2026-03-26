@@ -108,11 +108,15 @@ services:
       PMA_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       UPLOAD_LIMIT: 500M
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.phpmyadmin.rule=Host(`pma.${DOMAIN}`)"
-      - "traefik.http.routers.phpmyadmin.entrypoints=websecure"
-      - "traefik.http.routers.phpmyadmin.tls.certresolver=myresolver"
-      - "traefik.http.services.phpmyadmin.loadbalancer.server.port=80"
+      # - "traefik.enable=true"
+      # - "traefik.http.routers.phpmyadmin.rule=Host(`pma.${DOMAIN}`)"
+      # - "traefik.http.routers.phpmyadmin.entrypoints=websecure"
+      # - "traefik.http.routers.phpmyadmin.tls.certresolver=myresolver"
+      # - "traefik.http.services.phpmyadmin.loadbalancer.server.port=80"
+        - "traefik.enable=true"
+        - "traefik.http.routers.phpmyadmin.rule=Host(`pma.sghrl.com`)"
+        - "traefik.http.routers.phpmyadmin.entrypoints=web"  # HTTP only
+    # Remove the tls.certresolver line
     depends_on:
       - db
     networks:
