@@ -1,5 +1,5 @@
 #!/bin/bash
-# force-ssl-renew.sh
+# force-ssl-renew.sh 
 
 echo "🔄 FORCING SSL CERTIFICATE RENEWAL"
 echo "================================="
