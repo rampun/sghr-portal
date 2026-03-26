@@ -8,8 +8,6 @@ cd /var/www/sghr-portal
 
 # Step 1: Stop everything
 echo "1. Stopping all containers..."
-docker compose -f docker-compose.prod.yml down
-docker compose -f docker-compose.prod.yml restart traefik
 
 # Step 2: Remove old SSL data
 echo "2. Removing old SSL data..."
