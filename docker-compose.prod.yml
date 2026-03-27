@@ -86,7 +86,8 @@ services:
     container_name: nginx-prod
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.laravel.rule=Host(`sghrl.com`) || Host(`www.sghrl.com`) || Host(`pma.sghrl.com`)"
+      # - "traefik.http.routers.laravel.rule=Host(`sghrl.com`) || Host(`www.sghrl.com`) || Host(`pma.sghrl.com`)"
+      - "traefik.http.routers.laravel.rule=Host(`sghrl.com`)"
       - "traefik.http.routers.laravel.entrypoints=websecure"
       - "traefik.http.routers.laravel.tls.certresolver=myresolver"
       - "traefik.http.services.laravel.loadbalancer.server.port=80"
