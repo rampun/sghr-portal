@@ -11,6 +11,9 @@
         <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
 
         <link rel="stylesheet" href="{{ vite_asset('resources/css/app.css') }}">
+
+        <link rel="stylesheet" href="{{ asset('build/assets/app-Davcy8IY.css') }}">
+
         <script src="{{ vite_asset('resources/js/app.js') }}" defer></script>
 
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
