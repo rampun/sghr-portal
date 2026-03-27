@@ -17,7 +17,7 @@ services:
       - --entrypoints.web.http.redirections.entrypoint.to=websecure
       - --entrypoints.web.http.redirections.entrypoint.scheme=https
       
-      # Let's Encrypt - FIXED RESOLVER NAME
+      # Let's Encrypt
       - --certificatesresolvers.myresolver.acme.httpchallenge=true
       - --certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web
       - --certificatesresolvers.myresolver.acme.email=${LE_EMAIL}
@@ -86,8 +86,8 @@ services:
     container_name: nginx-prod
     labels:
       - "traefik.enable=true"
-      # - "traefik.http.routers.laravel.rule=Host(`sghrl.com`) || Host(`www.sghrl.com`) || Host(`pma.sghrl.com`)"
-      - "traefik.http.routers.laravel.rule=Host(`sghrl.com`)"
+      # SINGLE ROUTER with ALL domains
+      - "traefik.http.routers.laravel.rule=Host(`${DOMAIN}`) || Host(`www.${DOMAIN}`) || Host(`pma.${DOMAIN}`)"
       - "traefik.http.routers.laravel.entrypoints=websecure"
       - "traefik.http.routers.laravel.tls.certresolver=myresolver"
       - "traefik.http.services.laravel.loadbalancer.server.port=80"
@@ -108,15 +108,8 @@ services:
       PMA_USER: root
       PMA_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       UPLOAD_LIMIT: 500M
-    labels:
-      # - "traefik.enable=true"
-      # - "traefik.http.routers.phpmyadmin.rule=Host(`pma.${DOMAIN}`)"
-      # - "traefik.http.routers.phpmyadmin.entrypoints=websecure"
-      # - "traefik.http.routers.phpmyadmin.tls.certresolver=myresolver"
-      # - "traefik.http.services.phpmyadmin.loadbalancer.server.port=80"
-        - "traefik.enable=true"
-        - "traefik.http.routers.phpmyadmin.rule=Host(`pma.sghrl.com`)"
-        - "traefik.http.routers.phpmyadmin.entrypoints=web"  # HTTP only
+    # REMOVED labels - phpMyAdmin is now handled by the main nginx router
+    # All traffic to pma.sghrl.com will go through the main laravel router
     depends_on:
       - db
     networks:
