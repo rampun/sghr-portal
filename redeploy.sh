@@ -34,7 +34,7 @@ for domain in sghrl.com www.sghrl.com pma.sghrl.com; do
     fi
 done
 
-# 5. Start containers
+# 5. Start containers 
 echo ""
 echo "5. Starting containers..."
 docker compose -f docker-compose.prod.yml up -d
