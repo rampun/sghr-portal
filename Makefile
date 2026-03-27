@@ -41,5 +41,8 @@ logs:
 shell:
 	docker compose -f docker-compose.dev.yml exec webapp sh
 
+shell-prod:
+	docker compose -f docker-compose.prod.yml exec webapp sh
+
 clear-cache-prod:
 	docker compose exec webapp php artisan cache:clear && php artisan config:clear && php artisan optimize
