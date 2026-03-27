@@ -116,7 +116,6 @@ services:
         - "traefik.enable=true"
         - "traefik.http.routers.phpmyadmin.rule=Host(`pma.sghrl.com`)"
         - "traefik.http.routers.phpmyadmin.entrypoints=web"  # HTTP only
-    # Remove the tls.certresolver line
     depends_on:
       - db
     networks:
