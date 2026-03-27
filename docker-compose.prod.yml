@@ -43,6 +43,7 @@ services:
     container_name: webapp-prod
     volumes:
       - ./storage:/var/www/html/storage
+      - ./.env:/var/www/html/.env:ro  # Mount .env file as read-only
     environment:
       - APP_ENV=production
       - APP_DEBUG=false
