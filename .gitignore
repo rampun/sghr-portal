@@ -138,7 +138,6 @@ Thumbs.db
 # Docker
 docker-compose.override.yml
 docker-compose.dev.yml
-.docker
 docker/data
 docker/mysql
 docker/redis

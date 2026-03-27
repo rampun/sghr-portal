@@ -17,13 +17,13 @@ services:
       - --entrypoints.web.http.redirections.entrypoint.to=websecure
       - --entrypoints.web.http.redirections.entrypoint.scheme=https
       
-      # Let's Encrypt
+      # Let's Encrypt - FIXED RESOLVER NAME
       - --certificatesresolvers.myresolver.acme.httpchallenge=true
       - --certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web
       - --certificatesresolvers.myresolver.acme.email=${LE_EMAIL}
       - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
       
-      # Disable dashboard to avoid errors
+      # Disable dashboard
       - --api.dashboard=false
       
     ports:
@@ -108,15 +108,11 @@ services:
       PMA_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       UPLOAD_LIMIT: 500M
     labels:
-      # - "traefik.enable=true"
-      # - "traefik.http.routers.phpmyadmin.rule=Host(`pma.${DOMAIN}`)"
-      # - "traefik.http.routers.phpmyadmin.entrypoints=websecure"
-      # - "traefik.http.routers.phpmyadmin.tls.certresolver=myresolver"
-      # - "traefik.http.services.phpmyadmin.loadbalancer.server.port=80"
-        - "traefik.enable=true"
-        - "traefik.http.routers.phpmyadmin.rule=Host(`pma.sghrl.com`)"
-        - "traefik.http.routers.phpmyadmin.entrypoints=web"  # HTTP only
-    # Remove the tls.certresolver line
+      - "traefik.enable=true"
+      - "traefik.http.routers.phpmyadmin.rule=Host(`pma.${DOMAIN}`)"
+      - "traefik.http.routers.phpmyadmin.entrypoints=websecure"
+      - "traefik.http.routers.phpmyadmin.tls.certresolver=myresolver"
+      - "traefik.http.services.phpmyadmin.loadbalancer.server.port=80"
     depends_on:
       - db
     networks:
