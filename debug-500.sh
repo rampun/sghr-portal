@@ -9,6 +9,7 @@ cd /var/www/sghr-portal
 # docker exec nginx-prod tail -20 /var/log/nginx/error.log
 # echo ""
 
+
 echo "2. Checking PHP-FPM logs..."
 docker logs webapp-prod --tail 30
 echo ""
