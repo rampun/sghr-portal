@@ -41,9 +41,6 @@
             @include('partials.footer')
         </footer>
 
-        @filamentScripts
-        @vite('resources/js/app.js')
-
     </body>
 
     </html>

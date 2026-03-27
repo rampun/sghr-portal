@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
+import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
     plugins: [
@@ -11,22 +12,19 @@ export default defineConfig({
             refresh: true,
             buildDirectory: 'build',
         }),
+        tailwindcss(),
     ],
     build: {
         manifest: true,
         outDir: 'public/build',
         rollupOptions: {
             output: {
-                manualChunks: undefined,
+                assetFileNames: 'assets/[name]-[hash].[ext]',
+                chunkFileNames: 'assets/[name]-[hash].js',
+                entryFileNames: 'assets/[name]-[hash].js',
             },
         },
-        // Force relative paths
-        assetsInlineLimit: 0,
-        // Generate relative URLs
+        // Use relative paths for assets
         base: '/build/',
-    },
-    server: {
-        https: false,
-        host: '0.0.0.0',
     },
 });
