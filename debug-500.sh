@@ -5,9 +5,9 @@ echo "======================"
 
 cd /var/www/sghr-portal
 
-echo "1. Checking Nginx error logs..."
-docker exec nginx-prod tail -20 /var/log/nginx/error.log
-echo ""
+# echo "1. Checking Nginx error logs..."
+# docker exec nginx-prod tail -20 /var/log/nginx/error.log
+# echo ""
 
 echo "2. Checking PHP-FPM logs..."
 docker logs webapp-prod --tail 30
