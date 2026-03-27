@@ -12,8 +12,6 @@
 
         <link rel="stylesheet" href="{{ vite_asset('resources/css/app.css') }}">
 
-        <link rel="stylesheet" href="{{ asset('build/assets/app-Davcy8IY.css') }}">
-
         <script src="{{ vite_asset('resources/js/app.js') }}" defer></script>
 
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>

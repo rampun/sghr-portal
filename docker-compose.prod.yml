@@ -92,6 +92,9 @@ services:
       - "traefik.http.routers.laravel.entrypoints=websecure"
       - "traefik.http.routers.laravel.tls.certresolver=myresolver"
       - "traefik.http.services.laravel.loadbalancer.server.port=80"
+      # Add middleware to handle static files
+      - "traefik.http.routers.laravel.middlewares=static-files"
+      - "traefik.http.middlewares.static-files.headers.customrequestheaders.X-Forwarded-Proto=https"
     volumes:
       - ./public:/var/www/html/public:ro
       - ./.docker/nginx/default.prod.conf:/etc/nginx/conf.d/default.conf:ro
