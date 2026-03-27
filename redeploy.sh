@@ -2,7 +2,6 @@
 
 echo "🚀 CLEAN REDEPLOY WITH SSL"
 echo "=========================="
-
 cd /var/www/sghr-portal
 
 # 1. Stop all containers
