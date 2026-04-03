@@ -23,7 +23,7 @@
         <div class="footer-section flex flex-col items-center md:items-start text-center md:text-left">
             <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
             <ul class="space-y-2">
-                <li><a href="http://localhost:3000/" target="_blank" class="text-gray-600 hover:text-gray-800">About us</a></li>
+                <li><a href="https://we.sghrl.com" target="_blank" class="text-gray-600 hover:text-gray-800">About us</a></li>
                 <li><a href="/jobs" class="text-gray-600 hover:text-gray-800">Jobs</a></li>
                 <li><a href="/employers" class="text-gray-600 hover:text-gray-800">Companies</a></li>
                 <li><a href="/resume" class="text-gray-600 hover:text-gray-800">Resume</a></li>
