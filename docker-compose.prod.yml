@@ -89,7 +89,7 @@ services:
     labels:
       - "traefik.enable=true"
       # SINGLE ROUTER with ALL domains
-      - "traefik.http.routers.laravel.rule=Host(`${DOMAIN}`) || Host(`www.${DOMAIN}`) || Host(`pma.${DOMAIN}`)"
+      - "traefik.http.routers.laravel.rule=Host(`${DOMAIN}`) || Host(`www.${DOMAIN}`) || Host(`pma.${DOMAIN}`) || Host(`we.${DOMAIN}`)"
       - "traefik.http.routers.laravel.entrypoints=websecure"
       - "traefik.http.routers.laravel.tls.certresolver=myresolver"
       - "traefik.http.services.laravel.loadbalancer.server.port=80"
