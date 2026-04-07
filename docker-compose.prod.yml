@@ -42,6 +42,7 @@ services:
       dockerfile: Dockerfile.prod
     container_name: webapp-prod
     volumes:
+      - /var/www/sghr-portal:/var/www/html:ro  # Mount source code as read-only
       - ./storage:/var/www/html/storage
       - ./.env:/var/www/html/.env:ro  # Mount .env file as read-only
       - public_data:/var/www/html/public  # Shared volume for public files
