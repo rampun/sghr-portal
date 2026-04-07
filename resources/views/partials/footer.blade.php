@@ -32,7 +32,7 @@
         </div>
         <div class="footer-section flex flex-col items-center md:items-start text-center md:text-left">
             <h3 class="text-lg font-semibold mb-4">Contact Us</h3>
-            <p class="text-gray-600">Room 1504, Keybond Commercial Building, 38 Ferry Street, Jordan, Hong Kong</p>
+            <p class="text-gray-600">Room 1008, Hang Bong Commercial Centre, 28 Shanghai Street, Jordan, Kowloon, Hong Kong</p>
             <p class="text-gray-600 mt-2">Email: info@sghrl.com</p>
             <p class="text-gray-600 mt-2">Phone: +852 2770 9795</p>
         </div>
@@ -43,7 +43,7 @@
                 &copy; {{ date('Y') }} SGHRL. All rights reserved.
             </div>
             <div>
-                <a href="/privacy-policy" class="hover:underline">Privacy Policy</a>
+                <a href="https://we.sghrl.com/en/privacyPolicy" class="hover:underline">Privacy Policy</a>
             </div>
         </div>
 
