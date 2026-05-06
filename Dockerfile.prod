@@ -11,12 +11,12 @@ RUN npm ci --production=false || npm install
 
 # Copy source files if they exist
 COPY resources/ ./resources/ 2>/dev/null || mkdir -p resources
-COPY vite.config.js ./ 2>/dev/null || echo "export default {}" > vite.config.js
-COPY tailwind.config.js ./ 2>/dev/null || echo "module.exports = { content: ['./resources/**/*.blade.php'], plugins: [require('daisyui')] }" > tailwind.config.js
-COPY postcss.config.js ./ 2>/dev/null || echo "module.exports = { plugins: { tailwindcss: {}, autoprefixer: {} } }" > postcss.config.js
+COPY vite.config.js ./ 2>/dev/null || echo 'export default {}' > vite.config.js
+COPY tailwind.config.js ./ 2>/dev/null || echo 'module.exports = { content: ['./resources/**/*.blade.php'], plugins: [require('daisyui')] }' > tailwind.config.js
+COPY postcss.config.js ./ 2>/dev/null || echo 'module.exports = { plugins: { tailwindcss: {}, autoprefixer: {} } }' > postcss.config.js
 
 # Build assets
-RUN npm run build || echo "Build skipped"
+RUN npm run build || echo 'Build skipped'
 
 
 # PHP stage
@@ -87,4 +87,4 @@ RUN php artisan config:cache \
 
 EXPOSE 9000
 
-CMD ["php-fpm"]
+CMD ['php-fpm']
