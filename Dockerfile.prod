@@ -4,7 +4,6 @@ FROM node:20-alpine AS node-builder
 WORKDIR /app
 
 RUN mkdir -p public/build
-RUN npm run build
 
 # Copy package files
 COPY package*.json ./
@@ -17,6 +16,10 @@ COPY resources/ ./resources/
 RUN test -f vite.config.js || printf '%s\n' 'export default {}' > vite.config.js
 RUN test -f tailwind.config.js || printf '%s\n' 'module.exports = { content: ["./resources/**/*.blade.php"], plugins: [require("daisyui")] }' > tailwind.config.js
 RUN test -f postcss.config.js || printf '%s\n' 'module.exports = { plugins: { tailwindcss: {}, autoprefixer: {} } }' > postcss.config.js
+
+
+# Build assets
+RUN npm run build
 
 
 # PHP stage
