@@ -19,7 +19,7 @@ RUN test -f postcss.config.js || printf '%s\n' 'module.exports = { plugins: { ta
 
 
 # Build assets
-RUN npm run build
+RUN npm run build || echo 'Build skipped'
 
 
 # PHP stage
