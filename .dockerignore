@@ -1,0 +1,51 @@
+# .dockerignore
+# Keep host-side build artifacts and secrets out of the build context.
+
+# VCS + IDE
+.git
+.github
+.gitignore
+.gitattributes
+.idea
+.vscode
+
+# Host dependency dirs (re-installed inside the image)
+vendor
+node_modules
+
+# Local env / secrets — env is mounted at runtime, never baked in
+.env
+.env.*
+!.env.example
+
+# Build artifacts
+public/build
+public/hot
+public/storage
+
+# Laravel runtime
+storage/logs/*
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+storage/app/public/*
+bootstrap/cache/*.php
+
+# Compose & infra files (Docker doesn't need to send these to the daemon)
+docker-compose*.yml
+.docker
+
+# Helper scripts (not needed in the image)
+*.sh
+
+# Letsencrypt state (host-only)
+letsencrypt
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Tests + docs (skip in image — keep them slim)
+tests
+phpunit.xml
+README.md

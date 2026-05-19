@@ -1,33 +1,162 @@
-# docker-compose.yml (base file)
+# docker-compose.yml
+# Single Compose file for dev and prod, gated by profiles.
+#
+# Usage:
+#   make dev           # docker compose --profile dev  up -d
+#   make prod          # docker compose --profile prod up -d
+#
+# Direct:
+#   docker compose --profile dev  --env-file .env.dev  up -d
+#   docker compose --profile prod --env-file .env.prod up -d --build
+#
+# Notes:
+#   - Services without a `profiles:` key NEVER start (Compose default).
+#     Every service here declares one or both profiles explicitly.
+#   - DNS uses service names (`webapp`, `db`, `nginx`) — never container names.
+#   - The `app_public` named volume is refreshed on every webapp start by
+#     docker/entrypoint.sh, so nginx always serves freshly-built assets.
+
+# ---------------------------------------------------------------------------
+# Shared fragments (YAML anchors)
+# ---------------------------------------------------------------------------
+x-app-env: &app-env
+  DB_CONNECTION: mysql
+  DB_HOST: db
+  DB_PORT: 3306
+  DB_DATABASE: ${MYSQL_DATABASE}
+  DB_USERNAME: ${MYSQL_USER}
+  DB_PASSWORD: ${MYSQL_PASSWORD}
+
+x-webapp-base: &webapp-base
+  build:
+    context: .
+    dockerfile: Dockerfile
+  restart: unless-stopped
+  networks:
+    - sghr_network
+  depends_on:
+    db:
+      condition: service_healthy
+
+x-nginx-base: &nginx-base
+  image: nginx:alpine
+  restart: unless-stopped
+  networks:
+    - sghr_network
+  depends_on:
+    - webapp
+
+# ---------------------------------------------------------------------------
+# Services
+# ---------------------------------------------------------------------------
 services:
-  webapp:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: webapp
+
+  # ------------------------- Reverse proxy (dev) -------------------------
+  traefik-dev:
+    profiles: [dev]
+    image: traefik:3.5.4
+    command:
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --providers.docker.network=sghr_network
+      - --entrypoints.web.address=:80
+      - --api.dashboard=true
+      - --api.insecure=true
+    ports:
+      - "80:80"
+      - "8080:8080"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`traefik.${DOMAIN}`)"
+      - "traefik.http.routers.api.service=api@internal"
     volumes:
-      - ./storage:/var/www/html/storage
-    environment:
-      - DB_HOST=db
-      - DB_PORT=3306
-      - DB_DATABASE=${MYSQL_DATABASE}
-      - DB_USERNAME=${MYSQL_USER}
-      - DB_PASSWORD=${MYSQL_PASSWORD}
-    depends_on:
-      db:
-        condition: service_healthy
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
       - sghr_network
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "php-fpm", "-t"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
 
+  # ------------------------- Reverse proxy (prod) ------------------------
+  traefik-prod:
+    profiles: [prod]
+    image: traefik:3.5.4
+    command:
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --providers.docker.network=sghr_network
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --entrypoints.web.http.redirections.entrypoint.to=websecure
+      - --entrypoints.web.http.redirections.entrypoint.scheme=https
+      - --certificatesresolvers.myresolver.acme.httpchallenge=true
+      - --certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web
+      - --certificatesresolvers.myresolver.acme.email=${LE_EMAIL}
+      - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
+      - --api.dashboard=false
+      - --log.level=INFO
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./letsencrypt:/letsencrypt
+    networks:
+      - sghr_network
+    restart: unless-stopped
+
+  # ------------------------- PHP-FPM (dev) ------------------------------
+  webapp:
+    <<: *webapp-base
+    profiles: [dev]
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
+    environment:
+      <<: *app-env
+      APP_ENV: local
+      APP_DEBUG: "true"
+    volumes:
+      # Source bind mount for live reload.
+      - ./:/var/www/html
+      # Named volumes preserve install speed (avoid cross-OS perf hit on
+      # macOS/Windows for these large directories).
+      - vendor_dev:/var/www/html/vendor
+      - node_modules_dev:/var/www/html/node_modules
+    # No `app_public` volume in dev — bind mount owns /public.
+
+  # ------------------------- PHP-FPM (prod) -----------------------------
+  webapp-prod:
+    <<: *webapp-base
+    profiles: [prod]
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: prod
+    # IMPORTANT: service name must match what nginx fastcgi_pass expects.
+    # We keep service `webapp-prod` distinct from `webapp` because their
+    # profiles differ, but expose it under the alias `webapp` on the
+    # network so default.prod.conf can use `fastcgi_pass webapp:9000`.
+    networks:
+      sghr_network:
+        aliases:
+          - webapp
+    environment:
+      <<: *app-env
+      APP_ENV: production
+      APP_DEBUG: "false"
+      APP_URL: https://${DOMAIN}
+      ASSET_URL: https://${DOMAIN}
+      TRUSTED_PROXIES: "*"
+    volumes:
+      - ./storage:/var/www/html/storage
+      - ./.env:/var/www/html/.env:ro
+      - app_public:/var/www/html/public
+
+  # ------------------------- MySQL --------------------------------------
   db:
+    profiles: [dev, prod]
     image: mysql:8.0
-    container_name: mysql
+    command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -39,16 +168,132 @@ services:
       - sghr_network
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
+      start_period: 30s
+  # Dev-only port exposure: connect from host MySQL clients on :3307.
+  # In prod, db stays internal to the docker network.
+  db-port-exposer:
+    profiles: [dev]
+    image: alpine/socat:latest
+    command: TCP-LISTEN:3306,fork,reuseaddr TCP:db:3306
+    ports:
+      - "3307:3306"
+    networks:
+      - sghr_network
+    depends_on:
+      - db
+    restart: unless-stopped
 
+  # ------------------------- Nginx (dev) --------------------------------
+  nginx:
+    <<: *nginx-base
+    profiles: [dev]
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.laravel.rule=Host(`${DOMAIN}`)"
+      - "traefik.http.routers.laravel.entrypoints=web"
+      - "traefik.http.services.laravel.loadbalancer.server.port=80"
+    volumes:
+      # Dev: bind-mount source so changes to /public files (favicon, etc.)
+      # are picked up without rebuilding.
+      - ./:/var/www/html
+      - ./.docker/nginx/default.dev.conf:/etc/nginx/conf.d/default.conf:ro
+
+  # ------------------------- Nginx (prod) -------------------------------
+  nginx-prod:
+    <<: *nginx-base
+    profiles: [prod]
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.laravel.rule=Host(`${DOMAIN}`) || Host(`www.${DOMAIN}`) || Host(`we.${DOMAIN}`)"
+      - "traefik.http.routers.laravel.entrypoints=websecure"
+      - "traefik.http.routers.laravel.tls=true"
+      - "traefik.http.routers.laravel.tls.certresolver=myresolver"
+      - "traefik.http.services.laravel.loadbalancer.server.port=80"
+    volumes:
+      # Prod: nginx serves the same volume that webapp's entrypoint
+      # refreshes on every container start. NO bind mount — assets
+      # are owned by the image, refreshed on rebuild.
+      - app_public:/var/www/html/public:ro
+      - ./.docker/nginx/default.prod.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - webapp-prod
+
+  # ------------------------- phpMyAdmin ---------------------------------
+  phpmyadmin:
+    profiles: [dev]
+    image: phpmyadmin/phpmyadmin:5
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      UPLOAD_LIMIT: 500M
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.phpmyadmin.rule=Host(`phpmyadmin.${DOMAIN}`)"
+      - "traefik.http.routers.phpmyadmin.entrypoints=web"
+      - "traefik.http.services.phpmyadmin.loadbalancer.server.port=80"
+    networks:
+      - sghr_network
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  phpmyadmin-prod:
+    profiles: [prod]
+    image: phpmyadmin/phpmyadmin:5
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      UPLOAD_LIMIT: 500M
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.phpmyadmin.rule=Host(`pma.${DOMAIN}`)"
+      - "traefik.http.routers.phpmyadmin.entrypoints=websecure"
+      - "traefik.http.routers.phpmyadmin.tls=true"
+      - "traefik.http.routers.phpmyadmin.tls.certresolver=myresolver"
+      - "traefik.http.services.phpmyadmin.loadbalancer.server.port=80"
+    networks:
+      - sghr_network
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  # ------------------------- Mailhog (dev) ------------------------------
+  mailhog:
+    profiles: [dev]
+    image: mailhog/mailhog
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.mailhog.rule=Host(`mailhog.${DOMAIN}`)"
+      - "traefik.http.routers.mailhog.entrypoints=web"
+      - "traefik.http.services.mailhog.loadbalancer.server.port=8025"
+    networks:
+      - sghr_network
+    restart: unless-stopped
+
+# ---------------------------------------------------------------------------
+# Network
+# ---------------------------------------------------------------------------
 networks:
   sghr_network:
-    external: true
     name: sghr_network
+    external: true
+    driver: bridge
 
+# ---------------------------------------------------------------------------
+# Volumes
+# ---------------------------------------------------------------------------
 volumes:
   mysql_data:
+    driver: local
+  app_public:        # prod-only: shared between webapp and nginx
+    driver: local
+  vendor_dev:        # dev-only: speeds up bind-mount perf for /vendor
+    driver: local
+  node_modules_dev:  # dev-only: speeds up bind-mount perf for /node_modules
     driver: local

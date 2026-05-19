@@ -137,9 +137,8 @@ Thumbs.db
 
 # Docker
 docker-compose.override.yml
-docker-compose.dev.yml
 docker/data
-docker/mysql
+docker/mysql/data
 docker/redis
 docker/nginx/logs
 docker/php/logs
@@ -147,7 +146,6 @@ docker/postgres
 docker/rabbitmq
 
 # Laravel Sail
-docker-compose.yml
 .env.sail
 /sail
 /sail.bat

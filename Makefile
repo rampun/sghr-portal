@@ -1,48 +1,63 @@
 # Makefile
-.PHONY: help dev prod dev-down prod-down dev-build prod-build
+# Wrapper around `docker compose --profile {dev,prod}`.
+.PHONY: help dev dev-down dev-build prod prod-down prod-build \
+        logs logs-prod shell shell-prod migrate-prod clear-cache-prod
+
+DEV  := docker compose --profile dev
+PROD := docker compose --profile prod
 
 help:
 	@echo "Available commands:"
-	@echo "  make dev        		- Start development environment"
-	@echo "  make dev-down   		- Stop development environment"
-	@echo "  make dev-build  		- Rebuild development environment"
-	@echo "  make prod       		- Start production environment"
-	@echo "  make prod-down  		- Stop production environment"
-	@echo "  make prod-build 		- Rebuild production environment"
-	@echo "  make logs       		- View logs"
-	@echo "  make shell      		- Open shell in webapp container"
-	@echo "  make clear-cache-prod 	- Clear cache in production"
+	@echo "  make dev                - Start development environment"
+	@echo "  make dev-down           - Stop development environment"
+	@echo "  make dev-build          - Rebuild & start development environment"
+	@echo "  make prod               - Start production environment"
+	@echo "  make prod-down          - Stop production environment"
+	@echo "  make prod-build         - Rebuild & start production environment"
+	@echo "  make logs               - Tail dev logs"
+	@echo "  make logs-prod          - Tail prod logs"
+	@echo "  make shell              - Shell into dev webapp container"
+	@echo "  make shell-prod         - Shell into prod webapp container"
+	@echo "  make migrate-prod       - Run migrations in prod"
+	@echo "  make clear-cache-prod   - Clear Laravel cache in prod"
 
+# -------- Dev --------
 dev:
-	docker network create sghr_network 2>/dev/null || true
-	docker compose -f docker-compose.dev.yml up -d
+	$(DEV) up -d
 
 dev-down:
-	docker compose -f docker-compose.dev.yml down
+	$(DEV) down
 
 dev-build:
-	docker compose -f docker-compose.dev.yml build --no-cache
-	docker compose -f docker-compose.dev.yml up -d
+	$(DEV) build --no-cache
+	$(DEV) up -d
 
+# -------- Prod --------
 prod:
-	docker network create sghr_network 2>/dev/null || true
-	docker compose -f docker-compose.prod.yml up -d
+	$(PROD) up -d
 
 prod-down:
-	docker compose -f docker-compose.prod.yml down
+	$(PROD) down
 
 prod-build:
-	docker compose -f docker-compose.prod.yml build --no-cache
-	docker compose -f docker-compose.prod.yml up -d
+	$(PROD) build --no-cache
+	$(PROD) up -d
 
+# -------- Ops --------
 logs:
-	docker compose -f docker-compose.dev.yml logs -f
+	$(DEV) logs -f
+
+logs-prod:
+	$(PROD) logs -f
 
 shell:
-	docker compose -f docker-compose.dev.yml exec webapp sh
+	$(DEV) exec webapp sh
 
 shell-prod:
-	docker compose -f docker-compose.prod.yml exec webapp sh
+	$(PROD) exec webapp-prod sh
+
+migrate-prod:
+	$(PROD) exec -T webapp-prod php artisan migrate --force
 
 clear-cache-prod:
-	docker compose exec webapp php artisan cache:clear && php artisan config:clear && php artisan optimize
+	$(PROD) exec -T webapp-prod sh -c "php artisan cache:clear && php artisan config:clear && php artisan view:clear && php artisan optimize"
