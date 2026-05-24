@@ -39,8 +39,8 @@ docker exec webapp-prod php artisan tinker --execute="try { DB::connection()->ge
 
 # 7. Restart containers
 echo "7. Restarting containers..."
-docker compose -f docker-compose.prod.yml restart webapp
-docker compose -f docker-compose.prod.yml restart nginx
+docker compose -f docker-compose.yml restart webapp
+docker compose -f docker-compose.yml restart nginx
 
 sleep 5
 
