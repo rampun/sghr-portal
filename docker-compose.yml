@@ -80,8 +80,9 @@ services:
     profiles: [prod]
     image: traefik:3.5.4
     labels:
-      - traefik.http.routers.sghr-portal.rule=Host(`sghrl.com`)
-      - traefik.http.routers.sghr-portal-secure.rule=Host(`sghrl.com`)
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`traefik.${DOMAIN}`)"
+      - "traefik.http.routers.api.service=api@internal"
     command:
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
