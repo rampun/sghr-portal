@@ -97,6 +97,8 @@ services:
       - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
       - --api.dashboard=false
       - --log.level=INFO
+    environment:
+      DOCKER_API_VERSION: "1.40"
     ports:
       - "80:80"
       - "443:443"
