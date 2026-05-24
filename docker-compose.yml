@@ -79,6 +79,9 @@ services:
   traefik-prod:
     profiles: [prod]
     image: traefik:3.5.4
+    labels:
+      - traefik.http.routers.sghr-portal.rule=Host(`sghrl.com`)
+      - traefik.http.routers.sghr-portal-secure.rule=Host(`sghrl.com`)
     command:
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
