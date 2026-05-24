@@ -140,6 +140,13 @@ services:
     # We keep service `webapp-prod` distinct from `webapp` because their
     # profiles differ, but expose it under the alias `webapp` on the
     # network so default.prod.conf can use `fastcgi_pass webapp:9000`.
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.laravel.rule=Host(`${DOMAIN}`)"
+      - "traefik.http.routers.laravel.entrypoints=websecure"
+      - "traefik.http.routers.laravel.tls=true"
+      - "traefik.http.routers.laravel.tls.certresolver=myresolver"
+      - "traefik.http.services.laravel.loadbalancer.server.port=80"
     networks:
       sghr_network:
         aliases:
