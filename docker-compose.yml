@@ -219,7 +219,7 @@ services:
     profiles: [prod]
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.laravel.rule=Host(`${DOMAIN}`) || Host(`www.${DOMAIN}`) || Host(`we.${DOMAIN}`)"
+      - "traefik.http.routers.laravel.rule=Host(`${DOMAIN}`) || Host(`www.${DOMAIN}`)"
       - "traefik.http.routers.laravel.entrypoints=websecure"
       - "traefik.http.routers.laravel.tls=true"
       - "traefik.http.routers.laravel.tls.certresolver=myresolver"
