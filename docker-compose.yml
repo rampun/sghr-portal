@@ -54,7 +54,7 @@ services:
   # ------------------------- Reverse proxy (dev) -------------------------
   traefik-dev:
     profiles: [dev]
-    image: traefik:3.5.4
+    image: traefik:3.6.6
     command:
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
@@ -78,7 +78,7 @@ services:
   # ------------------------- Reverse proxy (prod) ------------------------
   traefik-prod:
     profiles: [prod]
-    image: traefik:3.5.4
+    image: traefik:3.6.6
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.api.rule=Host(`traefik.${DOMAIN}`)"
